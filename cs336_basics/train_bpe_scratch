@@ -1,0 +1,39 @@
+string = """\
+low low low low low
+lower lower widest widest widest
+newest newest newest newest newest newest
+"""
+
+def init_vocab() -> dict[int, bytes]:
+    vocab : dict[int, bytes] = {x: bytes([x]) for x in range (256)}
+    special_token_id = 256
+    vocab[special_token_id] = b'<|endoftext|>'
+    return vocab
+
+vocab = init_vocab()
+# print(vocab)
+
+def pretokenization_and_count(string : str) -> dict[tuple[bytes], int]:
+    pre_tokens : list[str] = string.split()
+    token_count : dict[tuple[bytes], int] = {}
+
+    for token in pre_tokens:
+        bytes_token = token.encode("utf-8")
+        tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
+        token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
+    return token_count
+
+print(pretokenization_and_count(string))
+
+
+# input:
+# input_path: str Path to a text file with BPE tokenizer training data.
+# vocab_size: int A positive integer that defines the maximum final vocabulary size (including the
+#   initial byte vocabulary, vocabulary items produced from merging, and any special tokens).
+# special_tokens: list[str] A list of strings to add to the vocabulary. These special tokens do not otherwise affect BPE training.
+# output:
+# vocab: dict[int, bytes] The tokenizer vocabulary, a mapping from int (token ID in the vocabulary) to bytes (token bytes).
+# merges: list[tuple[bytes, bytes]] A list of BPE merges produced from training. Each list item
+#   is a tuple of bytes (<token1>, <token2>), representing that <token1> was merged with
+#   <token2>. The merges should be ordered by order of creation.
+# def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
