@@ -25,50 +25,71 @@ def pretokenize_and_count(text : str) -> dict[tuple[bytes], int]:
 
 # print(pretokenize_and_count(string))
 
-def merge(token_count : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
-    merged_token_count : dict[tuple[bytes], int] = {}
+def merge(token_freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
 
-    for k, v in token_count.items():
-        for i in range(len(k)-1):
-            merged_token_count[k[i : i+2]] = merged_token_count.get(k[i : i+2], 0) + v
+    # here `freqs` refer to pretoken freqs
+    def _count_mergetokens(freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
+
+        merged_token_count : dict[tuple[bytes], int] = {}
+
+        for k, v in freqs.items():
+            for i in range(len(k)-1):
+                merged_token_count[k[i : i+2]] = merged_token_count.get(k[i : i+2], 0) + v
+        return merged_token_count
     
-    sorted_token_count_list = sorted(
-        merged_token_count.items(),
-        key = lambda kv: kv[1],
-        reverse=True
-    )
-
-    # find tie highest item
-    highest_count_items = []
-    highest_count_items.append(sorted_token_count_list[0])
-
-    for item in sorted_token_count_list[1:]:
-        if item[1] == highest_count_items[0][1]:
-            highest_count_items.append(item)
-        else:
-            break
+    # TODO: performance profile
+    # here `freq` refer to merge adjcent token freqs
+    def _pick_best_mergetoken(freqs: dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
+        return max(
+            freqs.items(),
+            key = lambda kv: (kv[1], kv[0])
+        )
     
-    # take the lexicographically greater pair
-    lexi_greater_item = highest_count_items[0]
-    # 不用去重
+    # construct map: merged token: count
+    mergetokens_freqs = _count_mergetokens(token_freqs)
 
-    for item in highest_count_items[1:]:
-        for i in range(min(len(item[0]), len(lexi_greater_item[0]))):
-            flag_item_e_greater = False
-            flag_item_e_not_greater = False
+    # find the most frequent adjcent tokens gram
+    # break ties lexicographically
+    return _pick_best_mergetoken(mergetokens_freqs)
 
-            if item[0][i] > lexi_greater_item[0][i]:
-                lexi_greater_item = item
-                flag_item_e_greater = True
-                break
-            elif item[0][i] < lexi_greater_item[0][i]:
-                flag_item_e_not_greater = True
-                break
+    
+    # sorted_token_count_list = sorted(
+    #     merged_token_count.items(),
+    #     key = lambda kv: kv[1],
+    #     reverse=True
+    # )
+
+    # # find tie highest count item
+    # highest_count_items = []
+    # highest_count_items.append(sorted_token_count_list[0])
+
+    # for item in sorted_token_count_list[1:]:
+    #     if item[1] == highest_count_items[0][1]:
+    #         highest_count_items.append(item)
+    #     else:
+    #         break
+    
+    # # take the lexicographically greater pair when there is a tie situation
+    # # there is no need to remove duplicate at first
+    # lexi_greater_item = highest_count_items[0]
+
+    # for item in highest_count_items[1:]:
+    #     for i in range(min(len(item[0]), len(lexi_greater_item[0]))):
+    #         flag_item_e_greater = False
+    #         flag_item_e_not_greater = False
+
+    #         if item[0][i] > lexi_greater_item[0][i]:
+    #             lexi_greater_item = item
+    #             flag_item_e_greater = True
+    #             break
+    #         elif item[0][i] < lexi_greater_item[0][i]:
+    #             flag_item_e_not_greater = True
+    #             break
         
-        if not flag_item_e_greater and not flag_item_e_not_greater and len(item[0]) > len(lexi_greater_item[0]):
-            lexi_greater_item = item
+    #     if not flag_item_e_greater and not flag_item_e_not_greater and len(item[0]) > len(lexi_greater_item[0]):
+    #         lexi_greater_item = item
 
-    return lexi_greater_item
+    # return lexi_greater_item
 
 print("merged token statistic:", merge(pretokenize_and_count(string)))
 
