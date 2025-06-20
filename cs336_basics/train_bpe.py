@@ -23,7 +23,8 @@ def pretokenize_and_count(text : str) -> dict[tuple[bytes], int]:
         token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
     return token_count
 
-# print(pretokenize_and_count(string))
+# init pretokenization
+pretokenization = pretokenize_and_count(string)
 
 def merge(token_freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
 
@@ -52,46 +53,30 @@ def merge(token_freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
     # break ties lexicographically
     return _pick_best_mergetoken(mergetokens_freqs)
 
-    
-    # sorted_token_count_list = sorted(
-    #     merged_token_count.items(),
-    #     key = lambda kv: kv[1],
-    #     reverse=True
-    # )
+# print("merged token statistic:", merge(pretokenize_and_count(string)))
 
-    # # find tie highest count item
-    # highest_count_items = []
-    # highest_count_items.append(sorted_token_count_list[0])
+# merge pretoken according to new merged token and update vocabulary
+def merge_pretoken(pre_tokens : dict[tuple[bytes], int], new_merged_token : tuple[tuple[bytes], int]):
+    new_pretokens : dict[tuple[bytes], int] = {}
 
-    # for item in sorted_token_count_list[1:]:
-    #     if item[1] == highest_count_items[0][1]:
-    #         highest_count_items.append(item)
-    #     else:
-    #         break
-    
-    # # take the lexicographically greater pair when there is a tie situation
-    # # there is no need to remove duplicate at first
-    # lexi_greater_item = highest_count_items[0]
-
-    # for item in highest_count_items[1:]:
-    #     for i in range(min(len(item[0]), len(lexi_greater_item[0]))):
-    #         flag_item_e_greater = False
-    #         flag_item_e_not_greater = False
-
-    #         if item[0][i] > lexi_greater_item[0][i]:
-    #             lexi_greater_item = item
-    #             flag_item_e_greater = True
-    #             break
-    #         elif item[0][i] < lexi_greater_item[0][i]:
-    #             flag_item_e_not_greater = True
-    #             break
+    for k, v in pre_tokens.items():
+        for i in range(len(k)-1):
+            if (k[i], k[i+1]) == new_merged_token[0]:
+                k = k[0:i] + (k[i] + k[i+1],) + k[i+2:]
         
-    #     if not flag_item_e_greater and not flag_item_e_not_greater and len(item[0]) > len(lexi_greater_item[0]):
-    #         lexi_greater_item = item
+        new_pretokens[k] = v
+    
+    print("new pretoken", new_pretokens)
 
-    # return lexi_greater_item
+merge_pretoken(pretokenization, merge(pretokenization))
 
-print("merged token statistic:", merge(pretokenize_and_count(string)))
+
+# t: tuple[bytes, ...] = (b'h', b'e', b'l', b'l', b'o')
+
+# # merge the first two bytes into one bytes object
+# merged: tuple[bytes, ...] = (t[0] + t[1],) + t[2:]
+
+# print(merged)  
 
 
 # input:
