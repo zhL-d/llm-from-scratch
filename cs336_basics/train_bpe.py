@@ -10,8 +10,13 @@ def init_vocab() -> dict[int, bytes]:
     vocab[special_token_id] = b'<|endoftext|>'
     return vocab
 
+# init vocab
 vocab = init_vocab()
 # print(vocab)
+
+# init pretokenization
+pretokens_freq : dict[tuple[bytes], int] = {}
+
 
 def pretokenize_and_count(text : str) -> dict[tuple[bytes], int]:
     pre_tokens : list[str] = string.split()
@@ -23,10 +28,9 @@ def pretokenize_and_count(text : str) -> dict[tuple[bytes], int]:
         token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
     return token_count
 
-# init pretokenization
-pretokenization = pretokenize_and_count(string)
 
-def merge(token_freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
+
+def merge(token_freqs : dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
 
     # here `freqs` refer to pretoken freqs
     def _count_mergetokens(freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
@@ -41,6 +45,7 @@ def merge(token_freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
     # TODO: performance profile
     # here `freq` refer to merge adjcent token freqs
     def _pick_best_mergetoken(freqs: dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
+        # as-is
         return max(
             freqs.items(),
             key = lambda kv: (kv[1], kv[0])
@@ -55,21 +60,75 @@ def merge(token_freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
 
 # print("merged token statistic:", merge(pretokenize_and_count(string)))
 
-# merge pretoken according to new merged token and update vocabulary
-def merge_pretoken(pre_tokens : dict[tuple[bytes], int], new_merged_token : tuple[tuple[bytes], int]):
+# merge pretoken according to new merged token
+def merge_pretoken(pre_tokens : dict[tuple[bytes], int], new_merged_token : tuple[tuple[bytes], int]) -> dict[tuple[bytes], int]:
     new_pretokens : dict[tuple[bytes], int] = {}
 
     for k, v in pre_tokens.items():
-        for i in range(len(k)-1):
+        i = 0
+        while i < len(k) - 1:
             if (k[i], k[i+1]) == new_merged_token[0]:
                 k = k[0:i] + (k[i] + k[i+1],) + k[i+2:]
+            i = i+1
         
         new_pretokens[k] = v
     
-    print("new pretoken", new_pretokens)
+    return new_pretokens
 
-merge_pretoken(pretokenization, merge(pretokenization))
+    # for k, v in pre_tokens.items():
+    #     # # less than two items, no need to merge
+    #     # if len(k) < 2:
+    #     #     continue
+    #     for i in range(len(k)-1):
+    #         if (k[i], k[i+1]) == new_merged_token[0]:
+    #             k = k[0:i] + (k[i] + k[i+1],) + k[i+2:]
+        
+    #     new_pretokens[k] = v
+    
+    # return new_pretokens
+    # print("new pretoken", new_pretokens)
 
+# merge_pretoken(pretokenization, merge(pretokenization))
+
+# update vocab
+def update_vocab(vocab : dict[int, bytes], merged_token : tuple[tuple[bytes], int]):
+    # TODO: optimize point
+    sorted_vocab = sorted(vocab.items(), reverse=True)
+    new_index =  sorted_vocab[0][0] + 1
+    
+    k = merged_token[0]
+    k = k[0] + k[1]
+
+    vocab[new_index] = k
+
+# update_vocab(vocab, merge(pretokenization))
+
+# print("vocab_len:", len(vocab))
+
+# input:
+# text: use for train and tokenization
+# vocab: original vocab
+# num: merge number
+# output:
+# #print trained_vocab: trained vocab
+# new_pretokens: new pretokens according to trained vocab
+def bpe_train_tokenizer(text : str, vocab : dict[int, bytes], num: int) -> dict[tuple[bytes], int]:
+    # pretokenize
+    temp_pretokens_freq = pretokenize_and_count(text)
+
+    for i in range(num):
+        # pick best adjcent tokens to merge
+        best_adjcent_tokens = merge(temp_pretokens_freq)
+        # update vocabs
+        update_vocab(vocab, best_adjcent_tokens)
+        # update pretokens
+        temp_pretokens_freq = merge_pretoken(temp_pretokens_freq, best_adjcent_tokens)
+    
+    return temp_pretokens_freq
+
+pretokens_freq = bpe_train_tokenizer(string, vocab, 6)
+print("pretokens:", pretokens_freq)
+# print("vocab:", vocab)
 
 # t: tuple[bytes, ...] = (b'h', b'e', b'l', b'l', b'o')
 
