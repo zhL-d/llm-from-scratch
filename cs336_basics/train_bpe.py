@@ -4,14 +4,22 @@ lower lower widest widest widest
 newest newest newest newest newest newest
 """
 
-def init_vocab() -> dict[int, bytes]:
+def init_vocab(special_tokens : list[str]) -> dict[int, bytes]:
     vocab : dict[int, bytes] = {x: bytes([x]) for x in range (256)}
-    special_token_id = 256
-    vocab[special_token_id] = b'<|endoftext|>'
+    token_id_start = 256
+
+    for i, special_token in enumerate(special_tokens):
+        s_bytes = special_token.encode("utf-8")
+        vocab[token_id_start + i] = s_bytes
+
+    # vocab[special_token_id] = b'<|endoftext|>'
+
+    # special_token_id = 256
+    # vocab[special_token_id] = b'<|endoftext|>'
     return vocab
 
 # init vocab
-vocab = init_vocab()
+# vocab_test = init_vocab()
 # print(vocab)
 
 # init pretokenization
@@ -126,9 +134,10 @@ def bpe_train_tokenizer(text : str, vocab : dict[int, bytes], num: int) -> dict[
     
     return temp_pretokens_freq
 
-pretokens_freq = bpe_train_tokenizer(string, vocab, 6)
-print("pretokens:", pretokens_freq)
+# pretokens_freq = bpe_train_tokenizer(string, vocab, 6)
+# print("pretokens:", pretokens_freq)
 # print("vocab:", vocab)
+# print("vocab length:", len(vocab))
 
 # t: tuple[bytes, ...] = (b'h', b'e', b'l', b'l', b'o')
 
@@ -148,4 +157,34 @@ print("pretokens:", pretokens_freq)
 # merges: list[tuple[bytes, bytes]] A list of BPE merges produced from training. Each list item
 #   is a tuple of bytes (<token1>, <token2>), representing that <token1> was merged with
 #   <token2>. The merges should be ordered by order of creation.
-# def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+    # init vocab
+    vocab : dict[int, bytes] = init_vocab(special_tokens)
+    # init merges
+    merges : list[tuple[bytes, bytes]] = []
+
+    # read training data
+    with open(input_path, "r", encoding="utf-8") as f:
+        text = f.read()
+    print(text)
+
+    # Pre-tokenization
+    #TODO: use a regex-based pre-tokenizer
+    pretokens = pretokenize_and_count(text)
+
+    for i in range(vocab_size - 256 - len(special_tokens)):
+        # pick best adjcent tokens to merge
+        merged_token = merge(pretokens)
+        # update vocabs
+        update_vocab(vocab, merged_token)
+        # update merges
+        merges.append((merged_token[0][0], merged_token[0][1]))
+        # update pretokens
+        pretokens = merge_pretoken(pretokens, merged_token)
+    
+    return vocab, merges
+
+vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 263, ["<|endoftext|>"])
+
+print("vocab:", vocab)
+print("merges:", merges)
