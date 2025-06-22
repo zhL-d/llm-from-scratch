@@ -1,3 +1,5 @@
+import regex as re
+
 string = """\
 low low low low low
 lower lower widest widest widest
@@ -26,8 +28,15 @@ def init_vocab(special_tokens : list[str]) -> dict[int, bytes]:
 pretokens_freq : dict[tuple[bytes], int] = {}
 
 
-def pretokenize_and_count(text : str) -> dict[tuple[bytes], int]:
-    pre_tokens : list[str] = string.split()
+def pretokenize_and_count(text: str, gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
+    pre_tokens : list[str] = []
+    # use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
+    if gpt2_regex:
+        PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+        pre_tokens = re.findall(PAT, text)
+    else:
+        pre_tokens = text.split()
+    
     token_count : dict[tuple[bytes], int] = {}
 
     for token in pre_tokens:
@@ -169,8 +178,9 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
     print(text)
 
     # Pre-tokenization
-    #TODO: use a regex-based pre-tokenizer
-    pretokens = pretokenize_and_count(text)
+    #use a regex-based pre-tokenizer
+    pretokens = pretokenize_and_count(text, True)
+    # pretokens = pretokenize_and_count(text)
 
     for i in range(vocab_size - 256 - len(special_tokens)):
         # pick best adjcent tokens to merge
