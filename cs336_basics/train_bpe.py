@@ -28,22 +28,42 @@ def init_vocab(special_tokens : list[str]) -> dict[int, bytes]:
 pretokens_freq : dict[tuple[bytes], int] = {}
 
 
-def pretokenize_and_count(text: str, gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
-    pre_tokens : list[str] = []
-    # use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
-    if gpt2_regex:
-        PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
-        pre_tokens = re.findall(PAT, text)
-    else:
-        pre_tokens = text.split()
-    
+def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
     token_count : dict[tuple[bytes], int] = {}
 
-    for token in pre_tokens:
-        bytes_token = token.encode("utf-8")
-        tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
-        token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
+    for doc in docs:
+        pre_tokens : list[str] = []
+        # use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
+        if gpt2_regex:
+            PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+            # pre_tokens = re.findall(PAT, doc)
+            pre_tokens = re.finditer(PAT, doc)
+        else:
+            pre_tokens = doc.split()
+
+        for token in pre_tokens:
+            bytes_token = token.encode("utf-8")
+            tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
+            token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
+        
     return token_count
+
+    # pre_tokens : list[str] = []
+    # # use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
+    # if gpt2_regex:
+    #     PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+    #     # pre_tokens = re.findall(PAT, text)
+    #     pre_tokens = re.finditer(PAT, text)
+    # else:
+    #     pre_tokens = text.split()
+    
+    # token_count : dict[tuple[bytes], int] = {}
+
+    # for token in pre_tokens:
+    #     bytes_token = token.encode("utf-8")
+    #     tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
+    #     token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
+    # return token_count
 
 
 
@@ -156,6 +176,11 @@ def bpe_train_tokenizer(text : str, vocab : dict[int, bytes], num: int) -> dict[
 # print(merged)  
 
 
+def remove_special_tokens(text : str, special_tokens : list[str]) -> list[str]:
+   stokens_escaped = [re.escape(stoken) for stoken in special_tokens]
+   return re.split("|".join(stokens_escaped), text)
+
+
 # input:
 # input_path: str Path to a text file with BPE tokenizer training data.
 # vocab_size: int A positive integer that defines the maximum final vocabulary size (including the
@@ -175,11 +200,13 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
     # read training data
     with open(input_path, "r", encoding="utf-8") as f:
         text = f.read()
-    print(text)
+    # print(text)
 
+    # removing special tokens before pre-tokenization
     # Pre-tokenization
     #use a regex-based pre-tokenizer
-    pretokens = pretokenize_and_count(text, True)
+    pretokens = pretokenize_and_count(remove_special_tokens(text), True)
+    # print("pretokens:", pretokens)
     # pretokens = pretokenize_and_count(text)
 
     for i in range(vocab_size - 256 - len(special_tokens)):
@@ -194,7 +221,8 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
     
     return vocab, merges
 
-vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 263, ["<|endoftext|>"])
+# vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 263, ["<|endoftext|>"])
+# train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 263, ["<|endoftext|>"])
 
-print("vocab:", vocab)
-print("merges:", merges)
+# print("vocab:", vocab)
+# print("merges:", merges)
