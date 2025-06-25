@@ -32,17 +32,21 @@ def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tup
     token_count : dict[tuple[bytes], int] = {}
 
     for doc in docs:
-        pre_tokens : list[str] = []
+        # pre_tokens : list[str] = []
+        pre_tokens = None
         # use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
         if gpt2_regex:
             PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
             # pre_tokens = re.findall(PAT, doc)
             pre_tokens = re.finditer(PAT, doc)
         else:
+            # TODO: change to iter
             pre_tokens = doc.split()
 
         for token in pre_tokens:
-            bytes_token = token.encode("utf-8")
+            # iter.match convert to string
+            token_str = token.group(0)
+            bytes_token = token_str.encode("utf-8")
             tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
             token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
         
@@ -205,7 +209,7 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
     # removing special tokens before pre-tokenization
     # Pre-tokenization
     #use a regex-based pre-tokenizer
-    pretokens = pretokenize_and_count(remove_special_tokens(text), True)
+    pretokens = pretokenize_and_count(remove_special_tokens(text, special_tokens), True)
     # print("pretokens:", pretokens)
     # pretokens = pretokenize_and_count(text)
 
