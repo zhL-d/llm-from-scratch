@@ -99,6 +99,84 @@ def merge(token_freqs : dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
     # break ties lexicographically
     return _pick_best_mergetoken(mergetokens_freqs)
 
+# here `freqs` refer to pretoken freqs
+def count_mergetokens(freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
+    merged_token_count : dict[tuple[bytes], int] = {}
+    for k, v in freqs.items():
+        for i in range(len(k)-1):
+            merged_token_count[k[i : i+2]] = merged_token_count.get(k[i : i+2], 0) + v
+    return merged_token_count
+
+def merge_optim(pair_counts : dict[tuple[bytes], int]) -> tuple[dict[tuple[bytes], int], tuple[tuple[bytes], int]]:
+
+    # here `freqs` refer to pretoken freqs
+    def _count_mergetokens(freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
+
+        merged_token_count : dict[tuple[bytes], int] = {}
+
+        for k, v in freqs.items():
+            for i in range(len(k)-1):
+                merged_token_count[k[i : i+2]] = merged_token_count.get(k[i : i+2], 0) + v
+        return merged_token_count
+    
+    # TODO: performance profile
+    # here `freq` refer to merge adjcent token freqs
+    def _pick_best_mergetoken(freqs: dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
+        # as-is
+        return max(
+            freqs.items(),
+            key = lambda kv: (kv[1], kv[0])
+        )
+    
+    def _find_count(overlap_merged: tuple[bytes], freqs: dict[tuple[bytes], int]) -> int:
+        count_overall = 0
+        for k, v in freqs.items():
+            i = 0
+            count = 0
+            while i < len(k) - 2:
+                if k[i] == overlap_merged[0] and k[i+1] == overlap_merged[1] and k[i+2] == overlap_merged[2]:
+                    count = count + 1
+                    i = i+2
+            count_overall = count_overall + count * v
+        return count_overall
+    
+
+    # # construct map: merged token: count
+    # mergetokens_freqs = _count_mergetokens(token_freqs)
+
+    # find the most frequent adjcent tokens gram
+    # break ties lexicographically
+    merged_token = _pick_best_mergetoken(pair_counts)
+
+    # remove best token
+    # update pair counts
+    del(pair_counts[merged_token[0]])
+    for k, v in pair_counts.items():
+        if k[1] == merged_token[0][0]:
+            # find count and update pair count
+            # find count for updating
+            # check if pretoken item contain this combination and the times of combination
+            count = _find_count((k, merged_token[0][1]), pair_counts)
+            updated_count = v - count
+            if updated_count == 0:
+                del(pair_counts[k])
+            else:
+                pair_counts[k] = updated_count
+            pair_counts[(k[0], (merged_token[0][0] + merged_token[0][1],))] = count
+        elif k[0] == merged_token[0][1]:
+            # find count and update pair count
+            count = _find_count((k, merged_token[0][1]), pair_counts)
+            updated_count = v - count
+            if updated_count == 0:
+                del(pair_counts[k])
+            else:
+                pair_counts[k] = updated_count
+            pair_counts[((merged_token[0][0] + merged_token[0][1],), k[1])] = count
+    
+    # merges.append((merged_token[0][0], merged_token[0][1]))
+
+    return pair_counts, merged_token
+
 # print("merged token statistic:", merge(pretokenize_and_count(string)))
 
 # merge pretoken according to new merged token
@@ -195,7 +273,7 @@ def remove_special_tokens(text : str, special_tokens : list[str]) -> list[str]:
 # merges: list[tuple[bytes, bytes]] A list of BPE merges produced from training. Each list item
 #   is a tuple of bytes (<token1>, <token2>), representing that <token1> was merged with
 #   <token2>. The merges should be ordered by order of creation.
-def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+def train_bpe_old(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
     # init vocab
     vocab : dict[int, bytes] = init_vocab(special_tokens)
     # init merges
@@ -230,3 +308,36 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
 
 # print("vocab:", vocab)
 # print("merges:", merges)
+
+
+
+def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+    # init vocab
+    vocab : dict[int, bytes] = init_vocab(special_tokens)
+    # init merges
+    merges : list[tuple[bytes, bytes]] = []
+
+    # read training data
+    with open(input_path, "r", encoding="utf-8") as f:
+        text = f.read()
+    # print(text)
+
+    # removing special tokens before pre-tokenization
+    # Pre-tokenization
+    #use a regex-based pre-tokenizer
+    pretokens = pretokenize_and_count(remove_special_tokens(text, special_tokens), True)
+    # print("pretokens:", pretokens)
+    # pretokens = pretokenize_and_count(text)
+
+    # construct init pair count
+    pair_counts = count_mergetokens(pretokens)
+    for i in range(vocab_size - 256 - len(special_tokens)):
+        # pick best adjcent tokens to merge
+        pair_counts,  merged_token = merge_optim(pair_counts)
+        # TODO: optimize point, insert vocab and merges two times
+        # update vocabs
+        update_vocab(vocab, merged_token)
+        # update merges
+        merges.append((merged_token[0][0], merged_token[0][1]))
+    
+    return vocab, merges
