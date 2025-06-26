@@ -44,9 +44,13 @@ def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tup
             pre_tokens = doc.split()
 
         for token in pre_tokens:
-            # iter.match convert to string
-            token_str = token.group(0)
+            if gpt2_regex:
+                # iter.match convert to string
+                token_str = token.group(0)
+            else:
+                token_str = token
             bytes_token = token_str.encode("utf-8")
+            
             tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
             token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
         
@@ -107,7 +111,7 @@ def count_mergetokens(freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int
             merged_token_count[k[i : i+2]] = merged_token_count.get(k[i : i+2], 0) + v
     return merged_token_count
 
-def merge_optim(pair_counts : dict[tuple[bytes], int]) -> tuple[dict[tuple[bytes], int], tuple[tuple[bytes], int]]:
+def merge_optim(pair_counts : dict[tuple[bytes], int], pretokens: dict[tuple[bytes], int]) -> tuple[dict[tuple[bytes], int], tuple[tuple[bytes], int]]:
 
     # here `freqs` refer to pretoken freqs
     def _count_mergetokens(freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
@@ -130,13 +134,29 @@ def merge_optim(pair_counts : dict[tuple[bytes], int]) -> tuple[dict[tuple[bytes
     
     def _find_count(overlap_merged: tuple[bytes], freqs: dict[tuple[bytes], int]) -> int:
         count_overall = 0
+
+        overlap_merged = tuple(
+            p[b:b+1]
+            for p in overlap_merged
+            for b in range(len(p))
+        )
+        print("overlap_merged", overlap_merged)
+
         for k, v in freqs.items():
             i = 0
             count = 0
-            while i < len(k) - 2:
-                if k[i] == overlap_merged[0] and k[i+1] == overlap_merged[1] and k[i+2] == overlap_merged[2]:
+            while i < len(k) - len(overlap_merged) + 1:
+                for j in range(len(overlap_merged)):
+                    if not k[i+j] == overlap_merged[j]:
+                        i = i+1
+                        break
+                else:
                     count = count + 1
-                    i = i+2
+                    i = i + len(overlap_merged)
+                # if k[i] == overlap_merged[0] and k[i+1] == overlap_merged[1] and k[i+2] == overlap_merged[2]:
+                #     count = count + 1
+                #     i = i+2
+                # i = i+1
             count_overall = count_overall + count * v
         return count_overall
     
@@ -151,31 +171,35 @@ def merge_optim(pair_counts : dict[tuple[bytes], int]) -> tuple[dict[tuple[bytes
     # remove best token
     # update pair counts
     del(pair_counts[merged_token[0]])
+    new_pair_counts : dict[tuple[bytes], int] = {}
+
     for k, v in pair_counts.items():
         if k[1] == merged_token[0][0]:
             # find count and update pair count
             # find count for updating
             # check if pretoken item contain this combination and the times of combination
-            count = _find_count((k, merged_token[0][1]), pair_counts)
+            count = _find_count((k[0], k[1], merged_token[0][1]), pretokens)
             updated_count = v - count
-            if updated_count == 0:
-                del(pair_counts[k])
-            else:
-                pair_counts[k] = updated_count
-            pair_counts[(k[0], (merged_token[0][0] + merged_token[0][1],))] = count
+            # print("update count:", updated_count)
+            if not updated_count == 0:
+                new_pair_counts[k] = updated_count
+
+            new_pair_counts[(k[0], merged_token[0][0] + merged_token[0][1])] = count
         elif k[0] == merged_token[0][1]:
             # find count and update pair count
-            count = _find_count((k, merged_token[0][1]), pair_counts)
+            count = _find_count((merged_token[0][0], k[0], k[1]), pretokens)
             updated_count = v - count
-            if updated_count == 0:
-                del(pair_counts[k])
-            else:
-                pair_counts[k] = updated_count
-            pair_counts[((merged_token[0][0] + merged_token[0][1],), k[1])] = count
+            if not updated_count == 0:
+                new_pair_counts[k] = updated_count
+            
+            new_pair_counts[(merged_token[0][0] + merged_token[0][1], k[1])] = count
+        else:
+            new_pair_counts[k] = v
+            
     
     # merges.append((merged_token[0][0], merged_token[0][1]))
 
-    return pair_counts, merged_token
+    return new_pair_counts, merged_token
 
 # print("merged token statistic:", merge(pretokenize_and_count(string)))
 
@@ -324,16 +348,18 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
 
     # removing special tokens before pre-tokenization
     # Pre-tokenization
-    #use a regex-based pre-tokenizer
-    pretokens = pretokenize_and_count(remove_special_tokens(text, special_tokens), True)
+    # use a regex-based pre-tokenizer
+    pretokens = pretokenize_and_count(remove_special_tokens(text, special_tokens), False)
     # print("pretokens:", pretokens)
     # pretokens = pretokenize_and_count(text)
 
     # construct init pair count
     pair_counts = count_mergetokens(pretokens)
     for i in range(vocab_size - 256 - len(special_tokens)):
+        print("pair counts:", pair_counts)
+
         # pick best adjcent tokens to merge
-        pair_counts,  merged_token = merge_optim(pair_counts)
+        pair_counts,  merged_token = merge_optim(pair_counts, pretokens)
         # TODO: optimize point, insert vocab and merges two times
         # update vocabs
         update_vocab(vocab, merged_token)
@@ -341,3 +367,9 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
         merges.append((merged_token[0][0], merged_token[0][1]))
     
     return vocab, merges
+
+
+vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 263, ["<|endoftext|>"])
+
+print("vocab:", vocab)
+print("merges:", merges)
