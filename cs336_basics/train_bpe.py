@@ -140,7 +140,7 @@ def merge_optim(pair_counts : dict[tuple[bytes], int], pretokens: dict[tuple[byt
             for p in overlap_merged
             for b in range(len(p))
         )
-        print("overlap_merged", overlap_merged)
+        # print("overlap_merged", overlap_merged)
 
         for k, v in freqs.items():
             i = 0
@@ -349,14 +349,14 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
     # removing special tokens before pre-tokenization
     # Pre-tokenization
     # use a regex-based pre-tokenizer
-    pretokens = pretokenize_and_count(remove_special_tokens(text, special_tokens), False)
+    pretokens = pretokenize_and_count(remove_special_tokens(text, special_tokens), True)
     # print("pretokens:", pretokens)
     # pretokens = pretokenize_and_count(text)
 
     # construct init pair count
     pair_counts = count_mergetokens(pretokens)
     for i in range(vocab_size - 256 - len(special_tokens)):
-        print("pair counts:", pair_counts)
+        # print("pair counts:", pair_counts)
 
         # pick best adjcent tokens to merge
         pair_counts,  merged_token = merge_optim(pair_counts, pretokens)
@@ -369,7 +369,7 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
     return vocab, merges
 
 
-vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 263, ["<|endoftext|>"])
+vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 500, ["<|endoftext|>"])
 
 print("vocab:", vocab)
 print("merges:", merges)
