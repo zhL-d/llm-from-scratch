@@ -1,0 +1,200 @@
+    
+    struct PairCount do
+        s: string
+        x: int
+    end
+
+    struct Cache do
+        merged_token: (pair, count)
+        merged_token_combimed: bytes
+        involved_paircount_type1: [(pair1, count1), (pair2, count2), ...]
+        involved_paircount_type2: [(pair1, count1), (pair2, count2), ...]
+        type1_directly: bool     // if there is merged token[0] in pair[0]
+        type2_directly: bool     // if there is merged token[1] in pair[1]
+        new_pair_count: PairCount
+        last_pair_change_count: int
+    end
+    
+    function find_involve_pair_count(pair_count) Cache do
+        //construct involved pair_count
+        //add not involved pair_count directly to cache.new_pair_count
+    end
+
+    function update_directly_type1(involved_pair, new_pair_count) do
+        inline construct_new_pair(pair) do
+            new_pair = (pair[0], cache.merged_token_combimed)   // ex. (s, l) -> (s, lo)
+        end
+
+        for pair, count in involved_pair do
+            new_pair = construct_new_pair(pair)
+            add (new_pair, count) to new_pair_count
+        end
+    end
+
+    function update_directly_type2(involved_pair, new_pair_count) do
+        inline construct_new_pair(pair) do
+            new_pair = (cache.merged_token_combimed, pair[1])   // ex. (o, e) -> (lo, e)
+        end
+
+        for pair, count in involved_pair do
+            new_pair = construct_new_pair(pair)
+            add (new_pair, count) to new_pair_count
+        end
+    end
+
+    function update_bysearch_type1(involved_pair, new_pair_count, merge_token_count, half_updated, merged_token) do
+        inline pretoken
+
+        inline construct_flat_pair(pair) do
+            new_pair_flat = (pair[0], pair[1], cache.merged_token[1])   // ex. (s, l) -> (s, l, o)
+        end
+
+        inline construct_new_pair(new_flat_pair) do
+            new_pair = (pair[0], cache.merged_token_combimed)   // ex. (s, lo)
+        end
+
+        inline update_pair_count(change_count, preserved_count, new_pair_count) do
+
+            cache.last_pair_change_count = cache.last_pair_change_count - change_count
+
+            if preserved_count != 0 then
+                add (pair, preserved_count) to new_pair_count
+            end
+
+            new_pair = construct_new_pair(new_flat_pair)
+            add (new_pair, change_count) to new_pair_count
+        end
+
+        inline update_last_pair(paircount, last_pair_change_count) do
+            if last_pair_change_count != 0 then
+                new_pair = construct_new_pair(paircount.pair)
+                add (new_pair, last_pair_change_count) to new_pair_count
+            end
+
+            add (paircount.pair, paircount.count-last_pair_change_count) to new_pair_count
+        end
+        
+
+
+
+        if half_updated then
+            for pair, count in involved_pair[:len(involved_pair)-1] do
+
+                change_count, preserved_count = determine_count(pair, pretoken)
+                update_pair_count(change_count, preserved_count, new_pair_count)
+            end
+
+            update_last_pair(involved_pair[-1], cache.last_pair_change_count)
+
+            return
+        end
+        else
+            for pair, count in involved_pair do
+
+                change_count, preserved_count = determine_count(pair, pretoken)
+                update_pair_count(change_count, preserved_count, new_pair_count)
+            end
+
+            return
+        end
+    end
+
+    function update_bysearch_type2(involved_pair_type2, new_pair_count) do
+        inline pretoken
+
+        inline construct_flat_pair(pair) do
+            new_pair_flat = (cache.merged_token[0], pair[0], pair[1])   // ex. (o, e) -> (l, o, e)
+        end
+
+        inline construct_new_pair(pair) do
+            new_pair = (cache.merged_token_combimed, pair[1])   // ex. (lo, e)
+        end
+
+        inline update_pair_count(change_count, preserved_count, new_pair_count) do
+            
+            cache.last_pair_change_count = cache.last_pair_change_count - change_count
+
+            if preserved_count != 0 then
+                add (pair, preserved_count) to new_pair_count
+            end
+
+            new_pair = construct_new_pair(new_flat_pair)
+            add (new_pair, change_count) to new_pair_count
+        end
+
+        inline update_last_pair(paircount, last_pair_change_count) do
+            if last_pair_change_count != 0 then
+                new_pair = construct_new_pair(paircount.pair)
+                add (new_pair, last_pair_change_count) to new_pair_count
+            end
+
+            add (paircount.pair, paircount.count-last_pair_change_count) to new_pair_count
+        end
+        
+
+
+
+        if half_updated then
+            for pair, count in involved_pair[:len(involved_pair)-1] do
+
+                change_count, preserved_count = determine_count(pair, pretoken)
+                update_pair_count(change_count, preserved_count, new_pair_count)
+            end
+
+            update_last_pair(involved_pair[-1], cache.last_pair_change_count)
+
+            return
+        end
+        else
+            for pair, count in involved_pair do
+
+                change_count, preserved_count = determine_count(pair, pretoken)
+                update_pair_count(change_count, preserved_count, new_pair_count)
+            end
+
+            return
+        end
+    end
+
+
+    function determine_count(new_pair_flat, pretoken) do
+        inline find_count(pair, pretoken) do
+            new_flat_pair = construct_flat_pair(pair)
+            //TODO: implement find_count logic
+        end
+
+        change_count = find_change_count(pair)
+        preserved_count = count - change_count
+
+        return change_count, preserved_count
+    end
+
+
+    function update_pair_count(pair_count) do
+
+        cache Cache = analysis_paircount_situation(pair_count)
+
+        if cache.type1_directly and cache.type2_directly then
+
+            update_directly_type1(cache.involved_pair_type1, cache.new_pair_count)
+            update_directly_type2(cache.involved_pair_type2, cache.new_pair_count)
+
+            return cache.new_pair_count
+        elseif cache.type1_directly and not cache.type2_directly then
+
+            update_directly_type1(cache.involved_pair_type1, cache.new_pair_count)
+            update_bysearch_type2(cache.involved_pair_type2, cache.new_pair_count)       
+
+            return cache.new_pair_count
+        elseif not cache.type1_directly and cache.type2_directly then
+
+            update_bysearch_type1(cache.involved_pair_type1, cache.new_pair_count)
+            update_directly_type2(cache.involved_pair_type2, cache.new_pair_count)
+    
+            return cache.new_pair_count
+        else
+            update_bysearch_type1(cache.involved_pair_type1, cache.new_pair_count)
+            update_bysearch_type2(cache.involved_pair_type2, cache.new_pair_count)
+
+            return cache.new_pair_count
+    end

@@ -91,7 +91,6 @@ def merge(token_freqs : dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
     # here `freq` refer to merge adjcent token freqs
     def _pick_best_mergetoken(freqs: dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
         # as-is
-        
         return max(
             freqs.items(),
             key = lambda kv: (kv[1], kv[0])
@@ -127,25 +126,15 @@ def merge_optim(pair_counts : dict[tuple[bytes], int], pretokens: dict[tuple[byt
     # TODO: performance profile
     # here `freq` refer to merge adjcent token freqs
     def _pick_best_mergetoken(freqs: dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
-        try:
-            return max(
-                freqs.items(),
-                key = lambda kv: (kv[1], kv[0])
-            )
-        except Exception as e:
-        # Log or print the freqs that caused the failure
-            print("Error picking best token, freqs was:", freqs)
-            raise
-
         # as-is
-        # return max(
-        #     freqs.items(),
-        #     key = lambda kv: (kv[1], kv[0])
-        # )
+        return max(
+            freqs.items(),
+            key = lambda kv: (kv[1], kv[0])
+        )
     
     def _find_count(overlap_merged: tuple[bytes], freqs: dict[tuple[bytes], int]) -> int:
-        # print("$$$pretoken:", freqs)
-        # print("$$$involved combination:", overlap_merged)
+        print("$$$pretoken:", freqs)
+        print("$$$involved combination:", overlap_merged)
         count_overall = 0
 
         overlap_merged = tuple(
@@ -153,10 +142,10 @@ def merge_optim(pair_counts : dict[tuple[bytes], int], pretokens: dict[tuple[byt
             for p in overlap_merged
             for b in range(len(p))
         )
-        # print("$$$involved combination-flat:", overlap_merged)
+        print("$$$involved combination-flat:", overlap_merged)
 
         for k, v in freqs.items():
-            # print("$$$comparing pretoken:", k, v)
+            print("$$$comparing pretoken:", k, v)
             i = 0
             count = 0
             while i < len(k) - len(overlap_merged) + 1:
@@ -171,7 +160,7 @@ def merge_optim(pair_counts : dict[tuple[bytes], int], pretokens: dict[tuple[byt
                 #     count = count + 1
                 #     i = i+2
                 # i = i+1
-            # print("$$$compaired pretoken, pretoken_num, count:", k, v, count)
+            print("$$$compaired pretoken, pretoken_num, count:", k, v, count)
             count_overall = count_overall + count * v
         return count_overall
     
@@ -192,58 +181,58 @@ def merge_optim(pair_counts : dict[tuple[bytes], int], pretokens: dict[tuple[byt
 
     # remove best token
     # update pair counts
-    # print("***update pair count***")
+    print("***update pair count***")
     del(pair_counts[merged_token[0]])
-    # print("delete merged token", pair_counts)
+    print("delete merged token", pair_counts)
 
     new_pair_counts : dict[tuple[bytes], int] = {}
 
     for k, v in pair_counts.items():
-        # print("***check if pair need update", k, v)
+        print("***check if pair need update", k, v)
         if k[1] == merged_token[0][0]:
             # find count and update pair count
             # find count for updating
             # check if pretoken item contain this combination and the times of combination
-            # print("$$$need update", k[1], merged_token[0][0])
+            print("$$$need update", k[1], merged_token[0][0])
             count = _find_count((k[0], k[1], merged_token[0][1]), pretokens)
-            # print("$$$count_overall:", k, count)
+            print("$$$count_overall:", k, count)
             if not count == 0:
-                # print("$$$have combination in pretoken")
+                print("$$$have combination in pretoken")
                 updated_count = v - count
-                # print("$$$update count:", k, updated_count)
+                print("$$$update count:", k, updated_count)
                 if not updated_count == 0:
                     new_pair_counts[k] = updated_count
-                    # print("update new_pair_counts", new_pair_counts)
+                    print("update new_pair_counts", new_pair_counts)
                 
                 new_pair_counts[(k[0], merged_token[0][0] + merged_token[0][1])] = count
-                # print("update new_pair_counts", new_pair_counts)
+                print("update new_pair_counts", new_pair_counts)
             else:
-                # print("$$$no combination in pretoken")
+                print("$$$no combination in pretoken")
                 new_pair_counts[k] = v
-                # print("update new_pair_counts", new_pair_counts)
+                print("update new_pair_counts", new_pair_counts)
         elif k[0] == merged_token[0][1]:
-            # print("$$$need update", k[0], merged_token[0][1])
+            print("$$$need update", k[0], merged_token[0][1])
             # find count and update pair count
             count = _find_count((merged_token[0][0], k[0], k[1]), pretokens)
-            # print("$$$count_overall:", k, count)
+            print("$$$count_overall:", k, count)
             if not count == 0:
                 updated_count = v - count
-                # print("$$$update count:", updated_count)
+                print("$$$update count:", updated_count)
                 if not updated_count == 0:
-                    new_pair_counts[k] = updated_count
-                    # print("update new_pair_counts", new_pair_counts)            
+                    new_pair_counts[k] = k, updated_count
+                    print("update new_pair_counts", new_pair_counts)            
 
                 new_pair_counts[(merged_token[0][0] + merged_token[0][1], k[1])] = count
-                # print("update new_pair_counts", new_pair_counts)
+                print("update new_pair_counts", new_pair_counts)
             else:
-                # print("$$$no combination in pretoken")
+                print("$$$no combination in pretoken")
                 new_pair_counts[k] = v
-                # print("update new_pair_counts", new_pair_counts)        
+                print("update new_pair_counts", new_pair_counts)        
             
         else:
-            # print("$$$no need update", k)
+            print("$$$no need update", k)
             new_pair_counts[k] = v
-            # print("update new_pair_counts", new_pair_counts)
+            print("update new_pair_counts", new_pair_counts)
             
     
     # merges.append((merged_token[0][0], merged_token[0][1]))
@@ -399,21 +388,21 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
     # Pre-tokenization
     # use a regex-based pre-tokenizer
     pretokens = pretokenize_and_count(remove_special_tokens(text, special_tokens), True)
-    # print("pretokens:", pretokens)
-    # print("#####################################")
+    print("pretokens:", pretokens)
+    print("#####################################")
     # pretokens = pretokenize_and_count(text)
 
     # construct init pair count
     pair_counts = count_mergetokens(pretokens)
-    # print("pair_counts:", pair_counts)
+    print("pair_counts:", pair_counts)
     for i in range(vocab_size - 256 - len(special_tokens)):
         # print("pair counts:", pair_counts)
 
         # pick best adjcent tokens to merge
         pair_counts,  merged_token = merge_optim(pair_counts, pretokens)
-        # print("merged_token", merged_token)
-        # print("#####################################")
-        # print("pair_counts:", pair_counts)
+        print("merged_token", merged_token)
+        print("#####################################")
+        print("pair_counts:", pair_counts)
         # TODO: optimize point, insert vocab and merges two times
         # update vocabs
         update_vocab(vocab, merged_token)
@@ -423,7 +412,7 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
     return vocab, merges
 
 
-# vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 500, ["<|endoftext|>"])
+vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 500, ["<|endoftext|>"])
 # vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/train_data_small.txt", 263, ["<|endoftext|>"])
 
 # print("vocab:", vocab)
