@@ -5,19 +5,56 @@
     end
 
     struct Cache do
-        merged_token: (pair, count)
+        merged_token_pair_count: (pair, count)
         merged_token_combimed: bytes
         involved_paircount_type1: [(pair1, count1), (pair2, count2), ...]
         involved_paircount_type2: [(pair1, count1), (pair2, count2), ...]
-        type1_directly: bool     // if there is merged token[0] in pair[0]
-        type2_directly: bool     // if there is merged token[1] in pair[1]
+        type1_directly: bool     # if there is merged token[0] in pair[0]
+        type2_directly: bool     # if there is merged token[1] in pair[1]
         new_pair_count: PairCount
         last_pair_change_count: int
-    end
+    end        
     
-    function find_involve_pair_count(pair_count) Cache do
-        //construct involved pair_count
-        //add not involved pair_count directly to cache.new_pair_count
+    function analysis_paircount_situation(pair_count, merged_token) Cache do
+
+        cache = Cache()
+        cache.new_pair_count = PairCount()
+        cache.merged_token_pair_count = merged_token
+        cache.merged_token_combimed = merged_token[0] + merged_token[1]
+        cache.involved_paircount_type1 = []
+        cache.involved_paircount_type2 = []
+        cache.type1_directly = True
+        cache.type2_directly = True
+        cache.last_pair_change_count = merge_token_count.count
+
+        merged_token = cache.merge_token_pair_count[0]
+        merged_token_count = cache.merge_token_pair_count[1]
+        is_involved = False
+
+        for pair, count in pair_count do
+            # include(o,l) situation
+            if cache.merged_token[0] == pair[1] do
+                cache.involved_pair_type1.apppend(pair)
+                is_involved = True
+            end
+            elif cache.merge_token_count[1] == pair[0] do
+                cache.involved_pair_type2.append(pair)
+                is_involved = True
+            end
+
+            if cache.merged_token[0] == pair[0] do
+                cache.type1_directly = False
+            end
+            if cache.merged_token[1] == pair[1] do
+                cache.type2_directly = False
+            end
+
+            if not is_involved then
+                cache.new_pair_count.append(pair)
+            end
+        end
+
+        return cache
     end
 
     function update_directly_type1(involved_pair, new_pair_count) do
@@ -111,7 +148,7 @@
         end
 
         inline update_pair_count(change_count, preserved_count, new_pair_count) do
-            
+
             cache.last_pair_change_count = cache.last_pair_change_count - change_count
 
             if preserved_count != 0 then
@@ -158,12 +195,23 @@
 
 
     function determine_count(new_pair_flat, pretoken) do
-        inline find_count(pair, pretoken) do
+        inline count_occurrences(pair, pretoken) do
             new_flat_pair = construct_flat_pair(pair)
-            //TODO: implement find_count logic
+            count_overall = 0
+            lenth_new_flat_pair = len(new_flat_pair)
+            for pair, pair_count in pretoken do
+                count = 0
+                for i in range(len(pair) - lenth_new_flat_pair + 1) do
+                    if pair[i:i+lenth_new_flat_pair] == new_flat_pair then
+                        count = count + 1
+                    end
+                end
+                count_overrall = count_overall + count * pair_count
+            end
+            return count_overall
         end
 
-        change_count = find_change_count(pair)
+        change_count = count_occurrences(pair)
         preserved_count = count - change_count
 
         return change_count, preserved_count

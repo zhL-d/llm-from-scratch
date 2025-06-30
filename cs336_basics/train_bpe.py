@@ -1,5 +1,23 @@
 import regex as re
 
+def construct_flatpair(pair: tuple[bytes, ...]) -> tuple[bytes, ...]:
+    # import pdb; pdb.set_trace()
+
+    flat_pair: tuple[bytes, ...] = ()
+
+    for part in pair:
+        if len(part) > 1:
+            for i in range(len(part)):
+                flat_pair = flat_pair + (part[i:i+1],)  # Extract single byte
+        else:
+            flat_pair = flat_pair + (part,)
+    
+    return flat_pair
+
+def count_occurrences(pair: tuple[bytes, ...], pretoken: dict[tuple[bytes, ...], int]) -> int:
+    return 0
+
+
 string = """\
 low low low low low
 lower lower widest widest widest
