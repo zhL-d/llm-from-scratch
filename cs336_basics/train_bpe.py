@@ -1,4 +1,24 @@
 import regex as re
+from dataclasses import dataclass
+
+@dataclass
+class pair_counts_context:
+    merged_token_pair_count: tuple[tuple[bytes, ...], int]
+    merged_token_combined: bytes
+    involved_paircount_type1: list[tuple[tuple[bytes, ...], int]]
+    involved_paircount_type2: list[tuple[tuple[bytes, ...], int]]
+    type1_directly: bool    # if there is no merged_token[0] in all pair[0]
+    type2_directly: bool    # if there is no merged_token[1] in all pair[1]
+    new_pair_count: dict[tuple[bytes, ...], int]
+    last_pair_changed_count: int
+
+def construct_pair_search_pattern(typ: int, pair: tuple[bytes, ...], merged_token_pair: tuple[bytes, ...]) -> tuple[bytes, ...]:
+    if not typ == 1 and not typ == 2:
+        raise ValueError("type must be 1 or 2")
+    if typ == 1:
+        return pair + (merged_token_pair[1],)
+    else:
+        return (merged_token_pair[0],) + pair
 
 def construct_flatpair(pair: tuple[bytes, ...]) -> tuple[bytes, ...]:
     # import pdb; pdb.set_trace()
@@ -15,7 +35,34 @@ def construct_flatpair(pair: tuple[bytes, ...]) -> tuple[bytes, ...]:
     return flat_pair
 
 def count_occurrences(pair: tuple[bytes, ...], pretoken: dict[tuple[bytes, ...], int]) -> int:
-    return 0
+    flat_pair = construct_flatpair(pair)
+
+    count_overall = 0
+    len_flat_pair = len(flat_pair)
+
+    for pretoken_pair, pretoken_count in pretoken.items():
+        count = 0
+        for i in range(len(pretoken_pair) - len_flat_pair + 1):
+            if pretoken_pair[i:i+len_flat_pair] == flat_pair:
+                count = count + 1
+        
+        count_overall = count_overall + count * pretoken_count
+    
+    return count_overall
+
+def determine_count(
+        typ: int, 
+        pair_count: tuple[tuple[bytes, ...], int], 
+        merged_token_pair: tuple[bytes, ...], 
+        pretoken: dict[tuple[bytes, ...], int]) -> tuple[int, int]:
+    
+    if not typ == 1 and not typ == 2:
+        raise ValueError("type must be 1 or 2")
+    
+    search_pattern = construct_pair_search_pattern(typ, pair_count[0], merged_token_pair)
+
+    change_count = count_occurrences(search_pattern, pretoken)
+    return change_count, pair_count[1] - change_count
 
 
 string = """\
