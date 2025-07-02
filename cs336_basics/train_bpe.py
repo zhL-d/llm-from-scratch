@@ -1,16 +1,55 @@
 import regex as re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class pair_counts_context:
-    merged_token_pair_count: tuple[tuple[bytes, ...], int]
-    merged_token_combined: bytes
-    involved_paircount_type1: list[tuple[tuple[bytes, ...], int]]
-    involved_paircount_type2: list[tuple[tuple[bytes, ...], int]]
-    type1_directly: bool    # if there is no merged_token[0] in all pair[0]
-    type2_directly: bool    # if there is no merged_token[1] in all pair[1]
-    new_pair_count: dict[tuple[bytes, ...], int]
-    last_pair_changed_count: int
+    merged_token_pair_count: tuple[tuple[bytes, ...], int] = ()
+    merged_token_combined: bytes = b''
+    involved_paircount_type1: list[tuple[tuple[bytes, ...], int]] = field(default_factory=list)
+    involved_paircount_type2: list[tuple[tuple[bytes, ...], int]] = field(default_factory=list)
+    type1_directly: bool = True    # if there is no merged_token[0] in all pair[0]
+    type2_directly: bool = True    # if there is no merged_token[1] in all pair[1]
+    new_pair_count: dict[tuple[bytes, ...], int] = field(default_factory=dict)
+    last_pair_changed_count: int = 0
+
+def analyse_paircounts(pair_counts: dict[tuple[bytes, ...], int]) -> pair_counts_context:
+    # first round analysis
+    pcc = pair_counts_context()
+    #TODO: O(n)?
+    pcc.merged_token_pair_count =  max(
+        pair_counts.items(),
+        key = lambda kv: (kv[1], kv[0]),
+    )
+    pcc.merged_token_combined = pcc.merged_token_pair_count[0][0] + pcc.merged_token_pair_count[0][1]
+    pcc.last_pair_changed_count = pcc.merged_token_pair_count[1]
+    del(pair_counts[pcc.merged_token_pair_count[0]])
+
+    # pcc.involved_paircount_type1 = []
+    # pcc.involved_paircount_type2 = []
+
+    # pcc.type1_directly = True
+    # pcc.type2_directly = True
+
+    # pcc.new_pair_count = {}
+
+    # second round analysis
+    merged_token_pair = pcc.merged_token_pair_count[0]
+    for pair, count in pair_counts.items():
+        if merged_token_pair[0] == pair[1]:
+            pcc.involved_paircount_type1.append((pair, count))
+        elif merged_token_pair[1] == pair[0]:
+            pcc.involved_paircount_type2.append((pair, count))
+        else:
+            if merged_token_pair[0] == pair[0]:
+                pcc.type1_directly = False
+            if merged_token_pair[1] == pair[1]:
+                pcc.type2_directly = False
+
+            pcc.new_pair_count[pair] = count
+    
+    return pcc
+            
+    
 
 def construct_pair_search_pattern(typ: int, pair: tuple[bytes, ...], merged_token_pair: tuple[bytes, ...]) -> tuple[bytes, ...]:
     if not typ == 1 and not typ == 2:
