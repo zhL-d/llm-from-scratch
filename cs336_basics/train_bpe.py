@@ -103,6 +103,38 @@ def determine_count(
     change_count = count_occurrences(search_pattern, pretoken)
     return change_count, pair_count[1] - change_count
 
+def consutrct_new_pair(pair: tuple[bytes, ...], merged_token_combined: bytes, typ: int) -> tuple[bytes, ...]:
+    if not typ == 1 and not typ == 2:
+        raise ValueError("type must be 1 or 2")
+    
+    if typ == 1:
+        return pair[0], merged_token_combined
+    else:
+        return merged_token_combined, pair[1]
+
+def update_directly(paircount_ctx: pair_counts_context, typ: int) -> pair_counts_context:
+    if not typ == 1 and not typ == 2:
+        raise ValueError("type must be 1 or 2")
+    
+    merged_token_combined = paircount_ctx.merged_token_combined
+    
+    if typ == 1:
+        for paircount in paircount_ctx.involved_paircount_type1:
+            new_pair = consutrct_new_pair(paircount[0], merged_token_combined, typ)
+            paircount_ctx.new_pair_count[new_pair] = paircount[1]
+
+            paircount_ctx.last_pair_changed_count = paircount_ctx.last_pair_changed_count - paircount[1]
+        
+        return paircount_ctx
+    else:
+        for paircount in paircount_ctx.involved_paircount_type2:
+            new_pair = consutrct_new_pair(paircount[0], merged_token_combined, typ)
+            paircount_ctx.new_pair_count[new_pair] = paircount[1]
+
+            paircount_ctx.last_pair_changed_count = paircount_ctx.last_pair_changed_count - paircount[1]
+
+        return paircount_ctx 
+
 
 string = """\
 low low low low low
