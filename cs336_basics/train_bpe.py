@@ -189,6 +189,38 @@ def update_directly(paircount_ctx: pair_counts_context, typ: int) -> pair_counts
 
         return paircount_ctx
     
+def update_pair_count(
+        pair_count: dict[tuple[bytes, ...], int], 
+        pretoken: dict[tuple[bytes, ...], int]
+        ) -> dict[tuple[bytes, ...], int]:
+
+    paircount_ctx = analyse_paircounts(pair_count)
+
+    if paircount_ctx.type1_directly and paircount_ctx.type2_directly:
+
+        paircount_ctx = update_directly(paircount_ctx, 1)
+        paircount_ctx = update_directly(paircount_ctx, 2)
+
+    elif paircount_ctx.type1_directly and not paircount_ctx.type2_directly:
+
+        paircount_ctx = update_directly(paircount_ctx, 1)
+        paircount_ctx.update_bysearch(2, pretoken, True)
+
+    elif not paircount_ctx.type1_directly and paircount_ctx.type2_directly:
+
+        paircount_ctx = update_directly(paircount_ctx, 2)
+        paircount_ctx.update_bysearch(1, pretoken, True)
+
+    else:
+
+        paircount_ctx.update_bysearch(1, pretoken, False)
+        paircount_ctx.update_bysearch(2, pretoken, False)
+
+    return paircount_ctx.new_pair_count
+
+
+
+    
 
 
 string = """\
