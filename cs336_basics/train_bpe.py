@@ -12,6 +12,60 @@ class pair_counts_context:
     new_pair_count: dict[tuple[bytes, ...], int] = field(default_factory=dict)
     last_pair_changed_count: int = 0
 
+    def update_paircount_item(self, change_count: int, preserved_count: int, pair_index: int, typ: int):
+        if not typ == 1 and not typ == 2:
+            raise ValueError("type must be 1 or 2")
+        
+        self.last_pair_changed_count =  self.last_pair_changed_count - change_count
+
+        if typ == 1:
+            involved_paircount = self.involved_paircount_type1
+            new_pair = consutrct_new_pair(involved_paircount[pair_index][0], self.merged_token_combined, typ)
+        else:
+            involved_paircount = self.involved_paircount_type2
+            new_pair = consutrct_new_pair(involved_paircount[pair_index][0], self.merged_token_combined, typ)
+
+
+        if preserved_count != 0:
+            self.new_pair_count[involved_paircount[pair_index][0]] = preserved_count
+        
+        if change_count != 0:
+            self.new_pair_count[new_pair] = change_count
+
+    def update_bysearch(self, typ: int, pretoken: dict[tuple[bytes, ...], int], half_updated: bool):
+
+        if not typ == 1 and not typ == 2:
+            raise ValueError("type must be 1 or 2")
+        
+        if typ == 1:
+            involved_paircount = self.involved_paircount_type1
+        else:
+            involved_paircount = self.involved_paircount_type2
+
+        if half_updated:           
+
+            for i, paircount in enumerate(involved_paircount[:len(involved_paircount)-1]):
+                change_count, preserved_count =  determine_count(typ, paircount, self.merged_token_pair_count[0], pretoken)
+                self.update_paircount_item(change_count, preserved_count, i, typ)
+            
+            # update last pair
+            last_pc_p = involved_paircount[-1][0]
+            last_pc_c = involved_paircount[-1][1]
+
+            if self.last_pair_changed_count > 0:
+                last_new_pair = consutrct_new_pair(last_pc_p, self.merged_token_combined, typ)
+                self.new_pair_count[last_new_pair] = self.last_pair_changed_count
+            
+            self.new_pair_count[last_pc_p] = last_pc_c - self.last_pair_changed_count
+
+        else:
+            for i, paircount in enumerate(involved_paircount):
+                change_count, preserved_count =  determine_count(typ, paircount, self.merged_token_pair_count[0], pretoken)
+                self.update_paircount_item(change_count, preserved_count, i, typ)
+
+        
+
+
 def analyse_paircounts(pair_counts: dict[tuple[bytes, ...], int]) -> pair_counts_context:
     # first round analysis
     pcc = pair_counts_context()
@@ -133,7 +187,8 @@ def update_directly(paircount_ctx: pair_counts_context, typ: int) -> pair_counts
 
             paircount_ctx.last_pair_changed_count = paircount_ctx.last_pair_changed_count - paircount[1]
 
-        return paircount_ctx 
+        return paircount_ctx
+    
 
 
 string = """\
