@@ -1,5 +1,23 @@
 import regex as re
 from dataclasses import dataclass, field
+import json
+
+
+def constuct_paircount_with_cache(
+        pretokens: dict[tuple[bytes], int]
+        ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], dict[tuple[bytes, ...], int]]]:
+    
+    pair_count: dict[tuple[bytes], int] = {}
+    pc_loc_cache:  dict[tuple[bytes, ...], dict[tuple[bytes, ...], int]] = {}
+
+    for k, v in pretokens.items():
+        for i in range(len(k)-1):
+            pair = k[i : i+2]
+            pair_count[pair] = pair_count.get(pair, 0) + v
+
+            inner = pc_loc_cache.setdefault(pair, {})
+            inner[k] = v
+    return pair_count, pc_loc_cache
 
 @dataclass
 class pair_counts_context:
@@ -62,6 +80,37 @@ class pair_counts_context:
             for i, paircount in enumerate(involved_paircount):
                 change_count, preserved_count =  determine_count(typ, paircount, self.merged_token_pair_count[0], pretoken)
                 self.update_paircount_item(change_count, preserved_count, i, typ)
+
+    def update_bysearch_no_half(self, typ: int, pretoken: dict[tuple[bytes, ...], int]):
+
+        if not typ == 1 and not typ == 2:
+            raise ValueError("type must be 1 or 2")
+        
+        if typ == 1:
+            involved_paircount = self.involved_paircount_type1
+        else:
+            involved_paircount = self.involved_paircount_type2
+
+        # if half_updated:           
+
+        #     for i, paircount in enumerate(involved_paircount[:len(involved_paircount)-1]):
+        #         change_count, preserved_count =  determine_count(typ, paircount, self.merged_token_pair_count[0], pretoken)
+        #         self.update_paircount_item(change_count, preserved_count, i, typ)
+            
+        #     # update last pair
+        #     last_pc_p = involved_paircount[-1][0]
+        #     last_pc_c = involved_paircount[-1][1]
+
+        #     if self.last_pair_changed_count > 0:
+        #         last_new_pair = consutrct_new_pair(last_pc_p, self.merged_token_combined, typ)
+        #         self.new_pair_count[last_new_pair] = self.last_pair_changed_count
+            
+        #     self.new_pair_count[last_pc_p] = last_pc_c - self.last_pair_changed_count
+
+        # else:
+        for i, paircount in enumerate(involved_paircount):
+            change_count, preserved_count =  determine_count(typ, paircount, self.merged_token_pair_count[0], pretoken)
+            self.update_paircount_item(change_count, preserved_count, i, typ)
 
         
 
@@ -143,6 +192,52 @@ def count_occurrences(pair: tuple[bytes, ...], pretoken: dict[tuple[bytes, ...],
     
     return count_overall
 
+#return: changed_count, new_loc_pretoken_cache_item, keep
+
+def analyse_cache_item(
+        loc_pretoken_cache_item: tuple[tuple[tuple[bytes, ...], int], int],
+        merged_token: tuple[bytes, ...]
+        ) -> tuple[int, dict[tuple[bytes, ...], int], bool]:
+
+    count_overall = 0
+    pretoken_pair = loc_pretoken_cache_item[0][0]
+    pretoken_count = loc_pretoken_cache_item[0][1]
+
+
+    for i in range(len(pretoken_pair) - pretoken_pair + 1):
+        if pretoken_pair[i:i+pretoken_pair] == merged_token:
+            count = count + 1
+        
+        count_overall = count_overall + count * pretoken_count
+    
+    # find sl in pretokken item, if have, flag sl, if it's essentially slo, flag false sl, at same time construct new pretoken
+    # once find sl, then start to find slo
+    # pretoken should only have one copy
+    return count_overall
+
+
+def count_occurrences_using_cache(
+        pair: tuple[bytes, ...], 
+        search_pattern: tuple[bytes, ...], 
+        cache: dict[tuple[bytes, ...], dict[tuple[bytes, ...], int]]
+        ) -> tuple[int, dict[tuple[bytes, ...], dict[tuple[bytes, ...], int]]]:
+     
+    
+    flat_pair = construct_flatpair(flat_pair)
+
+    count_overall = 0
+    len_flat_pair = len(flat_pair)
+
+    for pretoken_pair, pretoken_count in pretoken.items():
+        count = 0
+        for i in range(len(pretoken_pair) - len_flat_pair + 1):
+            if pretoken_pair[i:i+len_flat_pair] == flat_pair:
+                count = count + 1
+        
+        count_overall = count_overall + count * pretoken_count
+    
+    return count_overall
+
 def determine_count(
         typ: int, 
         pair_count: tuple[tuple[bytes, ...], int], 
@@ -155,6 +250,21 @@ def determine_count(
     search_pattern = construct_pair_search_pattern(typ, pair_count[0], merged_token_pair)
 
     change_count = count_occurrences(search_pattern, pretoken)
+    return change_count, pair_count[1] - change_count
+
+def determine_count_using_cache(
+        typ: int, 
+        pair_count: tuple[tuple[bytes, ...], int],
+        cache: dict[tuple[bytes, ...], dict[tuple[bytes, ...], int]],
+        merged_token_pair: tuple[bytes, ...], 
+        pretoken: dict[tuple[bytes, ...], int]) -> tuple[int, int]:
+    
+    if not typ == 1 and not typ == 2:
+        raise ValueError("type must be 1 or 2")
+    
+    search_pattern = construct_pair_search_pattern(typ, pair_count[0], merged_token_pair)
+
+    change_count = count_occurrences_using_cache(pair_count[0], search_pattern, cache)
     return change_count, pair_count[1] - change_count
 
 def consutrct_new_pair(pair: tuple[bytes, ...], merged_token_combined: bytes, typ: int) -> tuple[bytes, ...]:
@@ -192,7 +302,7 @@ def update_directly(paircount_ctx: pair_counts_context, typ: int) -> pair_counts
 def update_pair_count(
         pair_count: dict[tuple[bytes, ...], int], 
         pretoken: dict[tuple[bytes, ...], int]
-        ) -> dict[tuple[bytes, ...], int]:
+        ) -> tuple[dict[tuple[bytes, ...], int], tuple[tuple[bytes, ...], int]]:
 
     paircount_ctx = analyse_paircounts(pair_count)
 
@@ -216,7 +326,37 @@ def update_pair_count(
         paircount_ctx.update_bysearch(1, pretoken, False)
         paircount_ctx.update_bysearch(2, pretoken, False)
 
-    return paircount_ctx.new_pair_count
+    return paircount_ctx.new_pair_count, paircount_ctx.merged_token_pair_count
+
+
+def update_pair_count_nohalf(
+        pair_count: dict[tuple[bytes, ...], int], 
+        pretoken: dict[tuple[bytes, ...], int]
+        ) -> tuple[dict[tuple[bytes, ...], int], tuple[tuple[bytes, ...], int]]:
+
+    paircount_ctx = analyse_paircounts(pair_count)
+
+    if paircount_ctx.type1_directly and paircount_ctx.type2_directly:
+
+        paircount_ctx = update_directly(paircount_ctx, 1)
+        paircount_ctx = update_directly(paircount_ctx, 2)
+
+    elif paircount_ctx.type1_directly and not paircount_ctx.type2_directly:
+
+        paircount_ctx = update_directly(paircount_ctx, 1)
+        paircount_ctx.update_bysearch_no_half(2, pretoken)
+
+    elif not paircount_ctx.type1_directly and paircount_ctx.type2_directly:
+
+        paircount_ctx = update_directly(paircount_ctx, 2)
+        paircount_ctx.update_bysearch_no_half(1, pretoken)
+
+    else:
+
+        paircount_ctx.update_bysearch_no_half(1, pretoken)
+        paircount_ctx.update_bysearch_no_half(2, pretoken)
+
+    return paircount_ctx.new_pair_count, paircount_ctx.merged_token_pair_count
 
 
 
@@ -607,7 +747,7 @@ def train_bpe_old(input_path: str, vocab_size :int, special_tokens: list[str]) -
 
 
 
-def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+def train_bpe_problem(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
     # init vocab
     vocab : dict[int, bytes] = init_vocab(special_tokens)
     # init merges
@@ -646,8 +786,124 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
     return vocab, merges
 
 
-# vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 500, ["<|endoftext|>"])
-# vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/train_data_small.txt", 263, ["<|endoftext|>"])
+def train_bpe_with_half(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+    # init vocab
+    vocab : dict[int, bytes] = init_vocab(special_tokens)
+    # init merges
+    merges : list[tuple[bytes, bytes]] = []
+
+    # read training data
+    with open(input_path, "r", encoding="utf-8") as f:
+        text = f.read()
+    # print(text)
+
+    # removing special tokens before pre-tokenization
+    # Pre-tokenization
+    # use a regex-based pre-tokenizer
+    pretokens = pretokenize_and_count(remove_special_tokens(text, special_tokens), False)
+    # print("pretokens:", pretokens)
+    # print("#####################################")
+    # pretokens = pretokenize_and_count(text)
+
+    # construct init pair count
+    pair_counts = count_mergetokens(pretokens)
+    # print("pair_counts:", pair_counts)
+    for i in range(vocab_size - 256 - len(special_tokens)):
+        # print("pair counts:", pair_counts)
+
+        # pick best adjcent tokens to merge
+        pair_counts,  merged_token = update_pair_count(pair_counts, pretokens)
+        # print("merged_token", merged_token)
+        # print("#####################################")
+        # print("pair_counts:", pair_counts)
+        # TODO: optimize point, insert vocab and merges two times
+        # update vocabs
+        update_vocab(vocab, merged_token)
+        # update merges
+        merges.append((merged_token[0][0], merged_token[0][1]))
+    
+    return vocab, merges
+
+
+def train_bpe_problem(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+    # init vocab
+    vocab : dict[int, bytes] = init_vocab(special_tokens)
+    # init merges
+    merges : list[tuple[bytes, bytes]] = []
+
+    # read training data
+    with open(input_path, "r", encoding="utf-8") as f:
+        text = f.read()
+    # print(text)
+
+    # removing special tokens before pre-tokenization
+    # Pre-tokenization
+    # use a regex-based pre-tokenizer
+    pretokens = pretokenize_and_count(remove_special_tokens(text, special_tokens), True)
+    # print("pretokens:", pretokens)
+    # print("#####################################")
+    # pretokens = pretokenize_and_count(text)
+
+    # construct init pair count
+    pair_counts = count_mergetokens(pretokens)
+    # print("pair_counts:", pair_counts)
+    for i in range(vocab_size - 256 - len(special_tokens)):
+        # print("pair counts:", pair_counts)
+
+        # pick best adjcent tokens to merge
+        pair_counts,  merged_token = merge_optim(pair_counts, pretokens)
+        # print("merged_token", merged_token)
+        # print("#####################################")
+        # print("pair_counts:", pair_counts)
+        # TODO: optimize point, insert vocab and merges two times
+        # update vocabs
+        update_vocab(vocab, merged_token)
+        # update merges
+        merges.append((merged_token[0][0], merged_token[0][1]))
+    
+    return vocab, merges
+
+
+def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+    # init vocab
+    vocab : dict[int, bytes] = init_vocab(special_tokens)
+    # init merges
+    merges : list[tuple[bytes, bytes]] = []
+
+    # read training data
+    with open(input_path, "r", encoding="utf-8") as f:
+        text = f.read()
+    # print(text)
+
+    # removing special tokens before pre-tokenization
+    # Pre-tokenization
+    # use a regex-based pre-tokenizer
+    pretokens = pretokenize_and_count(remove_special_tokens(text, special_tokens), True)
+    # print("pretokens:", pretokens)
+    # print("#####################################")
+    # pretokens = pretokenize_and_count(text)
+
+    # construct init pair count
+    pair_counts = count_mergetokens(pretokens)
+    # print("pair_counts:", json.dumps({str(k): v for k, v in pair_counts.items()}, ensure_ascii=False))
+    for i in range(vocab_size - 256 - len(special_tokens)):
+        # print("pair counts:", pair_counts)
+
+        # pick best adjcent tokens to merge
+        pair_counts,  merged_token = update_pair_count_nohalf(pair_counts, pretokens)
+        # print("merged_token", json.dumps([[b.decode("utf-8") for b in merged_token[0]], merged_token[1]],ensure_ascii=False))
+        # print("#####################################")
+        # print("pair_counts:", json.dumps({str(k): v for k, v in pair_counts.items()}, ensure_ascii=False))
+        # TODO: optimize point, insert vocab and merges two times
+        # update vocabs
+        update_vocab(vocab, merged_token)
+        # update merges
+        merges.append((merged_token[0][0], merged_token[0][1]))
+    
+    return vocab, merges
+
+# vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/train_data_small.txt", 500, ["<|endoftext|>"])
+# # vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/train_data_small.txt", 263, ["<|endoftext|>"])
 
 # print("vocab:", vocab)
 # print("merges:", merges)
