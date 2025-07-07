@@ -1,6 +1,7 @@
 import regex as re
 from dataclasses import dataclass, field
 import json
+from collections import defaultdict
 
 
 def constuct_paircount_with_cache(
@@ -176,44 +177,85 @@ def construct_flatpair(pair: tuple[bytes, ...]) -> tuple[bytes, ...]:
     
     return flat_pair
 
-def count_occurrences(pair: tuple[bytes, ...], pretoken: dict[tuple[bytes, ...], int]) -> int:
-    flat_pair = construct_flatpair(pair)
+# def count_occurrences(pair: tuple[bytes, ...], pretoken: dict[tuple[bytes, ...], int]) -> int:
+#     flat_pair = construct_flatpair(pair)
 
-    count_overall = 0
-    len_flat_pair = len(flat_pair)
+#     count_overall = 0
+#     len_flat_pair = len(flat_pair)
 
-    for pretoken_pair, pretoken_count in pretoken.items():
-        count = 0
-        for i in range(len(pretoken_pair) - len_flat_pair + 1):
-            if pretoken_pair[i:i+len_flat_pair] == flat_pair:
-                count = count + 1
+#     for pretoken_pair, pretoken_count in pretoken.items():
+#         count = 0
+#         for i in range(len(pretoken_pair) - len_flat_pair + 1):
+#             if pretoken_pair[i:i+len_flat_pair] == flat_pair:
+#                 count = count + 1
         
-        count_overall = count_overall + count * pretoken_count
+#         count_overall = count_overall + count * pretoken_count
     
-    return count_overall
+#     return count_overall
 
-#return: changed_count, new_loc_pretoken_cache_item, keep
+# #return: changed_count, new_loc_pretoken_cache_item, keep
 
-def analyse_cache_item(
-        loc_pretoken_cache_item: tuple[tuple[tuple[bytes, ...], int], int],
-        merged_token: tuple[bytes, ...]
-        ) -> tuple[int, dict[tuple[bytes, ...], int], bool]:
+# def analyse_cache_item(
+#         loc_pretoken_cache_item: tuple[tuple[bytes, ...], int],
+#         pair: tuple[bytes, ...], 
+#         merged_token_pair: tuple[bytes, ...],
+#         typ: int
+#         ) -> tuple[int, dict[tuple[bytes, ...], int], bool]:
 
-    count_overall = 0
-    pretoken_pair = loc_pretoken_cache_item[0][0]
-    pretoken_count = loc_pretoken_cache_item[0][1]
+#     count_overall = 0
+#     keep: bool = 0
+#     count = 0
+
+#     pretoken_pair = loc_pretoken_cache_item[0]
+#     pretoken_count = loc_pretoken_cache_item[0]
+
+#     new_pretoken_pair: tuple[bytes, ...] = ()
+
+#     i = 0
+#     j = i + 1
+
+#     search_pattern = pair
+
+#     while i < len(pretoken_pair) - 1:
+#         if pretoken_pair[i : i+2] == search_pattern:
+#             if i+2 >= len(pretoken_pair):
+#                 new_pretoken_pair = new_pretoken_pair + pretoken_pair[i : i+2]
+#                 i =  i + 1
+#             elif pretoken_pair[i+2] == merged_token_pair[1]:
+#                 merged_token = (merged_token_pair[0] + merged_token_pair[1],)
+#                 new_pretoken_pair = new_pretoken_pair + pretoken_pair[i] + merged_token
+#             else:
+#                 keep = True
+#                 new_pretoken_pair = new_pretoken_pair + pretoken_pair[i : i+3]
+#         else:
+#             new_pretoken_pair = new_pretoken_pair + pretoken_pair[i : i+2]
 
 
-    for i in range(len(pretoken_pair) - pretoken_pair + 1):
-        if pretoken_pair[i:i+pretoken_pair] == merged_token:
-            count = count + 1
+#     while j < len(pretoken_pair):
+#         if not keep:
+#             search_pattern = pair
+#             if pretoken_pair[i : i+2] == pair:
+
+#         if not keep and pretoken_pair[i : i+2] == pair:
+#             if i[i+2] == merged_token[1]:
+#                 # TODO: construct new pair add new pretoken
+#                 count = count + 1
+#             else:
+# #                 keep = True
+# #                 # TODO: change to compare whole search pattern
+
+
+
+#     for i in range(len(pretoken_pair) -  + 1):
+#         if pretoken_pair[i:i+pretoken_pair] == merged_token:
+#             count = count + 1
         
-        count_overall = count_overall + count * pretoken_count
+#         count_overall = count_overall + count * pretoken_count
     
-    # find sl in pretokken item, if have, flag sl, if it's essentially slo, flag false sl, at same time construct new pretoken
-    # once find sl, then start to find slo
-    # pretoken should only have one copy
-    return count_overall
+#     # find sl in pretokken item, if have, flag sl, if it's essentially slo, flag false sl, at same time construct new pretoken
+#     # once find sl, then start to find slo
+#     # pretoken should only have one copy
+#     return count_overall
 
 
 def count_occurrences_using_cache(
@@ -864,7 +906,7 @@ def train_bpe_problem(input_path: str, vocab_size :int, special_tokens: list[str
     return vocab, merges
 
 
-def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+def train_bpe_w(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
     # init vocab
     vocab : dict[int, bytes] = init_vocab(special_tokens)
     # init merges
@@ -901,6 +943,149 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
         merges.append((merged_token[0][0], merged_token[0][1]))
     
     return vocab, merges
+
+
+
+
+def build_paircount_and_cache(
+        pretokens : dict[tuple[bytes, ...], int]
+        ) -> tuple[
+            dict[tuple[bytes], int], 
+            dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]
+            ]:
+    
+    pair_count: dict[tuple[bytes], int] = {}
+    cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]] = defaultdict(set)
+
+    for k, v in pretokens.items():
+        for i in range(len(k)-1):
+            pair_count[k[i : i+2]] = pair_count.get(k[i : i+2], 0) + v
+
+            cache[k[i : i+2]].add((k, v))
+
+    return pair_count, cache
+
+def _build_new_pretoken(
+        old_pretoken: tuple[tuple[bytes, ...], int], 
+        best_paircount: tuple[tuple[bytes, ...], int]
+        ) ->  tuple[tuple[bytes, ...], int]:
+    
+    new_pretoken_pair = ()
+    old_pretoken_pair = old_pretoken[0]
+    best_pair = best_paircount[0]
+
+    for i in range(len(old_pretoken_pair)-1):
+        if old_pretoken_pair[i : i+2] == best_pair:
+            new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i] + old_pretoken_pair[i+1],)
+        else:
+            new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i],)
+    
+    new_pretoken = (new_pretoken_pair, old_pretoken[1])
+    return new_pretoken
+
+def _delete_old_contribution(
+        pretoken: tuple[tuple[bytes, ...], int], 
+        pair_count: dict[tuple[bytes], int], 
+        reversed_cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]
+        ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]]:
+
+    pretoken_pair = pretoken[0]
+    pretoken_count = pretoken[1]
+
+    for i in range (len(pretoken_pair)-1):
+        pair = pretoken_pair[i : i+2]
+
+        pair_count[pair] = pair_count[pair] - pretoken_count
+        if pair_count[pair] == 0:
+            del pair_count[pair]
+
+        reversed_cache[pair].discard(pretoken)
+    
+    return pair_count, reversed_cache
+
+def _add_new_contribution(
+        pretoken: tuple[tuple[bytes, ...], int], 
+        pair_count: dict[tuple[bytes], int], 
+        reversed_cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]
+        ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]]:
+
+    reversed_cache = defaultdict(set, reversed_cache)
+    pretoken_pair = pretoken[0]
+    pretoken_count = pretoken[1]
+
+    for i in range (len(pretoken_pair)-1):
+        pair = pretoken_pair[i : i+2]
+
+        pair_count[pair] = pair_count.get(pair, 0) + pretoken_count
+
+        reversed_cache[pair].add(pretoken)
+    
+    return pair_count, reversed_cache
+
+
+def merge_new(
+        pair_counts: dict[tuple[bytes], int], 
+        reversed_cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]],
+        best_pair: tuple[bytes, ...]
+        ) -> tuple[tuple[bytes], int]:
+
+    affected_pretokens = reversed_cache[best_pair]
+
+    for old_pretoken in affected_pretokens:
+        new_pretoken = _build_new_pretoken(old_pretoken, best_pair)
+
+        # update, delete old pretoken contribution
+        pair_counts, reversed_cache = _delete_old_contribution(old_pretoken, pair_counts, reversed_cache)
+        # update, add new pretoken contrbution
+
+    
+    # construct map: merged token: count
+    mergetokens_freqs = _count_mergetokens(token_freqs)
+
+    # find the most frequent adjcent tokens gram
+    # break ties lexicographically
+    return _pick_best_mergetoken(mergetokens_freqs)
+
+
+
+def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+    # init vocab
+    vocab : dict[int, bytes] = init_vocab(special_tokens)
+    # init merges
+    merges : list[tuple[bytes, bytes]] = []
+
+    # read training data
+    with open(input_path, "r", encoding="utf-8") as f:
+        text = f.read()
+    # print(text)
+
+    # removing special tokens before pre-tokenization
+    # Pre-tokenization
+    # use a regex-based pre-tokenizer
+    pretokens = pretokenize_and_count(remove_special_tokens(text, special_tokens), True)
+    # print("pretokens:", pretokens)
+    # print("#####################################")
+    # pretokens = pretokenize_and_count(text)
+
+    # construct init pair count
+    pair_counts, reversed_cache = build_paircount_and_cache(pretokens)
+    # print("pair_counts:", json.dumps({str(k): v for k, v in pair_counts.items()}, ensure_ascii=False))
+    for i in range(vocab_size - 256 - len(special_tokens)):
+        # print("pair counts:", pair_counts)
+
+        # pick best adjcent tokens to merge
+        pair_counts,  merged_token = update_pair_count_nohalf(pair_counts, pretokens)
+        # print("merged_token", json.dumps([[b.decode("utf-8") for b in merged_token[0]], merged_token[1]],ensure_ascii=False))
+        # print("#####################################")
+        # print("pair_counts:", json.dumps({str(k): v for k, v in pair_counts.items()}, ensure_ascii=False))
+        # TODO: optimize point, insert vocab and merges two times
+        # update vocabs
+        update_vocab(vocab, merged_token)
+        # update merges
+        merges.append((merged_token[0][0], merged_token[0][1]))
+    
+    return vocab, merges
+
 
 # vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/train_data_small.txt", 500, ["<|endoftext|>"])
 # # vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/train_data_small.txt", 263, ["<|endoftext|>"])
