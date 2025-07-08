@@ -1,4 +1,11 @@
 import regex as re
+import json, logging
+
+logging.basicConfig(filename="/workspaces/stf-assignment1-basics/cs336_basics/gold_pairs.log", filemode="w", level=logging.INFO, format="%(message)s")
+
+def dump_pair_count(pair_count: dict[tuple[bytes], int], index: int):
+    serial = { str(k): v for k, v in pair_count.items() }
+    logging.info(json.dumps({"step": index, "pair": serial}, ensure_ascii=False, sort_keys=True))
 
 string = """\
 low low low low low
@@ -71,7 +78,7 @@ def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tup
 
 
 
-def merge(token_freqs : dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
+def merge(token_freqs : dict[tuple[bytes], int], index: int) -> tuple[tuple[bytes], int]:
 
     # here `freqs` refer to pretoken freqs
     def _count_mergetokens(freqs : dict[tuple[bytes], int]) -> dict[tuple[bytes], int]:
@@ -94,6 +101,9 @@ def merge(token_freqs : dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
     
     # construct map: merged token: count
     mergetokens_freqs = _count_mergetokens(token_freqs)
+
+    dump_pair_count(mergetokens_freqs, index)
+
 
     # find the most frequent adjcent tokens gram
     # break ties lexicographically
@@ -215,7 +225,7 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
 
     for i in range(vocab_size - 256 - len(special_tokens)):
         # pick best adjcent tokens to merge
-        merged_token = merge(pretokens)
+        merged_token = merge(pretokens, i)
         # update vocabs
         update_vocab(vocab, merged_token)
         # update merges
@@ -228,5 +238,7 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
 # vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 263, ["<|endoftext|>"])
 # train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 263, ["<|endoftext|>"])
 
-# print("vocab:", vocab)
-# print("merges:", merges)
+vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 320, ["<|endoftext|>"])
+
+print("vocab:", vocab)
+print("merges:", merges)
