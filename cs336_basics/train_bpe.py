@@ -1,7 +1,61 @@
 import regex as re
 from dataclasses import dataclass, field
-import json
+import json, logging
 from collections import defaultdict
+
+logging.basicConfig(filename="/workspaces/stf-assignment1-basics/cs336_basics/feature_pair.log", filemode="w", level=logging.INFO, format="%(message)s")
+
+import json, logging
+
+_prev_counts = None
+
+def _repr_pair(pair: tuple[bytes, ...]) -> str:
+    # e.g. turns (b't',b'h') into "('t','h')"
+    return "(" + ",".join(f"'{b.decode('utf-8', 'replace')}'" for b in pair) + ")"
+
+def dump_delta(pair_counts: dict[tuple[bytes,bytes],int],
+               merged_token: tuple[tuple[bytes,bytes],int],
+               step: int):
+    global _prev_counts
+    old = _prev_counts or {}
+    added, removed, changed = {}, {}, {}
+
+    # detect additions & changes
+    for k, v in pair_counts.items():
+        if k not in old:
+            added[_repr_pair(k)] = v
+        elif old[k] != v:
+            changed[_repr_pair(k)] = {"old": old[k], "new": v}
+
+    # detect removals
+    for k, v in old.items():
+        if k not in pair_counts:
+            removed[_repr_pair(k)] = v
+
+    # stringify merged_token
+    merged_pair, merged_count = merged_token
+    merged_repr = {
+        "pair": _repr_pair(merged_pair),
+        "count": merged_count
+    }
+
+    record = {
+        "step":   step,
+        "merged": merged_repr,
+        "added":    added,
+        "removed":  removed,
+        "changed":  changed,
+    }
+
+    logging.info(json.dumps(record, ensure_ascii=False, sort_keys=True))
+    _prev_counts = pair_counts.copy()
+
+
+
+def dump_pair_count(pair_count: dict[tuple[bytes], int], merged_token: tuple[tuple[bytes], int], index: int):
+    serial = { str(k): v for k, v in pair_count.items() }
+    serial_merged_token = {str(merged_token[0]): merged_token[1]}
+    logging.info(json.dumps({"step": index, "pair": serial, "merged": serial_merged_token}, ensure_ascii=False, sort_keys=True))
 
 
 def constuct_paircount_with_cache(
@@ -991,7 +1045,7 @@ def _build_new_pretoken(
             new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i],)
 
             if i == len(old_pretoken_pair)-2:
-                new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i],) + (old_pretoken_pair[i+1],)
+                new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i+1],)
 
             i = i+1
 
@@ -1107,12 +1161,23 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
     # construct init pair count
     pair_counts, reversed_cache = build_paircount_and_cache(pretokens)
     # print("pair_counts:", json.dumps({str(k): v for k, v in pair_counts.items()}, ensure_ascii=False))
-    for _ in range(vocab_size - 256 - len(special_tokens)):
+    for i in range(vocab_size - 256 - len(special_tokens)):
         # print("pair counts:", pair_counts)
 
         # pick best adjcent tokens to merge
         best_pair = _pick_best_mergetoken(pair_counts)
+
+        if not i == 0:
+            dump_pair_count(pair_counts, best_pair, i)
+        else:
+            dump_pair_count(pair_counts, best_pair, i)
+
+            
+
         pair_counts,  reversed_cache = merge_new(pair_counts, reversed_cache, best_pair[0])
+
+        # dump_delta(pair_counts, best_pair, )
+
         # print("merged_token", json.dumps([[b.decode("utf-8") for b in merged_token[0]], merged_token[1]],ensure_ascii=False))
         # print("#####################################")
         # print("pair_counts:", json.dumps({str(k): v for k, v in pair_counts.items()}, ensure_ascii=False))
@@ -1127,6 +1192,8 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
 
 # vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/train_data_small.txt", 500, ["<|endoftext|>"])
 # vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/train_data_small.txt", 263, ["<|endoftext|>"])
+
+# vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/train_data_small.txt", 320, ["<|endoftext|>"])
 
 # print("vocab:", vocab)
 # print("merges:", merges)
