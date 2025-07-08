@@ -3,9 +3,10 @@ import json, logging
 
 logging.basicConfig(filename="/workspaces/stf-assignment1-basics/cs336_basics/gold_pairs.log", filemode="w", level=logging.INFO, format="%(message)s")
 
-def dump_pair_count(pair_count: dict[tuple[bytes], int], index: int):
+def dump_pair_count(pair_count: dict[tuple[bytes], int], merged_token: tuple[tuple[bytes], int], index: int):
     serial = { str(k): v for k, v in pair_count.items() }
-    logging.info(json.dumps({"step": index, "pair": serial}, ensure_ascii=False, sort_keys=True))
+    serial_merged_token = {str(merged_token[0]): merged_token[1]}
+    logging.info(json.dumps({"step": index, "pair": serial, "merged": serial_merged_token}, ensure_ascii=False, sort_keys=True))
 
 string = """\
 low low low low low
@@ -102,12 +103,16 @@ def merge(token_freqs : dict[tuple[bytes], int], index: int) -> tuple[tuple[byte
     # construct map: merged token: count
     mergetokens_freqs = _count_mergetokens(token_freqs)
 
-    dump_pair_count(mergetokens_freqs, index)
+   
 
 
     # find the most frequent adjcent tokens gram
     # break ties lexicographically
-    return _pick_best_mergetoken(mergetokens_freqs)
+    best_merged_token = _pick_best_mergetoken(mergetokens_freqs)
+
+    dump_pair_count(mergetokens_freqs, best_merged_token, index)
+
+    return best_merged_token
 
 # print("merged token statistic:", merge(pretokenize_and_count(string)))
 
