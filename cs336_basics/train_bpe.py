@@ -259,6 +259,7 @@ def construct_flatpair(pair: tuple[bytes, ...]) -> tuple[bytes, ...]:
 
 
 def count_occurrences_using_cache(
+        pretoken: dict[tuple[bytes, ...], int],
         pair: tuple[bytes, ...], 
         search_pattern: tuple[bytes, ...], 
         cache: dict[tuple[bytes, ...], dict[tuple[bytes, ...], int]]
@@ -291,7 +292,8 @@ def determine_count(
     
     search_pattern = construct_pair_search_pattern(typ, pair_count[0], merged_token_pair)
 
-    change_count = count_occurrences(search_pattern, pretoken)
+    # change_count = count_occurrences(search_pattern, pretoken)
+    change_count = 0
     return change_count, pair_count[1] - change_count
 
 def determine_count_using_cache(
@@ -967,18 +969,37 @@ def build_paircount_and_cache(
 
 def _build_new_pretoken(
         old_pretoken: tuple[tuple[bytes, ...], int], 
-        best_paircount: tuple[tuple[bytes, ...], int]
+        # best_paircount: tuple[tuple[bytes, ...], int]
+        best_paircount: tuple[bytes, ...]
         ) ->  tuple[tuple[bytes, ...], int]:
     
     new_pretoken_pair = ()
     old_pretoken_pair = old_pretoken[0]
-    best_pair = best_paircount[0]
+    # best_pair = best_paircount[0]
+    best_pair = best_paircount
+    i = 0
 
-    for i in range(len(old_pretoken_pair)-1):
+    while i < len(old_pretoken_pair)-1:
         if old_pretoken_pair[i : i+2] == best_pair:
             new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i] + old_pretoken_pair[i+1],)
+
+            if i == len(old_pretoken_pair)-3:
+                new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i+2],)
+
+            i = i+2
         else:
             new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i],)
+
+            if i == len(old_pretoken_pair)-2:
+                new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i],) + (old_pretoken_pair[i+1],)
+
+            i = i+1
+
+    # for i in range(len(old_pretoken_pair)-1):
+    #     if old_pretoken_pair[i : i+2] == best_pair:
+    #         new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i] + old_pretoken_pair[i+1],)
+    #     else:
+    #         new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i],)
     
     new_pretoken = (new_pretoken_pair, old_pretoken[1])
     return new_pretoken
@@ -1000,6 +1021,8 @@ def _delete_old_contribution(
             del pair_count[pair]
 
         reversed_cache[pair].discard(pretoken)
+        if not reversed_cache[pair]:
+            del reversed_cache[pair]
     
     return pair_count, reversed_cache
 
@@ -1027,9 +1050,9 @@ def merge_new(
         pair_counts: dict[tuple[bytes], int], 
         reversed_cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]],
         best_pair: tuple[bytes, ...]
-        ) -> tuple[tuple[bytes], int]:
+        ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]]:
 
-    affected_pretokens = reversed_cache[best_pair]
+    affected_pretokens = reversed_cache[best_pair].copy()
 
     for old_pretoken in affected_pretokens:
         new_pretoken = _build_new_pretoken(old_pretoken, best_pair)
@@ -1037,14 +1060,28 @@ def merge_new(
         # update, delete old pretoken contribution
         pair_counts, reversed_cache = _delete_old_contribution(old_pretoken, pair_counts, reversed_cache)
         # update, add new pretoken contrbution
+        pair_counts, reversed_cache = _add_new_contribution(new_pretoken, pair_counts, reversed_cache)
 
     
-    # construct map: merged token: count
-    mergetokens_freqs = _count_mergetokens(token_freqs)
+    return pair_counts, reversed_cache
 
-    # find the most frequent adjcent tokens gram
-    # break ties lexicographically
-    return _pick_best_mergetoken(mergetokens_freqs)
+
+def _pick_best_mergetoken(pair_count: dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
+        try:
+            return max(
+                pair_count.items(),
+                key = lambda kv: (kv[1], kv[0])
+            )
+        except Exception as e:
+        # Log or print the freqs that caused the failure
+            print("Error picking best token, pair_count was:", pair_count)
+            raise
+
+        # as-is
+        # return max(
+        #     freqs.items(),
+        #     key = lambda kv: (kv[1], kv[0])
+        # )
 
 
 
@@ -1070,25 +1107,26 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
     # construct init pair count
     pair_counts, reversed_cache = build_paircount_and_cache(pretokens)
     # print("pair_counts:", json.dumps({str(k): v for k, v in pair_counts.items()}, ensure_ascii=False))
-    for i in range(vocab_size - 256 - len(special_tokens)):
+    for _ in range(vocab_size - 256 - len(special_tokens)):
         # print("pair counts:", pair_counts)
 
         # pick best adjcent tokens to merge
-        pair_counts,  merged_token = update_pair_count_nohalf(pair_counts, pretokens)
+        best_pair = _pick_best_mergetoken(pair_counts)
+        pair_counts,  reversed_cache = merge_new(pair_counts, reversed_cache, best_pair[0])
         # print("merged_token", json.dumps([[b.decode("utf-8") for b in merged_token[0]], merged_token[1]],ensure_ascii=False))
         # print("#####################################")
         # print("pair_counts:", json.dumps({str(k): v for k, v in pair_counts.items()}, ensure_ascii=False))
         # TODO: optimize point, insert vocab and merges two times
         # update vocabs
-        update_vocab(vocab, merged_token)
+        update_vocab(vocab, best_pair)
         # update merges
-        merges.append((merged_token[0][0], merged_token[0][1]))
+        merges.append((best_pair[0][0], best_pair[0][1]))
     
     return vocab, merges
 
 
 # vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/train_data_small.txt", 500, ["<|endoftext|>"])
-# # vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/train_data_small.txt", 263, ["<|endoftext|>"])
+# vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/train_data_small.txt", 263, ["<|endoftext|>"])
 
 # print("vocab:", vocab)
 # print("merges:", merges)
