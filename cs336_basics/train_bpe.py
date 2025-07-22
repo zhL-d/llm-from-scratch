@@ -14,7 +14,21 @@ lower lower widest widest widest
 newest newest newest newest newest newest
 """
 
-def init_vocab(special_tokens : list[str]) -> dict[int, bytes]:
+def init_vocab(special_tokens: list[str]) -> dict[int, bytes]:
+    """
+    Initialize vocab using bytes and special tokens
+
+    Args:
+        special_tokens: Special tokens to reserve in vocab
+
+    Returns:
+        A dictionary mapping token IDs to bytes and special tokens
+
+    Example:
+        > init_vocab(["<|endoftext|>"])
+        {0: b'\x00', 1: b'\x01', 2: b'\x02', 3: b'\x03', 4: b'\x04', 5: b'\x05', 6: b'\x06', 7: b'\x07', 8: b'\x08', 9: b'\t', 10: b'\n', ... , 255: b'\xff', 256: b'<|endoftext|>'}
+    """
+
     vocab : dict[int, bytes] = {x: bytes([x]) for x in range (256)}
     token_id_start = 256
 
@@ -32,8 +46,8 @@ def init_vocab(special_tokens : list[str]) -> dict[int, bytes]:
 # vocab_test = init_vocab()
 # print(vocab)
 
-# init pretokenization
-pretokens_freq : dict[tuple[bytes], int] = {}
+# # init pretokenization
+# pretokens_freq : dict[tuple[bytes], int] = {}
 
 
 def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
