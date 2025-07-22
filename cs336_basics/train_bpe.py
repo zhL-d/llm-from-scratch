@@ -14,6 +14,48 @@ lower lower widest widest widest
 newest newest newest newest newest newest
 """
 
+class BPETokenizer:
+    """BPE tokenizer, byte-based"""
+
+    def __init__(self, special_tokens: list[str] | None = None):
+        """
+        Initialize state of BPE tokenizer
+
+        Args:
+            special_tokens: List of special tokens to add vocab
+        """
+        self.special_tokens = special_tokens or []
+        self.vocab = {}
+        self.merge = []
+
+    def _init_vocab(special_tokens: list[str]) -> dict[int, bytes]:
+        """
+        Initialize vocab using bytes and special tokens
+
+        Args:
+            special_tokens: Special tokens to reserve in vocab
+
+        Returns:
+            A dictionary mapping token IDs to bytes and special tokens
+
+        Example:
+            > init_vocab(["<|endoftext|>"])
+            {0: b'\x00', 1: b'\x01', 2: b'\x02', 3: b'\x03', 4: b'\x04', 5: b'\x05', 6: b'\x06', 7: b'\x07', 8: b'\x08', 9: b'\t', 10: b'\n', ... , 255: b'\xff', 256: b'<|endoftext|>'}
+        """
+
+        vocab : dict[int, bytes] = {x: bytes([x]) for x in range (256)}
+        token_id_start = 256
+
+        for i, special_token in enumerate(special_tokens):
+            s_bytes = special_token.encode("utf-8")
+            vocab[token_id_start + i] = s_bytes
+
+        # vocab[special_token_id] = b'<|endoftext|>'
+
+        # special_token_id = 256
+        # vocab[special_token_id] = b'<|endoftext|>'
+        return vocab
+
 def init_vocab(special_tokens: list[str]) -> dict[int, bytes]:
     """
     Initialize vocab using bytes and special tokens
