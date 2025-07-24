@@ -17,18 +17,32 @@ newest newest newest newest newest newest
 class BPETokenizer:
     """BPE tokenizer, byte-based"""
 
-    def __init__(self, special_tokens: list[str] | None = None):
+    GPT_PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+
+    def __init__(self, special_tokens: list[str] | None = None, log_file: str | str = None):
         """
         Initialize state of BPE tokenizer
 
         Args:
-            special_tokens: List of special tokens to add vocab
+            special_tokens: Optional list of special tokens to add vocab
+            log_file: Optional path of log file
         """
         self.special_tokens = special_tokens or []
         self.vocab = {}
         self.merge = []
 
-    def _init_vocab(special_tokens: list[str]) -> dict[int, bytes]:
+        if log_file:
+            self._set_up_logging(log_file)
+
+    def _set_up_logging(self, log_file: str) -> None:
+        logging.basicConfig(
+            filename=log_file,
+            filemode="w",
+            level=logging.INFO,
+            format="%(message)s"
+        )
+
+    def _initialize_vocab(self) -> dict[int, bytes]:
         """
         Initialize vocab using bytes and special tokens
 
@@ -43,18 +57,122 @@ class BPETokenizer:
             {0: b'\x00', 1: b'\x01', 2: b'\x02', 3: b'\x03', 4: b'\x04', 5: b'\x05', 6: b'\x06', 7: b'\x07', 8: b'\x08', 9: b'\t', 10: b'\n', ... , 255: b'\xff', 256: b'<|endoftext|>'}
         """
 
-        vocab : dict[int, bytes] = {x: bytes([x]) for x in range (256)}
-        token_id_start = 256
+        vocab: dict[int, bytes] = {byte_value: bytes([byte_value]) for byte_value in range (256)}
 
-        for i, special_token in enumerate(special_tokens):
-            s_bytes = special_token.encode("utf-8")
-            vocab[token_id_start + i] = s_bytes
+        for i, special_token in enumerate(self.special_tokens):
+            token_byte = special_token.encode("utf-8")
+            vocab[256 + i] = token_byte
 
-        # vocab[special_token_id] = b'<|endoftext|>'
-
-        # special_token_id = 256
-        # vocab[special_token_id] = b'<|endoftext|>'
         return vocab
+    
+    def _remove_special_tokens(self, text: str) -> list[str]:
+        """
+        Remove special tokens from text before pre-tokenization
+
+        Args:
+            text: Input text
+        
+        Returns: 
+            List of docs from text with special tokens removed
+        """
+        if not self.special_tokens:
+            return [text]
+
+        escaped_special_tokens = [re.escape(token) for token in self.special_tokens]
+        return re.split("|".join(escaped_special_tokens), text)
+    
+    def _pretokenize_and_count(self, docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes, ...], int]:
+        """
+        Pre-tokenize documents from input text and count pre-token frequencies
+
+        Args:
+            docs: List of docs from input text with special tokens removed
+            gpt2_regex: Whether to use gpt2 regex pattern for pre-tokenization
+        
+        Returns:
+            Dictionary mapping pretoken byte tuples to their freqencies
+        """
+        token_counts : dict[tuple[bytes], int] = {}
+    
+        for doc in docs:
+            pre_tokens = None
+            if gpt2_regex:
+                # use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
+                pre_tokens = re.finditer(self.GPT_PAT, doc)
+                pre_tokens_string = [match.group(0) for match in pre_tokens]
+            else:
+                pre_tokens_string = doc.split()
+    
+            for token in pre_tokens_string:
+                token_bytes = token.encode("utf-8")
+                token_tuple = tuple(token_bytes[i:i+1] for i in range(len(token_bytes)))
+                token_counts[token_tuple] = token_counts.get(token_tuple, 0) + 1
+            
+        return token_counts
+    
+    def _count_adjacent_pairs(self, token_freqs: dict[tuple[bytes, ...], int]) -> dict[tuple[bytes, bytes], int]:
+        """
+        Build adjacent pairs freqencies dictionary from pretokens
+
+        Args:
+            token_freqs: Dictionary mapping pretokens mapping to freqencies
+        
+        Returns:
+            Dictionary mapping adjacent pairs to freqencies
+        """
+
+        pair_counts: dict[tuple[bytes, bytes], int] = {}
+
+        for token_tuple, count in token_freqs.items():
+            for i in range(len(token_tuple) - 1):
+                pair_counts[token_tuple[i : i+2]] = pair_counts.get(token_tuple[i : i+2], 0) + count
+        
+        return pair_counts
+    
+    def _find_best_merge_pair(self, pair_counts: dict[tuple[bytes, bytes], int]) -> tuple[tuple[bytes, bytes], int]:
+        """
+        Find best adjacent pair count 
+        with the rule "deterministically break ties in pair frequency by preferring the lexicographically greater pair"
+
+        Args:
+            pair_counts: Dictionary of pairs frequencies
+        
+        Returns:
+            Best pair count
+        """
+        if not pair_counts:
+            raise ValueError("No pairs available for merging")
+
+        return max(
+            pair_counts.items(),
+            key = lambda item: (item[1], item[0])
+        )
+    
+    def _log_merge_steps(self, pair_counts: dict[tuple[bytes, bytes], int], 
+                         best_pair: tuple[tuple[bytes, bytes], int], step: int) -> None:
+        """
+        Log merge steps for debugging purpose
+
+        Args:
+            pair_counts: Dictionary of pairs frenquencies in the current step
+            best_pair: The best pair in the current step
+            step: Current step
+        """
+        if logging.getLogger().handlers:
+            # serialization: tuple -> string
+            serializable_pair_count = {str(pair): count for pair, count in pair_counts.items()}
+            serializable_best_pair = {str(best_pair[0]): best_pair[1]}
+
+        log_data = {
+            "step": step,
+            "pair_counts": serializable_pair_count,
+            "best_pair": serializable_best_pair
+        }
+
+        logging.info(json.dumps(log_data, ensure_ascii=False, sort_keys=True))
+            
+    
+
 
 def init_vocab(special_tokens: list[str]) -> dict[int, bytes]:
     """
