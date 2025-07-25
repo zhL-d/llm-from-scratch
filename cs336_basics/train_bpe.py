@@ -1,5 +1,6 @@
 import regex as re
 import json, logging
+from pathlib import Path
 
 logging.basicConfig(filename="/workspaces/stf-assignment1-basics/cs336_basics/gold_pairs.log", filemode="w", level=logging.INFO, format="%(message)s")
 
@@ -112,7 +113,7 @@ class BPETokenizer:
     
     def _count_adjacent_pairs(self, token_freqs: dict[tuple[bytes, ...], int]) -> dict[tuple[bytes, bytes], int]:
         """
-        Build adjacent pairs freqencies dictionary from pretokens
+        Build dictionary mapping adjacent pairs to freqencies from pretokens
 
         Args:
             token_freqs: Dictionary mapping pretokens mapping to freqencies
@@ -170,6 +171,138 @@ class BPETokenizer:
         }
 
         logging.info(json.dumps(log_data, ensure_ascii=False, sort_keys=True))
+
+    def _merge_pretokens(
+            self, 
+            pre_tokens: dict[tuple[bytes, ...], int], 
+            merge_pair: tuple[tuple[bytes, bytes], int]
+    ) -> dict[tuple[bytes, ...], int]:
+        """
+        Build new pretokens by merging best pair in previous pretokens
+
+        Args:
+            pre_tokens: Dictionary mapping pretokens to frequencies
+            merge_pair: Pair needed to merge
+        
+        Returns:
+            New pretokens
+        """
+        new_pretokens: dict[tuple[bytes, ...], int] = {}
+    
+        for k, v in pre_tokens.items():
+            i = 0
+            while i < len(k) - 1:
+                if (k[i], k[i+1]) == merge_pair[0]:
+                    k = k[0:i] + (k[i] + k[i+1],) + k[i+2:]
+                i = i+1
+            
+            new_pretokens[k] = v
+        
+        return new_pretokens
+    
+    def _merge_pretokens_new(
+            self, 
+            pre_tokens: dict[tuple[bytes, ...], int], 
+            merge_pair: tuple[tuple[bytes, bytes], int]
+    ) -> dict[tuple[bytes, ...], int]:
+        """
+        Build new pretokens by merging best pair in previous pretokens
+
+        Args:
+            pre_tokens: Dictionary mapping pretokens to frequencies
+            merge_pair: Pair needed to merge
+        
+        Returns:
+            New pretokens
+        """
+        new_pretokens: dict[tuple[bytes, ...], int] = {}
+        target = merge_pair[0]
+    
+        for pretoken_tuple, freq in pre_tokens.items():
+            i = 0
+            new_pretoken: list[bytes] = []
+            while i < len(pretoken_tuple):
+                if i < len(pretoken_tuple) - 1 and (pretoken_tuple[i], pretoken_tuple[i + 1]) == target:
+                    new_pretoken.append(pretoken_tuple[i] + pretoken_tuple[i+1])
+                    i += 2 # Skip merge token
+                else:
+                    new_pretoken.append(pretoken_tuple[i])
+                    i += 1
+            
+            new_pretokens[tuple(new_pretoken)] = freq
+        
+        return new_pretokens
+    
+    def _update_vocab(self, merge_pair: tuple[bytes, bytes]) -> None:
+        """
+        Insert merged pair to vocab
+
+        Args:
+            merge_pair: The pair that was merged
+        """
+        # Find the next available token id
+        next_id = max(self.vocab.keys()) + 1
+        merged_bytes = merge_pair[0] + merge_pair[1]
+        self.vocab[next_id] = merged_bytes
+    
+    def train(
+            self, 
+            input_path: str, 
+            vocab_size: int, 
+        ) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+        """
+        Train BPE tokenizer
+
+        Args:
+            input_path: Path to a text file with BPE tokenizer training data
+            vocab_size: A positive integer that defines the maximum final vocabulary size 
+            (including the initial byte vocabulary, vocabulary items produced from merging, and any special tokens)
+        Returns:
+            vocab: The tokenizer vocabulary, a mapping from int (token ID in the vocabulary) to bytes (token bytes)
+            merges: A list of BPE merges produced from training. 
+            Each list item is a tuple of bytes (<token1>, <token2>), 
+            representing that <token1> was merged with <token2>. The merges should be ordered by order of creation.
+        
+        Raises:
+            ValueError: if vocab size is too small
+        """
+        # Validate inputs
+        if vocab_size < 256 + len(self.special_tokens):
+            raise ValueError(f"vocab size must be at least {256 + len(self.special_tokens)}")
+        
+        # Initialize vocabulary
+        self.vocab = self._initialize_vocab()
+
+        # Read training data
+        input_file = Path(input_path)
+        with input_file.open("r", encoding="utf-8") as file:
+            text = file.read()
+    
+        # Removing special tokens and pre-tokenize
+        cleaned_text = self._remove_special_tokens(text)
+        pretoken_freqs = self._pretokenize_and_count(cleaned_text, gpt2_regex=True)
+
+        # Peform BPE merge
+        num_merges = vocab_size - 256 - len(self.special_tokens)
+    
+        for step in range(num_merges):
+            # Buld pari counts
+            pair_counts = self._count_adjacent_pairs(pretoken_freqs)
+
+            # Find best merge pair
+            merged_tuple= self._find_best_merge_pair(pair_counts)
+        
+            # Log the merge step
+            self._log_merge_steps(pair_counts, merged_tuple, step)
+
+            # Update vocabulary and merge
+            self._update_vocab(merged_tuple[0])
+            self.merge.append((merged_tuple[0][0], merged_tuple[0][1]))
+
+            # Update pretokens
+            pretoken_freqs = self._merge_pretokens_new(pretoken_freqs, merged_tuple)
+        
+        return vocab, merges
             
     
 
