@@ -2,7 +2,7 @@ import regex as re
 import json, logging
 from pathlib import Path
 
-logging.basicConfig(filename="/workspaces/stf-assignment1-basics/cs336_basics/gold_pairs.log", filemode="w", level=logging.INFO, format="%(message)s")
+# logging.basicConfig(filename="/workspaces/stf-assignment1-basics/cs336_basics/gold_pairs.log", filemode="w", level=logging.INFO, format="%(message)s")
 
 def dump_pair_count(pair_count: dict[tuple[bytes], int], merged_token: tuple[tuple[bytes], int], index: int):
     serial = { str(k): v for k, v in pair_count.items() }
@@ -256,12 +256,12 @@ class BPETokenizer:
         Args:
             input_path: Path to a text file with BPE tokenizer training data
             vocab_size: A positive integer that defines the maximum final vocabulary size 
-            (including the initial byte vocabulary, vocabulary items produced from merging, and any special tokens)
+              (including the initial byte vocabulary, vocabulary items produced from merging, and any special tokens)
         Returns:
             vocab: The tokenizer vocabulary, a mapping from int (token ID in the vocabulary) to bytes (token bytes)
             merges: A list of BPE merges produced from training. 
-            Each list item is a tuple of bytes (<token1>, <token2>), 
-            representing that <token1> was merged with <token2>. The merges should be ordered by order of creation.
+              Each list item is a tuple of bytes (<token1>, <token2>), 
+              representing that <token1> was merged with <token2>. The merges should be ordered by order of creation.
         
         Raises:
             ValueError: if vocab size is too small
@@ -301,11 +301,32 @@ class BPETokenizer:
 
             # Update pretokens
             pretoken_freqs = self._merge_pretokens_new(pretoken_freqs, merged_tuple)
-        
-        return vocab, merges
-            
-    
 
+        return self.vocab, self.merge         
+    
+def main():
+    """Example usage of the BPE tokenizer"""
+    # Initialize bpe tokenizer
+    tokenizer = BPETokenizer(
+        special_tokens=["<|endoftext|>"], 
+        log_file="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log"
+    )
+    
+    # Train the tokenizer
+    try:
+        vocab, merges = tokenizer.train(
+            "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/training_data.txt", 
+            vocab_size=320
+        )
+
+        print(f"Vocabulary size: {len(vocab)}")
+        print(f"Number of merges: {len(merges)}")
+        print(f"First 5 merges: {merge[:5]}")
+    except (FileNotFoundError, ValueError) as e:
+        print(f"Error during traning: {e}")
+
+if __name__ == "__main__":
+    main()
 
 def init_vocab(special_tokens: list[str]) -> dict[int, bytes]:
     """
@@ -550,7 +571,7 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
 # vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 263, ["<|endoftext|>"])
 # train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 263, ["<|endoftext|>"])
 
-vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 320, ["<|endoftext|>"])
+# vocab, merges = train_bpe("/workspaces/stf-assignment1-basics/cs336_basics/training_data.txt", 320, ["<|endoftext|>"])
 
-print("vocab:", vocab)
-print("merges:", merges)
+# print("vocab:", vocab)
+# print("merges:", merges)

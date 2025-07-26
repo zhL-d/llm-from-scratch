@@ -9,7 +9,7 @@ import numpy.typing as npt
 import torch
 from torch import Tensor
 
-from cs336_basics.train_bpe import train_bpe
+from cs336_basics.train_bpe import BPETokenizer
 
 
 
@@ -590,5 +590,15 @@ def run_train_bpe(
                 representing that <token1> was merged with <token2>.
                 Merges are ordered by order of creation.
     """
-    return train_bpe(input_path, vocab_size, special_tokens)
+    tokenizer = BPETokenizer(
+        special_tokens, 
+        log_file="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log"
+    )
+
+    return tokenizer.train(
+            input_path, 
+            vocab_size
+    )
+
+    # return train_bpe(input_path, vocab_size, special_tokens)
     # raise NotImplementedError
