@@ -75,6 +75,7 @@ class BPETokenizer:
         escaped_special_tokens = [re.escape(token) for token in self.special_tokens]
         return re.split("|".join(escaped_special_tokens), text)
     
+    # TODO: Optimize point
     def _pretokenize_and_count(self, docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes, ...], int]:
         """
         Pre-tokenize documents from input text and count pre-token frequencies
@@ -104,6 +105,7 @@ class BPETokenizer:
             
         return token_counts
     
+    # TODO: Optimize point
     def _count_adjacent_pairs(self, token_freqs: dict[tuple[bytes, ...], int]) -> dict[tuple[bytes, bytes], int]:
         """
         Build dictionary mapping adjacent pairs to freqencies from pretokens
@@ -193,6 +195,7 @@ class BPETokenizer:
         
         return new_pretokens
     
+    # TODO: Optimize point
     def _merge_pretokens_new(
             self, 
             pre_tokens: dict[tuple[bytes, ...], int], 
@@ -309,7 +312,7 @@ def main():
     try:
         vocab, merges = tokenizer.train(
             "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/training_data.txt", 
-            vocab_size=320 # small_text is 263
+            vocab_size=500 # small_text is 263
         )
 
         print(f"Vocabulary size: {len(vocab)}")
