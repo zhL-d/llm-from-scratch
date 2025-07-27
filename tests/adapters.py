@@ -595,7 +595,11 @@ def run_train_bpe(
         log_file="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log"
     )
 
-    return tokenizer.train(
+    # return tokenizer.train(
+    #         input_path, 
+    #         vocab_size
+
+    return tokenizer.train_parallel(
             input_path, 
             vocab_size
     )
