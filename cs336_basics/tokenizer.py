@@ -12,70 +12,70 @@ newest newest newest newest newest newest
 """
 GPT_PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
 
-def _pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes, ...], int]:
-        """
-        Pre-tokenize documents from input text and count pre-token frequencies
+# def _pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes, ...], int]:
+#         """
+#         Pre-tokenize documents from input text and count pre-token frequencies
 
-        Args:
-            docs: List of docs from input text with special tokens removed
-            gpt2_regex: Whether to use gpt2 regex pattern for pre-tokenization
+#         Args:
+#             docs: List of docs from input text with special tokens removed
+#             gpt2_regex: Whether to use gpt2 regex pattern for pre-tokenization
         
-        Returns:
-            Dictionary mapping pretoken byte tuples to their freqencies
-        """
-        token_counts : dict[tuple[bytes], int] = {}
+#         Returns:
+#             Dictionary mapping pretoken byte tuples to their freqencies
+#         """
+#         token_counts : dict[tuple[bytes], int] = {}
     
-        for doc in docs:
-            pre_tokens = None
-            if gpt2_regex:
-                # use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
-                pre_tokens = re.finditer(GPT_PAT, doc)
-                pre_tokens_string = [match.group(0) for match in pre_tokens]
-            else:
-                pre_tokens_string = doc.split()
+#         for doc in docs:
+#             pre_tokens = None
+#             if gpt2_regex:
+#                 # use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
+#                 pre_tokens = re.finditer(GPT_PAT, doc)
+#                 pre_tokens_string = [match.group(0) for match in pre_tokens]
+#             else:
+#                 pre_tokens_string = doc.split()
     
-            for token in pre_tokens_string:
-                token_bytes = token.encode("utf-8")
-                token_tuple = tuple(token_bytes[i:i+1] for i in range(len(token_bytes)))
-                token_counts[token_tuple] = token_counts.get(token_tuple, 0) + 1
+#             for token in pre_tokens_string:
+#                 token_bytes = token.encode("utf-8")
+#                 token_tuple = tuple(token_bytes[i:i+1] for i in range(len(token_bytes)))
+#                 token_counts[token_tuple] = token_counts.get(token_tuple, 0) + 1
             
-        return token_counts
+#         return token_counts
 
-def _remove_special_tokens(text: str, special_tokens: list[str]) -> list[str]:
-        """
-        Remove special tokens from text before pre-tokenization
+# def _remove_special_tokens(text: str, special_tokens: list[str]) -> list[str]:
+#         """
+#         Remove special tokens from text before pre-tokenization
 
-        Args:
-            text: Input text
+#         Args:
+#             text: Input text
         
-        Returns: 
-            List of docs from text with special tokens removed
-        """
-        if not special_tokens:
-            return [text]
+#         Returns: 
+#             List of docs from text with special tokens removed
+#         """
+#         if not special_tokens:
+#             return [text]
 
-        escaped_special_tokens = [re.escape(token) for token in special_tokens]
-        return re.split("|".join(escaped_special_tokens), text)
+#         escaped_special_tokens = [re.escape(token) for token in special_tokens]
+#         return re.split("|".join(escaped_special_tokens), text)
 
-def _pretokenize_and_count_task(start: int, end: int, path: Path, special_tokens: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes, ...], int]:
-        """
-        Remove special tokens and pretokenize chunk from training_data, count pretoken freqencies
+# def _pretokenize_and_count_task(start: int, end: int, path: Path, special_tokens: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes, ...], int]:
+#         """
+#         Remove special tokens and pretokenize chunk from training_data, count pretoken freqencies
 
-        Args:
-            start: Beginning index of training_data for this chunk
-            end: Ending index of training_data text for this chunk
-            path: Original training data path for tokenizer
-            gpt2_regex: Whether to use gpt2 regex pattern for pre-tokenization
-        Returns:
-            Sub dictionary of pretoken and counts
-        """
-        with open(path, "rb") as f:
-            f.seek(start)
-            chunk = f.read(end - start).decode("utf-8", errors="ignore")
+#         Args:
+#             start: Beginning index of training_data for this chunk
+#             end: Ending index of training_data text for this chunk
+#             path: Original training data path for tokenizer
+#             gpt2_regex: Whether to use gpt2 regex pattern for pre-tokenization
+#         Returns:
+#             Sub dictionary of pretoken and counts
+#         """
+#         with open(path, "rb") as f:
+#             f.seek(start)
+#             chunk = f.read(end - start).decode("utf-8", errors="ignore")
     
-            cleaned_text = _remove_special_tokens(chunk, special_tokens)
-            pretoken_freqs = _pretokenize_and_count(cleaned_text, gpt2_regex)
-            return pretoken_freqs
+#             cleaned_text = _remove_special_tokens(chunk, special_tokens)
+#             pretoken_freqs = _pretokenize_and_count(cleaned_text, gpt2_regex)
+#             return pretoken_freqs
 
 class BPETokenizer:
     """BPE tokenizer, byte-based"""
@@ -128,7 +128,38 @@ class BPETokenizer:
 
         return vocab
     
-    def _remove_special_tokens(self, text: str) -> list[str]:
+    @staticmethod
+    def _pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes, ...], int]:
+        """
+        Pre-tokenize documents from input text and count pre-token frequencies
+
+        Args:
+            docs: List of docs from input text with special tokens removed
+            gpt2_regex: Whether to use gpt2 regex pattern for pre-tokenization
+        
+        Returns:
+            Dictionary mapping pretoken byte tuples to their freqencies
+        """
+        token_counts : dict[tuple[bytes], int] = {}
+    
+        for doc in docs:
+            pre_tokens = None
+            if gpt2_regex:
+                # use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
+                pre_tokens = re.finditer(GPT_PAT, doc)
+                pre_tokens_string = [match.group(0) for match in pre_tokens]
+            else:
+                pre_tokens_string = doc.split()
+    
+            for token in pre_tokens_string:
+                token_bytes = token.encode("utf-8")
+                token_tuple = tuple(token_bytes[i:i+1] for i in range(len(token_bytes)))
+                token_counts[token_tuple] = token_counts.get(token_tuple, 0) + 1
+            
+        return token_counts
+    
+    @staticmethod
+    def _remove_special_tokens(text: str, special_tokens: list[str]) -> list[str]:
         """
         Remove special tokens from text before pre-tokenization
 
@@ -138,11 +169,48 @@ class BPETokenizer:
         Returns: 
             List of docs from text with special tokens removed
         """
-        if not self.special_tokens:
+        if not special_tokens:
             return [text]
 
-        escaped_special_tokens = [re.escape(token) for token in self.special_tokens]
+        escaped_special_tokens = [re.escape(token) for token in special_tokens]
         return re.split("|".join(escaped_special_tokens), text)
+    
+    @staticmethod
+    def _pretokenize_and_count_task(start: int, end: int, path: str, special_tokens: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes, ...], int]:
+        """
+        Remove special tokens and pretokenize chunk from training_data, count pretoken freqencies
+
+        Args:
+            start: Beginning index of training_data for this chunk
+            end: Ending index of training_data text for this chunk
+            path: Original training data path for tokenizer
+            gpt2_regex: Whether to use gpt2 regex pattern for pre-tokenization
+        Returns:
+            Sub dictionary of pretoken and counts
+        """
+        with open(path, "rb") as f:
+            f.seek(start)
+            chunk = f.read(end - start).decode("utf-8", errors="ignore")
+    
+            cleaned_text = BPETokenizer._remove_special_tokens(chunk, special_tokens)
+            pretoken_freqs = BPETokenizer._pretokenize_and_count(cleaned_text, gpt2_regex)
+            return pretoken_freqs
+    
+    # def _remove_special_tokens(self, text: str) -> list[str]:
+    #     """
+    #     Remove special tokens from text before pre-tokenization
+
+    #     Args:
+    #         text: Input text
+        
+    #     Returns: 
+    #         List of docs from text with special tokens removed
+    #     """
+    #     if not self.special_tokens:
+    #         return [text]
+
+    #     escaped_special_tokens = [re.escape(token) for token in self.special_tokens]
+    #     return re.split("|".join(escaped_special_tokens), text)
     
     @staticmethod
     def find_chunk_boundaries(
@@ -214,7 +282,7 @@ class BPETokenizer:
     #         return pretoken_freqs
         
     @staticmethod
-    def _pretokenize_and_count_parallel(path: Path, special_tokens: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes, ...], int]:
+    def _pretokenize_and_count_parallel(path: str, special_tokens: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes, ...], int]:
         """
         Parallelly pre-tokenize documents from training data and count pre-token frequencies
 
@@ -231,7 +299,7 @@ class BPETokenizer:
                 f, 4, "<|endoftext|>".encode("utf-8"))
 
             with ProcessPoolExecutor() as executor:
-                futures = [executor.submit(_pretokenize_and_count_task, start, end, path, special_tokens, gpt2_regex) for start, end in zip(boundaries[:-1], boundaries[1:])]
+                futures = [executor.submit(BPETokenizer._pretokenize_and_count_task, start, end, path, special_tokens, gpt2_regex) for start, end in zip(boundaries[:-1], boundaries[1:])]
 
                 pretoken_counts = {}
 
@@ -245,34 +313,34 @@ class BPETokenizer:
         return pretoken_counts
     
     # TODO: Optimize point
-    def _pretokenize_and_count(self, docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes, ...], int]:
-        """
-        Pre-tokenize documents from input text and count pre-token frequencies
+    # def _pretokenize_and_count(self, docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes, ...], int]:
+    #     """
+    #     Pre-tokenize documents from input text and count pre-token frequencies
 
-        Args:
-            docs: List of docs from input text with special tokens removed
-            gpt2_regex: Whether to use gpt2 regex pattern for pre-tokenization
+    #     Args:
+    #         docs: List of docs from input text with special tokens removed
+    #         gpt2_regex: Whether to use gpt2 regex pattern for pre-tokenization
         
-        Returns:
-            Dictionary mapping pretoken byte tuples to their freqencies
-        """
-        token_counts : dict[tuple[bytes], int] = {}
+    #     Returns:
+    #         Dictionary mapping pretoken byte tuples to their freqencies
+    #     """
+    #     token_counts : dict[tuple[bytes], int] = {}
     
-        for doc in docs:
-            pre_tokens = None
-            if gpt2_regex:
-                # use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
-                pre_tokens = re.finditer(self.GPT_PAT, doc)
-                pre_tokens_string = [match.group(0) for match in pre_tokens]
-            else:
-                pre_tokens_string = doc.split()
+    #     for doc in docs:
+    #         pre_tokens = None
+    #         if gpt2_regex:
+    #             # use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
+    #             pre_tokens = re.finditer(self.GPT_PAT, doc)
+    #             pre_tokens_string = [match.group(0) for match in pre_tokens]
+    #         else:
+    #             pre_tokens_string = doc.split()
     
-            for token in pre_tokens_string:
-                token_bytes = token.encode("utf-8")
-                token_tuple = tuple(token_bytes[i:i+1] for i in range(len(token_bytes)))
-                token_counts[token_tuple] = token_counts.get(token_tuple, 0) + 1
+    #         for token in pre_tokens_string:
+    #             token_bytes = token.encode("utf-8")
+    #             token_tuple = tuple(token_bytes[i:i+1] for i in range(len(token_bytes)))
+    #             token_counts[token_tuple] = token_counts.get(token_tuple, 0) + 1
             
-        return token_counts
+    #     return token_counts
     
     # TODO: Optimize point
     def _count_adjacent_pairs(self, token_freqs: dict[tuple[bytes, ...], int]) -> dict[tuple[bytes, bytes], int]:
@@ -498,14 +566,14 @@ class BPETokenizer:
         self.vocab = self._initialize_vocab()
 
         # Read training data
-        input_file = Path(input_path)
+        # input_file = Path(input_path)
         # with input_file.open("r", encoding="utf-8") as file:
         #     text = file.read()
     
         # Removing special tokens and pre-tokenize
         # cleaned_text = self._remove_special_tokens(text)
         # pretoken_freqs = self._pretokenize_and_count(cleaned_text, gpt2_regex=True)
-        pretoken_freqs = BPETokenizer._pretokenize_and_count_parallel(input_file, self.special_tokens, True)
+        pretoken_freqs = BPETokenizer._pretokenize_and_count_parallel(input_path, self.special_tokens, True)
 
         # Peform BPE merge
         num_merges = vocab_size - 256 - len(self.special_tokens)
@@ -527,4 +595,4 @@ class BPETokenizer:
             # Update pretokens
             pretoken_freqs = self._merge_pretokens_new(pretoken_freqs, merged_tuple)
 
-        return self.vocab, self.merge      
+        return self.vocab, self.merge     
