@@ -15,9 +15,15 @@ def main():
         #     vocab_size=500 # small_text is 263
         # )
 
-        vocab, merges = tokenizer.train_parallel(
+        # vocab, merges = tokenizer.train_parallel(
+        #     "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/training_data.txt", 
+        #     vocab_size=500 # small_text is 263
+        # )
+
+        vocab, merges = tokenizer.train(
             "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/training_data.txt", 
-            vocab_size=500 # small_text is 263
+            vocab_size=500, # small_text is 263
+            parallel=True
         )
 
         print(f"Vocabulary size: {len(vocab)}")

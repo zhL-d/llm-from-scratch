@@ -9,7 +9,7 @@ import numpy.typing as npt
 import torch
 from torch import Tensor
 
-from cs336_basics.train_bpe import BPETokenizer
+from cs336_basics.tokenizer import BPETokenizer
 
 
 
@@ -595,13 +595,15 @@ def run_train_bpe(
         log_file="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log"
     )
 
-    # return tokenizer.train(
+
+    # return tokenizer.train_parallel(
     #         input_path, 
     #         vocab_size
-
-    return tokenizer.train_parallel(
+    # )
+    return tokenizer.train(
             input_path, 
-            vocab_size
+            vocab_size,
+            parallel=True
     )
 
     # return train_bpe(input_path, vocab_size, special_tokens)
