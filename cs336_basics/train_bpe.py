@@ -1,6 +1,9 @@
 from tokenizer import BPETokenizer
     
 def main():
+    # import logging
+    # logging.disable(logging.CRITICAL)
+
     """Example usage of the BPE tokenizer"""
     # Initialize bpe tokenizer
     tokenizer = BPETokenizer(

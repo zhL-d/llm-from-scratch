@@ -281,8 +281,11 @@ class BPETokenizer:
 
         for token_tuple, count in token_freqs.items():
             for i in range(len(token_tuple) - 1):
-                pair_counts[token_tuple[i : i+2]] = pair_counts.get(token_tuple[i : i+2], 0) + count
-        
+                # pair_counts[token_tuple[i : i+2]] = pair_counts.get(token_tuple[i : i+2], 0) + count
+
+                # Avoid creating slice overhead, can use package dis to check
+                pair = (token_tuple[i], token_tuple[i + 1])
+                pair_counts[pair] = pair_counts.get(pair, 0) + count
         return pair_counts
     
     def _find_best_merge_pair(self, pair_counts: dict[tuple[bytes, bytes], int]) -> tuple[tuple[bytes, bytes], int]:
