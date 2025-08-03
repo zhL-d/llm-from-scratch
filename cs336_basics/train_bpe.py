@@ -1,8 +1,10 @@
 from tokenizer import BPETokenizer
+import time
+import tracemalloc
     
 def main():
-    # import logging
-    # logging.disable(logging.CRITICAL)
+    tracemalloc.start()
+    start_time = time.perf_counter()
 
     """Example usage of the BPE tokenizer"""
     # Initialize bpe tokenizer
@@ -35,6 +37,13 @@ def main():
         print(f"First 5 merges: {merges[:5]}")
     except (FileNotFoundError, ValueError) as e:
         print(f"Error during traning: {e}")
+    
+    end_time = time.perf_counter()
+    _, peak = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+
+    print(f"Total time: {(end_time - start_time):.2f} seconds")
+    print(f"Peak memory: {peak / 1024 / 1024:.2f} MB")
 
 if __name__ == "__main__":
     main()
