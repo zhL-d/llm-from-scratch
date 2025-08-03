@@ -11,7 +11,10 @@ def main():
     tokenizer = BPETokenizer(
         special_tokens=["<|endoftext|>"], 
         log_file="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log",
-        enable_logging=False
+        enable_logging=False,
+        serialization=True,
+        serialization_vocab_path= "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/serialization_vocab.json",
+        serialization_merge_path= "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/serialization_merge.json"
     )
     
     # Train the tokenizer

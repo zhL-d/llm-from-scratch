@@ -17,7 +17,15 @@ class BPETokenizer:
 
     GPT_PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
 
-    def __init__(self, special_tokens: list[str] | None = None, log_file: str | str = None, enable_logging: bool = False):
+    def __init__(
+            self, 
+            special_tokens: list[str] | None = None, 
+            log_file: str | str = None, 
+            enable_logging: bool = False,
+            serialization: bool = False,
+            serialization_vocab_path: str | None = None,
+            serialization_merge_path: str | None = None,
+        ):
         """
         Initialize state of BPE tokenizer
 
@@ -28,7 +36,11 @@ class BPETokenizer:
         self.special_tokens = special_tokens or []
         self.vocab = {}
         self.merge = []
+
         self.enable_logging = enable_logging
+        self.serialization = serialization
+        self.serialization_vocab_path = serialization_vocab_path
+        self.serialization_merge_path = serialization_merge_path
 
         if enable_logging and log_file:
             self._set_up_logging(log_file)
@@ -331,6 +343,32 @@ class BPETokenizer:
 
             logging.info(json.dumps(log_data, ensure_ascii=False, sort_keys=True))
     
+    def _save_vocabulary_merges(self):
+        """
+        Serialize the resulting vocabulary and merges to disk for further inspection
+
+        Args:
+
+        Returns:
+        """
+        vocab_serialized = {
+            str(token_id): vocab_bytes.decode("utf-8", "replace")
+            for token_id, vocab_bytes in self.vocab.items()
+        }
+
+        merge_serialized = [
+            [first_bytes.decode("utf-8", "replace"), second_bytes.decode("utf-8", "replace")]
+            for first_bytes, second_bytes in self.merge
+        ]
+
+        with open(self.serialization_vocab_path, 'w', encoding="utf-8") as f:
+            json.dump(vocab_serialized, f, indent=2, ensure_ascii=False)
+        
+        with open(self.serialization_merge_path, 'w', encoding="utf-8") as f:
+            json.dump(merge_serialized, f, indent=2, ensure_ascii=False)
+
+
+    
     # TODO: Optimize point
     def _merge_pretokens(
             self, 
@@ -493,4 +531,7 @@ class BPETokenizer:
             # Update pretokens
             pretoken_freqs = self._merge_pretokens(pretoken_freqs, merged_tuple)
 
+        if self.serialization:
+            self._save_vocabulary_merges()
+        
         return self.vocab, self.merge 
