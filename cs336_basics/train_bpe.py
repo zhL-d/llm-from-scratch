@@ -8,7 +8,8 @@ def main():
     # Initialize bpe tokenizer
     tokenizer = BPETokenizer(
         special_tokens=["<|endoftext|>"], 
-        log_file="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log"
+        log_file="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log",
+        enable_logging=False
     )
     
     # Train the tokenizer

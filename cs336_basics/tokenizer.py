@@ -17,7 +17,7 @@ class BPETokenizer:
 
     GPT_PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
 
-    def __init__(self, special_tokens: list[str] | None = None, log_file: str | str = None):
+    def __init__(self, special_tokens: list[str] | None = None, log_file: str | str = None, enable_logging: bool = False):
         """
         Initialize state of BPE tokenizer
 
@@ -28,8 +28,9 @@ class BPETokenizer:
         self.special_tokens = special_tokens or []
         self.vocab = {}
         self.merge = []
+        self.enable_logging = enable_logging
 
-        if log_file:
+        if enable_logging and log_file:
             self._set_up_logging(log_file)
 
     def _set_up_logging(self, log_file: str) -> None:
@@ -317,18 +318,18 @@ class BPETokenizer:
             best_pair: The best pair in the current step
             step: Current step
         """
-        if logging.getLogger().handlers:
+        if self.enable_logging and logging.getLogger().handlers:
             # serialization: tuple -> string
             serializable_pair_count = {str(pair): count for pair, count in pair_counts.items()}
             serializable_best_pair = {str(best_pair[0]): best_pair[1]}
 
-        log_data = {
-            "step": step,
-            "pair_counts": serializable_pair_count,
-            "best_pair": serializable_best_pair
-        }
+            log_data = {
+                "step": step,
+                "pair_counts": serializable_pair_count,
+                "best_pair": serializable_best_pair
+            }
 
-        logging.info(json.dumps(log_data, ensure_ascii=False, sort_keys=True))
+            logging.info(json.dumps(log_data, ensure_ascii=False, sort_keys=True))
     
     # TODO: Optimize point
     def _merge_pretokens(
