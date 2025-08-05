@@ -1,8 +1,11 @@
 from tokenizer import BPETokenizer
 import time
 import tracemalloc
+import os
+import psutil
     
 def main():
+    # Time and memory stat
     tracemalloc.start()
     start_time = time.perf_counter()
 
@@ -35,18 +38,35 @@ def main():
             parallel=True
         )
 
-        print(f"Vocabulary size: {len(vocab)}")
-        print(f"Number of merges: {len(merges)}")
-        print(f"First 5 merges: {merges[:5]}")
     except (FileNotFoundError, ValueError) as e:
         print(f"Error during traning: {e}")
     
+    # Time and memory stat
     end_time = time.perf_counter()
     _, peak = tracemalloc.get_traced_memory()
     tracemalloc.stop()
 
-    print(f"Total time: {(end_time - start_time):.2f} seconds")
-    print(f"Peak memory: {peak / 1024 / 1024:.2f} MB")
+    # Memory stat(rss)
+    process = psutil.Process(os.getpid())
+    rss_mem = process.memory_info().rss / (1024 * 1024)
+
+    # Build report
+    report = f"""
+    BPE Tokenizer Training Report
+    --------------------------------
+    Vocabulary size                 :{len(vocab)}
+    Number of merges                :{len(merges)}
+    First 5 merges                  :{merges[:5]}
+
+
+    Performance Summary
+    --------------------------------
+    Total time                      :{(end_time - start_time):.2f} seconds
+    Peak memory managed by python   :{peak / 1024 / 1024:.2f} MB
+    Total physical memory used(RSS) :{rss_mem:.2f} MB
+    """
+
+    print(report)
 
 if __name__ == "__main__":
     main()
