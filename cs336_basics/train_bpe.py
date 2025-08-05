@@ -3,21 +3,26 @@ import time
 import tracemalloc
 import os
 import psutil
+import yaml
     
 def main():
     # Time and memory stat
     tracemalloc.start()
     start_time = time.perf_counter()
 
+    # Load config
+    with open("cs336_basics/config_local.yaml", "r") as f:
+        config = yaml.safe_load(f)
+
     """Example usage of the BPE tokenizer"""
     # Initialize bpe tokenizer
     tokenizer = BPETokenizer(
-        special_tokens=["<|endoftext|>"], 
-        log_file="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log",
-        enable_logging=False,
-        serialization=True,
-        serialization_vocab_path= "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/serialization_vocab.json",
-        serialization_merge_path= "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/serialization_merge.json"
+        special_tokens=config["special_tokens"], 
+        log_file=config["log_file"],
+        enable_logging=config["enable_logging"],
+        serialization=config["serialization"],
+        serialization_vocab_path= config["serialization_vocab_path"],
+        serialization_merge_path= config["serialization_merge_path"]
     )
     
     # Train the tokenizer
@@ -33,9 +38,9 @@ def main():
         # )
 
         vocab, merges = tokenizer.train(
-            "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/training_data.txt", 
-            vocab_size=500, # small_text is 263
-            parallel=True
+            config["traindata_path"], 
+            vocab_size=config["vocab_size"], # small_text is 263
+            parallel=config["parallel"]
         )
 
     except (FileNotFoundError, ValueError) as e:

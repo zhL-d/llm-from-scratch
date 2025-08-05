@@ -1,0 +1,10 @@
+special_tokens:
+  - "<|endoftext|>"
+log_file: "gold.log"
+enable_logging: False
+serialization: True
+serialization_vocab_path: "serialization_vocab.json"
+serialization_merge_path: "serialization_merge.json"
+traindata_path: "training_data.txt"
+vocab_size: 500
+parallel: True
