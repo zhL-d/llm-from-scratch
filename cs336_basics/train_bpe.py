@@ -3,6 +3,10 @@ from dataclasses import dataclass, field
 import json, logging
 from collections import defaultdict
 
+logging.basicConfig(filename="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log", filemode="w", level=logging.INFO, format="%(message)s")
+
+import json, logging
+
 class Tokenizer:
     def __init__(self, special_tokens: list[str] | None = None):
         self.special_tokens = special_tokens or []
@@ -15,15 +19,13 @@ class Tokenizer:
         serial_merged_token = {str(merged_token[0]): merged_token[1]}
         logging.info(json.dumps({"step": index, "pair": serial, "merged": serial_merged_token}, ensure_ascii=False, sort_keys=True))
     
-    def init_vocab(self) -> dict[int, bytes]:
-        vocab: dict[int, bytes] = {x: bytes([x]) for x in range (256)}
+    def init_vocab(self):
+        self.vocab = {x: bytes([x]) for x in range (256)}
         token_id_start = 256
     
         for i, special_token in enumerate(self.special_tokens):
             s_bytes = special_token.encode("utf-8")
-            vocab[token_id_start + i] = s_bytes
-    
-        return vocab
+            self.vocab[token_id_start + i] = s_bytes
     
     def remove_special_tokens(self, text: str) -> list[str]:
         stokens_escaped = [re.escape(stoken) for stoken in self.special_tokens]
@@ -192,43 +194,41 @@ class Tokenizer:
     
         self.vocab[new_index] = k
         
-    def train_bpe(self, input_path: str, vocab_size :int, special_tokens: list[str]) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+    def train_bpe(self, input_path: str, vocab_size: int) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
         # Init vocab
-        vocab: dict[int, bytes] = init_vocab(special_tokens)
-        # Init merges
-        merges: list[tuple[bytes, bytes]] = []
+        self.init_vocab()
     
         # Read training data
         with open(input_path, "r", encoding="utf-8") as f:
             text = f.read()
     
-        # Removing special tokens and pre-tokenization
-        pretokens = pretokenize_and_count(remove_special_tokens(text, special_tokens), True)
+        # Removing special tokens
+        docs = self.remove_special_tokens(text)
+
+        # Pre-tokenization
+        pretokens = self.pretokenize_and_count(docs, True)
     
         # Build the first pair count and cache(pair to corresponding pretokens)
-        pair_counts, reversed_cache = build_paircount_and_cache(pretokens)
+        pair_counts, reversed_cache = self.build_paircount_and_cache(pretokens)
     
-        for i in range(vocab_size - 256 - len(special_tokens)):
+        for i in range(vocab_size - 256 - len(self.special_tokens)):
             # Pick best adjcent tokens to merge
-            best_pair = _pick_best_mergetoken(pair_counts)
+            best_pair = self._pick_best_mergetoken(pair_counts)
     
             # Log pair counts, best pair and step
-            dump_pair_count(pair_counts, best_pair, i)
+            self.dump_pair_count(pair_counts, best_pair, i)
     
             # Update pair counts and cache
-            pair_counts,  reversed_cache = merge_new(pair_counts, reversed_cache, best_pair[0])
+            pair_counts,  reversed_cache = self.merge_new(pair_counts, reversed_cache, best_pair[0])
     
             # TODO: optimize point, insert vocab and merges two times
             # Update vocabs
-            update_vocab(vocab, best_pair)
+            self.update_vocab(best_pair)
             # Update merges
-            merges.append((best_pair[0][0], best_pair[0][1]))
+            self.merge.append((best_pair[0][0], best_pair[0][1]))
         
-        return vocab, merges
+        return self.vocab, self.merge
 
-logging.basicConfig(filename="/workspaces/stf-assignment1-basics/cs336_basics/feature_pair.log", filemode="w", level=logging.INFO, format="%(message)s")
-
-import json, logging
 
 # NEED
 def dump_pair_count(pair_count: dict[tuple[bytes], int], merged_token: tuple[tuple[bytes], int], index: int):
@@ -476,3 +476,24 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
 
 # print("vocab:", vocab)
 # print("merges:", merges)
+
+def main():
+    # Init tokenizer
+    tokenizer = Tokenizer(["<|endoftext|>"])
+
+    # Training
+    vocab, merges = tokenizer.train_bpe("/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/training_data.txt", 500)
+
+    # Build report
+    report = f"""
+    BPE Tokenizer Training report
+    -------------------------------
+    Vocabuary size                  :{len(vocab)}
+    Number of merges                :{len(merges)}
+    First 5 merges                  :{merges[:5]}
+    """
+
+    print(report)
+
+if __name__ == "__main__":
+    main()
