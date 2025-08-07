@@ -1,23 +1,46 @@
 import regex as re
-from dataclasses import dataclass, field
-import json, logging
+# from dataclasses import dataclass, field
+import json
+import logging
 from collections import defaultdict
 
-logging.basicConfig(filename="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log", filemode="w", level=logging.INFO, format="%(message)s")
+# logging.basicConfig(filename="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log", filemode="w", level=logging.INFO, format="%(message)s")
 
-import json, logging
+# import json, logging
 
 class Tokenizer:
-    def __init__(self, special_tokens: list[str] | None = None):
+    def __init__(
+            self, 
+            special_tokens: list[str] | None = None, 
+            enable_log: bool = False, 
+            log_path: str = ""
+        ):
         self.special_tokens = special_tokens or []
         self.vocab: dict[int, bytes] = {}
         self.merge: list[tuple[bytes, bytes]] = []
-    
+        self.enable_log = enable_log
+
+        if enable_log:
+            if not log_path:
+                raise ValueError("Logging is enable but no log path was provided")
+            
+            self._set_log_conifg(log_path)
+
     @staticmethod
-    def dump_pair_count(pair_count: dict[tuple[bytes], int], merged_token: tuple[tuple[bytes], int], index: int):
-        serial = { str(k): v for k, v in pair_count.items() }
-        serial_merged_token = {str(merged_token[0]): merged_token[1]}
-        logging.info(json.dumps({"step": index, "pair": serial, "merged": serial_merged_token}, ensure_ascii=False, sort_keys=True))
+    def _set_log_conifg(log_path: str):
+        logging.basicConfig(
+            filename=log_path, 
+            filemode="w", 
+            level=logging.INFO, 
+            format="%(message)s"
+        )
+
+    
+    def dump_pair_count(self, pair_count: dict[tuple[bytes], int], merged_token: tuple[tuple[bytes], int], index: int):
+        if self.enable_log:
+            serial = { str(k): v for k, v in pair_count.items() }
+            serial_merged_token = {str(merged_token[0]): merged_token[1]}
+            logging.info(json.dumps({"step": index, "pair": serial, "merged": serial_merged_token}, ensure_ascii=False, sort_keys=True))
     
     def init_vocab(self):
         self.vocab = {x: bytes([x]) for x in range (256)}
@@ -479,7 +502,7 @@ def train_bpe(input_path: str, vocab_size :int, special_tokens: list[str]) -> tu
 
 def main():
     # Init tokenizer
-    tokenizer = Tokenizer(["<|endoftext|>"])
+    tokenizer = Tokenizer(["<|endoftext|>"], False, "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log")
 
     # Training
     vocab, merges = tokenizer.train_bpe("/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/training_data.txt", 500)
