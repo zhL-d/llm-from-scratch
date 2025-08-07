@@ -1,0 +1,718 @@
+
+        BPE Tokenizer Training report
+        -------------------------------
+        Vocabuary size                  :500
+        Number of merges                :243
+        First 5 merges                  :[(b' ', b't'), (b' ', b'a'), (b'h', b'e'), (b'i', b'n'), (b' t', b'he')]
+    
+         1714503 function calls (1713727 primitive calls) in 1.796 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     27/1    0.000    0.000    1.796    1.796 {built-in method builtins.exec}
+        1    0.000    0.000    1.796    1.796 train_bpe.py:1(<module>)
+        1    0.003    0.003    1.735    1.735 train_bpe.py:79(main)
+        1    0.015    0.015    1.732    1.732 tokenizer.py:215(train_bpe)
+      243    0.271    0.001    1.140    0.005 tokenizer.py:185(merge_new)
+    15404    0.576    0.000    0.632    0.000 tokenizer.py:165(_add_new_contribution)
+5640/5639    0.237    0.000    0.355    0.000 {built-in method builtins.max}
+      243    0.001    0.000    0.353    0.001 tokenizer.py:98(_pick_best_mergetoken)
+        1    0.100    0.100    0.163    0.163 tokenizer.py:52(pretokenize_and_count)
+    15404    0.092    0.000    0.129    0.000 tokenizer.py:142(_delete_old_contribution)
+   836665    0.118    0.000    0.118    0.000 tokenizer.py:103(<lambda>)
+    15404    0.079    0.000    0.107    0.000 tokenizer.py:111(_build_new_pretoken)
+     45/3    0.000    0.000    0.061    0.020 <frozen importlib._bootstrap>:1343(_find_and_load)
+     45/3    0.000    0.000    0.061    0.020 <frozen importlib._bootstrap>:1298(_find_and_load_unlocked)
+     43/3    0.000    0.000    0.060    0.020 <frozen importlib._bootstrap>:905(_load_unlocked)
+     26/3    0.000    0.000    0.060    0.020 <frozen importlib._bootstrap_external>:988(exec_module)
+    108/6    0.000    0.000    0.059    0.010 <frozen importlib._bootstrap>:480(_call_with_frames_removed)
+        4    0.001    0.000    0.053    0.013 __init__.py:1(<module>)
+        1    0.032    0.032    0.050    0.050 tokenizer.py:79(build_paircount_and_cache)
+   139429    0.042    0.000    0.042    0.000 {method 'get' of 'dict' objects}
+   106129    0.039    0.000    0.039    0.000 {method 'add' of 'set' objects}
+239794/239696    0.037    0.000    0.037    0.000 {built-in method builtins.len}
+    91517    0.035    0.000    0.035    0.000 {method 'discard' of 'set' objects}
+   160785    0.032    0.000    0.032    0.000 tokenizer.py:74(<genexpr>)
+        1    0.000    0.000    0.031    0.031 tokenizer.py:1(<module>)
+        1    0.000    0.000    0.020    0.020 regex.py:1(<module>)
+        1    0.005    0.005    0.017    0.017 _regex_core.py:1(<module>)
+    18/11    0.000    0.000    0.013    0.001 <frozen importlib._bootstrap>:1384(_handle_fromlist)
+      7/4    0.000    0.000    0.013    0.003 {built-in method builtins.__import__}
+      243    0.001    0.000    0.010    0.000 tokenizer.py:205(update_vocab)
+      267    0.009    0.000    0.009    0.000 {built-in method builtins.sorted}
+       26    0.000    0.000    0.009    0.000 <frozen importlib._bootstrap_external>:1061(get_code)
+    27758    0.009    0.000    0.009    0.000 {method 'group' of '_regex.Match' objects}
+       43    0.000    0.000    0.009    0.000 <frozen importlib._bootstrap>:806(module_from_spec)
+    27760    0.008    0.000    0.008    0.000 {method 'encode' of 'str' objects}
+      145    0.002    0.000    0.008    0.000 {built-in method builtins.__build_class__}
+       13    0.000    0.000    0.007    0.001 <frozen importlib._bootstrap_external>:1286(create_module)
+       13    0.007    0.001    0.007    0.001 {built-in method _imp.create_dynamic}
+       45    0.001    0.000    0.006    0.000 <frozen importlib._bootstrap>:1234(_find_spec)
+        1    0.000    0.000    0.006    0.006 _psosx.py:1(<module>)
+        1    0.000    0.000    0.006    0.006 socket.py:1(<module>)
+      118    0.000    0.000    0.006    0.000 __init__.py:280(_compile)
+       26    0.001    0.000    0.005    0.000 <frozen importlib._bootstrap_external>:750(_compile_bytecode)
+       12    0.000    0.000    0.005    0.000 __init__.py:226(compile)
+       13    0.000    0.000    0.005    0.000 _compiler.py:738(compile)
+       41    0.000    0.000    0.005    0.000 <frozen importlib._bootstrap_external>:1516(find_spec)
+       41    0.000    0.000    0.005    0.000 <frozen importlib._bootstrap_external>:1487(_get_spec)
+       26    0.005    0.000    0.005    0.000 {built-in method marshal.loads}
+      113    0.001    0.000    0.004    0.000 <frozen importlib._bootstrap_external>:1589(find_spec)
+        1    0.000    0.000    0.004    0.004 tracemalloc.py:1(<module>)
+       30    0.001    0.000    0.004    0.000 __init__.py:355(namedtuple)
+        1    0.000    0.000    0.004    0.004 _common.py:1(<module>)
+        7    0.000    0.000    0.004    0.001 enum.py:902(_convert_)
+        1    0.000    0.000    0.003    0.003 _psposix.py:1(<module>)
+       13    0.000    0.000    0.003    0.000 _parser.py:962(parse)
+    38/13    0.000    0.000    0.003    0.000 _parser.py:445(_parse_sub)
+        3    0.000    0.000    0.003    0.001 regex.py:449(_compile)
+        1    0.000    0.000    0.003    0.003 pickle.py:1(<module>)
+    49/13    0.001    0.000    0.003    0.000 _parser.py:505(_parse)
+        1    0.000    0.000    0.003    0.003 decoder.py:1(<module>)
+       11    0.000    0.000    0.003    0.000 enum.py:515(__new__)
+  257/187    0.001    0.000    0.002    0.000 {built-in method __new__ of type object at 0x110436880}
+       13    0.000    0.000    0.002    0.000 _compiler.py:571(_code)
+       26    0.000    0.000    0.002    0.000 <frozen importlib._bootstrap_external>:1182(get_data)
+      211    0.000    0.000    0.002    0.000 enum.py:709(__call__)
+        1    0.000    0.000    0.002    0.002 regex.py:340(finditer)
+       30    0.002    0.000    0.002    0.000 {built-in method builtins.eval}
+        7    0.001    0.000    0.002    0.000 enum.py:1679(convert_class)
+      198    0.000    0.000    0.002    0.000 <frozen importlib._bootstrap_external>:140(_path_stat)
+    92/13    0.000    0.000    0.002    0.000 _compiler.py:37(_compile)
+        1    0.000    0.000    0.002    0.002 scanner.py:1(<module>)
+      198    0.002    0.000    0.002    0.000 {built-in method posix.stat}
+       70    0.001    0.000    0.002    0.000 enum.py:249(__set_name__)
+        1    0.000    0.000    0.002    0.002 string.py:1(<module>)
+        1    0.000    0.000    0.001    0.001 signal.py:1(<module>)
+        1    0.000    0.000    0.001    0.001 __init__.py:469(StrFormatStyle)
+        1    0.000    0.000    0.001    0.001 subprocess.py:1(<module>)
+        1    0.000    0.000    0.001    0.001 string.py:69(__init_subclass__)
+       64    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:304(acquire)
+       45    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:416(__enter__)
+      243    0.001    0.000    0.001    0.000 {method 'copy' of 'set' objects}
+       26    0.001    0.000    0.001    0.000 {built-in method _io.open_code}
+        1    0.000    0.000    0.001    0.001 selectors.py:1(<module>)
+      545    0.001    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:126(_path_join)
+        1    0.000    0.000    0.001    0.001 enum.py:846(_create_)
+      5/3    0.000    0.000    0.001    0.000 _regex_core.py:417(_parse_pattern)
+     13/8    0.000    0.000    0.001    0.000 _regex_core.py:427(parse_sequence)
+       43    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:733(_init_module_attrs)
+       41    0.001    0.000    0.001    0.000 _compiler.py:241(_optimize_charset)
+      210    0.000    0.000    0.001    0.000 enum.py:1112(__new__)
+        1    0.000    0.000    0.001    0.001 __init__.py:436(PercentStyle)
+       52    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:481(cache_from_source)
+       83    0.000    0.000    0.001    0.000 enum.py:383(__setitem__)
+       64    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:162(__enter__)
+       30    0.000    0.000    0.001    0.000 enum.py:1528(__or__)
+       22    0.000    0.000    0.001    0.000 enum.py:1398(_missing_)
+        1    0.000    0.000    0.001    0.001 encoder.py:1(<module>)
+        1    0.000    0.000    0.001    0.001 datetime.py:1(<module>)
+     2054    0.001    0.000    0.001    0.000 {method 'append' of 'list' objects}
+       65    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:632(cached)
+       13    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:1294(exec_module)
+       39    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:610(_get_cached)
+        1    0.000    0.000    0.001    0.001 struct.py:1(<module>)
+       64    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:124(setdefault)
+       26    0.001    0.000    0.001    0.000 {method 'read' of '_io.BufferedReader' objects}
+       19    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:463(_lock_unlock_module)
+       13    0.001    0.000    0.001    0.000 {built-in method _imp.exec_dynamic}
+      178    0.000    0.000    0.001    0.000 enum.py:1538(__and__)
+       51    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:159(_path_isfile)
+        1    0.000    0.000    0.001    0.001 tokenizer.py:48(remove_special_tokens)
+       55    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:150(_path_is_mode_type)
+      490    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
+     2068    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        1    0.000    0.000    0.000    0.000 regex.py:314(split)
+       13    0.000    0.000    0.000    0.000 _compiler.py:509(_compile_info)
+      280    0.000    0.000    0.000    0.000 enum.py:833(__setattr__)
+       64    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:372(release)
+     1231    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1640(_fill_cache)
+      120    0.000    0.000    0.000    0.000 enum.py:1388(_iter_member_by_def_)
+        1    0.000    0.000    0.000    0.000 glob.py:1(<module>)
+      141    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1465(_path_importer_cache)
+      702    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
+       45    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:420(__exit__)
+      106    0.000    0.000    0.000    0.000 __init__.py:164(match)
+        2    0.000    0.000    0.000    0.000 _regex_core.py:803(parse_paren)
+        1    0.000    0.000    0.000    0.000 threading.py:1(<module>)
+       64    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:426(_get_module_lock)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:73(RegexFlag)
+      490    0.000    0.000    0.000    0.000 _parser.py:164(__getitem__)
+      527    0.000    0.000    0.000    0.000 _parser.py:254(get)
+        1    0.000    0.000    0.000    0.000 traceback.py:1(<module>)
+       39    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1584(_get_spec)
+        4    0.000    0.000    0.000    0.000 {built-in method posix.listdir}
+   113/34    0.000    0.000    0.000    0.000 _parser.py:174(getwidth)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:1116(parse_flags_subpattern)
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1452(_path_hooks)
+        1    0.000    0.000    0.000    0.000 {method 'read' of '_io.TextIOWrapper' objects}
+       52    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:132(_path_split)
+       10    0.000    0.000    0.000    0.000 <frozen abc>:105(__new__)
+     1142    0.000    0.000    0.000    0.000 {method 'rstrip' of 'str' objects}
+      2/1    0.000    0.000    0.000    0.000 _regex_core.py:2039(optimise)
+      880    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}
+       45    0.000    0.000    0.000    0.000 __init__.py:101(find_spec)
+        1    0.000    0.000    0.000    0.000 <frozen codecs>:319(decode)
+        1    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+       38    0.000    0.000    0.000    0.000 functools.py:35(update_wrapper)
+      718    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+       11    0.000    0.000    0.000    0.000 _regex_core.py:1637(lookup_property)
+     13/8    0.000    0.000    0.000    0.000 _regex_core.py:3406(optimise)
+       26    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1201(path_stats)
+      249    0.000    0.000    0.000    0.000 socket.py:89(<lambda>)
+       39    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:801(spec_from_file_location)
+        1    0.000    0.000    0.000    0.000 _psosx.py:358(Process)
+       64    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:74(__new__)
+      248    0.000    0.000    0.000    0.000 socket.py:84(<lambda>)
+      2/1    0.000    0.000    0.000    0.000 _regex_core.py:2133(_flatten_branches)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:1102(parse_subpattern)
+        2    0.000    0.000    0.000    0.000 _regex_core.py:1417(parse_set)
+        2    0.000    0.000    0.000    0.000 __init__.py:1658(cpu_times)
+        2    0.000    0.000    0.000    0.000 _regex_core.py:335(_compile_firstset)
+     1063    0.000    0.000    0.000    0.000 {method 'isupper' of 'str' objects}
+      247    0.000    0.000    0.000    0.000 socket.py:79(<lambda>)
+      120    0.000    0.000    0.000    0.000 enum.py:1378(_iter_member_by_value_)
+       10    0.000    0.000    0.000    0.000 _regex_core.py:1187(parse_escape)
+      250    0.000    0.000    0.000    0.000 socket.py:94(<lambda>)
+       21    0.000    0.000    0.000    0.000 _parser.py:94(closegroup)
+     47/4    0.000    0.000    0.000    0.000 _regex_core.py:1897(compile)
+      660    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
+       27    0.000    0.000    0.000    0.000 {method '__exit__' of '_io._IOBase' objects}
+      678    0.000    0.000    0.000    0.000 {method 'get' of 'mappingproxy' objects}
+      647    0.000    0.000    0.000    0.000 _parser.py:233(__next)
+       25    0.000    0.000    0.000    0.000 _psosx.py:338(wrap_exceptions)
+     10/7    0.000    0.000    0.000    0.000 _regex_core.py:3418(pack_characters)
+        2    0.000    0.000    0.000    0.000 _regex_core.py:345(_check_firstset)
+        1    0.000    0.000    0.000    0.000 tokenizer.py:6(Tokenizer)
+        4    0.000    0.000    0.000    0.000 enum.py:500(__prepare__)
+      155    0.000    0.000    0.000    0.000 enum.py:79(_is_private)
+      142    0.000    0.000    0.000    0.000 enum.py:38(_is_descriptor)
+      594    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:491(_verbose_message)
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1681(path_hook_for_FileFinder)
+        2    0.000    0.000    0.000    0.000 _regex_core.py:1483(parse_set_imp_union)
+      2/1    0.000    0.000    0.000    0.000 _regex_core.py:2113(_compile)
+        2    0.000    0.000    0.000    0.000 enum.py:1558(__invert__)
+       11    0.000    0.000    0.000    0.000 _regex_core.py:1626(standardise_name)
+       85    0.000    0.000    0.000    0.000 {built-in method builtins.delattr}
+       15    0.000    0.000    0.000    0.000 _compiler.py:384(_mk_bitmap)
+        4    0.000    0.000    0.000    0.000 _regex_core.py:1374(parse_property)
+       28    0.000    0.000    0.000    0.000 _regex_core.py:2484(__init__)
+       26    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:665(_classify_pyc)
+      2/1    0.000    0.000    0.000    0.000 _regex_core.py:2089(pack_characters)
+        6    0.000    0.000    0.000    0.000 _regex_core.py:3485(_compile)
+       69    0.000    0.000    0.000    0.000 signal.py:9(<lambda>)
+      219    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1216(__enter__)
+      219    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1220(__exit__)
+        4    0.000    0.000    0.000    0.000 <frozen zipimport>:64(__init__)
+        1    0.000    0.000    0.000    0.000 threading.py:1418(__init__)
+        7    0.000    0.000    0.000    0.000 _regex_core.py:1506(parse_set_member)
+        1    0.000    0.000    0.000    0.000 _psosx.py:144(per_cpu_times)
+      165    0.000    0.000    0.000    0.000 enum.py:48(_is_dunder)
+      217    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+       45    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:445(cb)
+      282    0.000    0.000    0.000    0.000 {method 'rpartition' of 'str' objects}
+       78    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:84(_unpack_uint32)
+        1    0.000    0.000    0.000    0.000 _compat_pickle.py:1(<module>)
+      137    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
+      191    0.000    0.000    0.000    0.000 _parser.py:160(__len__)
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1563(__init__)
+        7    0.000    0.000    0.000    0.000 _regex_core.py:1547(parse_set_item)
+       19    0.000    0.000    0.000    0.000 _regex_core.py:384(make_case_flags)
+       83    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+       26    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:698(_validate_timestamp_pyc)
+      126    0.000    0.000    0.000    0.000 _parser.py:286(tell)
+       85    0.000    0.000    0.000    0.000 enum.py:768(__delattr__)
+        1    0.000    0.000    0.000    0.000 {built-in method _io.open}
+       24    0.000    0.000    0.000    0.000 _parser.py:442(_uniq)
+        1    0.000    0.000    0.000    0.000 __init__.py:288(Process)
+       45    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:976(find_spec)
+      243    0.000    0.000    0.000    0.000 tokenizer.py:34(dump_pair_count)
+       45    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:232(__init__)
+      155    0.000    0.000    0.000    0.000 enum.py:59(_is_sunder)
+      285    0.000    0.000    0.000    0.000 _parser.py:249(match)
+       41    0.000    0.000    0.000    0.000 _compiler.py:214(_compile_charset)
+        1    0.000    0.000    0.000    0.000 _psosx.py:138(cpu_times)
+      328    0.000    0.000    0.000    0.000 {built-in method _imp.acquire_lock}
+       41    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1122(find_spec)
+       10    0.000    0.000    0.000    0.000 {built-in method _abc._abc_init}
+       64    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:82(remove)
+       65    0.000    0.000    0.000    0.000 {method 'format' of 'str' objects}
+       64    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:79(__init__)
+       19    0.000    0.000    0.000    0.000 _regex_core.py:3500(_flush_characters)
+       43    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:185(_path_abspath)
+        3    0.000    0.000    0.000    0.000 _regex_core.py:4316(_get_required_string)
+       59    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method psutil._psutil_osx.cpu_times}
+        1    0.000    0.000    0.000    0.000 tokenizer.py:40(init_vocab)
+        1    0.000    0.000    0.000    0.000 threading.py:861(__init__)
+       36    0.000    0.000    0.000    0.000 _compiler.py:396(_simple)
+        9    0.000    0.000    0.000    0.000 enum.py:950(_get_mixins_)
+      116    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:645(parent)
+      328    0.000    0.000    0.000    0.000 {built-in method _imp.release_lock}
+      113    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:67(_relax_case)
+      104    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:134(<genexpr>)
+      101    0.000    0.000    0.000    0.000 _parser.py:172(append)
+       25    0.000    0.000    0.000    0.000 _parser.py:365(_escape)
+      129    0.000    0.000    0.000    0.000 {method '__exit__' of '_thread.RLock' objects}
+        2    0.000    0.000    0.000    0.000 _regex_core.py:2146(_split_common_prefix)
+       64    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:173(__exit__)
+      139    0.000    0.000    0.000    0.000 {method 'find' of 'bytearray' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:567(__init__)
+       13    0.000    0.000    0.000    0.000 _regex_core.py:1850(with_flags)
+        1    0.000    0.000    0.000    0.000 {built-in method psutil._psutil_osx.per_cpu_times}
+        1    0.000    0.000    0.000    0.000 {method 'split' of '_regex.Pattern' objects}
+       72    0.000    0.000    0.000    0.000 types.py:192(__init__)
+      4/3    0.000    0.000    0.000    0.000 _regex_core.py:3829(_compile)
+        1    0.000    0.000    0.000    0.000 threading.py:256(__init__)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:1912(get_required_string)
+       51    0.000    0.000    0.000    0.000 _regex_core.py:4147(match)
+        3    0.000    0.000    0.000    0.000 {built-in method builtins.dir}
+       11    0.000    0.000    0.000    0.000 _regex_core.py:1605(numeric_to_rational)
+        6    0.000    0.000    0.000    0.000 _common.py:425(memoize_when_activated)
+      2/1    0.000    0.000    0.000    0.000 _regex_core.py:2419(max_width)
+       43    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:180(_path_isabs)
+        8    0.000    0.000    0.000    0.000 _regex_core.py:2876(_compile)
+       21    0.000    0.000    0.000    0.000 _parser.py:82(opengroup)
+      120    0.000    0.000    0.000    0.000 enum.py:117(_iter_bits_lsb)
+       68    0.000    0.000    0.000    0.000 enum.py:197(__get__)
+      156    0.000    0.000    0.000    0.000 {built-in method sys.intern}
+      132    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
+      160    0.000    0.000    0.000    0.000 {method 'isidentifier' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 _regex_core.py:2313(_reduce_to_set)
+    16/11    0.000    0.000    0.000    0.000 _compiler.py:434(_get_literal_prefix)
+       33    0.000    0.000    0.000    0.000 {built-in method builtins.locals}
+        9    0.000    0.000    0.000    0.000 enum.py:991(_find_data_type_)
+     12/7    0.000    0.000    0.000    0.000 _regex_core.py:2420(<genexpr>)
+       26    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:642(_check_name_wrapper)
+        8    0.000    0.000    0.000    0.000 _regex_core.py:511(apply_quantifier)
+        1    0.000    0.000    0.000    0.000 <frozen os>:44(_get_exports_list)
+      163    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2106(get_firstset)
+      128    0.000    0.000    0.000    0.000 {method 'setdefault' of 'dict' objects}
+        7    0.000    0.000    0.000    0.000 {method 'sort' of 'list' objects}
+      106    0.000    0.000    0.000    0.000 {method 'match' of 're.Pattern' objects}
+        1    0.000    0.000    0.000    0.000 _common.py:128(NicDuplex)
+        3    0.000    0.000    0.000    0.000 contextlib.py:260(contextmanager)
+      5/4    0.000    0.000    0.000    0.000 _regex_core.py:3809(optimise)
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:983(create_module)
+        3    0.000    0.000    0.000    0.000 _common.py:380(memoize)
+       24    0.000    0.000    0.000    0.000 {built-in method fromkeys}
+        5    0.000    0.000    0.000    0.000 _regex_core.py:3589(max_width)
+        3    0.000    0.000    0.000    0.000 locale.py:665(getpreferredencoding)
+        1    0.000    0.000    0.000    0.000 _common.py:138(BatteryTime)
+       83    0.000    0.000    0.000    0.000 enum.py:70(_is_internal_class)
+        6    0.000    0.000    0.000    0.000 _regex_core.py:3469(get_firstset)
+      156    0.000    0.000    0.000    0.000 __init__.py:429(<genexpr>)
+        3    0.000    0.000    0.000    0.000 {built-in method regex._regex.compile}
+       25    0.000    0.000    0.000    0.000 _regex_core.py:1840(make_sequence)
+       16    0.000    0.000    0.000    0.000 _parser.py:305(_class_escape)
+        5    0.000    0.000    0.000    0.000 {built-in method builtins.sum}
+      131    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+      109    0.000    0.000    0.000    0.000 _regex_core.py:1847(__init__)
+       52    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+       64    0.000    0.000    0.000    0.000 {method 'pop' of 'dict' objects}
+        4    0.000    0.000    0.000    0.000 {built-in method _imp.create_builtin}
+        5    0.000    0.000    0.000    0.000 _regex_core.py:376(_flatten_code)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2682(Fuzzy)
+       45    0.000    0.000    0.000    0.000 {built-in method _imp.is_builtin}
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:164(_path_isdir)
+        1    0.000    0.000    0.000    0.000 subprocess.py:749(Popen)
+      156    0.000    0.000    0.000    0.000 {method '__contains__' of 'frozenset' objects}
+       68    0.000    0.000    0.000    0.000 _parser.py:79(groups)
+       13    0.000    0.000    0.000    0.000 _parser.py:224(__init__)
+     13/8    0.000    0.000    0.000    0.000 _regex_core.py:3402(fix_groups)
+        4    0.000    0.000    0.000    0.000 enum.py:1018(_find_new_)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:946(parse_lookaround)
+        8    0.000    0.000    0.000    0.000 _regex_core.py:2847(optimise)
+       15    0.000    0.000    0.000    0.000 _regex_core.py:3590(<genexpr>)
+       88    0.000    0.000    0.000    0.000 _regex_core.py:4004(get)
+       26    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:48(_new_module)
+       41    0.000    0.000    0.000    0.000 {built-in method _imp.find_frozen}
+       52    0.000    0.000    0.000    0.000 {method 'rfind' of 'str' objects}
+       64    0.000    0.000    0.000    0.000 {built-in method _weakref._remove_dead_weakref}
+        1    0.000    0.000    0.000    0.000 pickle.py:1129(_Unpickler)
+        2    0.000    0.000    0.000    0.000 _regex_core.py:394(make_character)
+        1    0.000    0.000    0.000    0.000 __init__.py:1293(__init__)
+       48    0.000    0.000    0.000    0.000 {built-in method _thread.allocate_lock}
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:662(spec_from_loader)
+       64    0.000    0.000    0.000    0.000 {method 'remove' of 'list' objects}
+       78    0.000    0.000    0.000    0.000 {built-in method from_bytes}
+       29    0.000    0.000    0.000    0.000 _regex_core.py:3395(__init__)
+      2/1    0.000    0.000    0.000    0.000 _regex_core.py:2035(fix_groups)
+        9    0.000    0.000    0.000    0.000 locale.py:598(setlocale)
+       45    0.000    0.000    0.000    0.000 _virtualenv.py:50(find_spec)
+        1    0.000    0.000    0.000    0.000 __init__.py:928(__init__)
+        1    0.000    0.000    0.000    0.000 __init__.py:592(__init__)
+        3    0.000    0.000    0.000    0.000 _regex_core.py:4215(__init__)
+       38    0.000    0.000    0.000    0.000 functools.py:65(wraps)
+        8    0.000    0.000    0.000    0.000 _regex_core.py:2869(get_firstset)
+        1    0.000    0.000    0.000    0.000 regex.py:377(escape)
+       26    0.000    0.000    0.000    0.000 _compiler.py:568(isstring)
+    26/16    0.000    0.000    0.000    0.000 _regex_core.py:1903(__hash__)
+        2    0.000    0.000    0.000    0.000 functools.py:188(total_ordering)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2030(Branch)
+       94    0.000    0.000    0.000    0.000 _parser.py:109(__init__)
+       38    0.000    0.000    0.000    0.000 _parser.py:168(__setitem__)
+        2    0.000    0.000    0.000    0.000 _compiler.py:389(_bytes_to_codes)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+       99    0.000    0.000    0.000    0.000 enum.py:1395(<lambda>)
+       11    0.000    0.000    0.000    0.000 _regex_core.py:3213(__init__)
+        4    0.000    0.000    0.000    0.000 _regex_core.py:1395(parse_property_name)
+        4    0.000    0.000    0.000    0.000 _regex_core.py:2513(_compile)
+       92    0.000    0.000    0.000    0.000 {built-in method posix.fspath}
+       15    0.000    0.000    0.000    0.000 _regex_core.py:1917(__init__)
+        4    0.000    0.000    0.000    0.000 _regex_core.py:410(make_property)
+        2    0.000    0.000    0.000    0.000 _compiler.py:405(_generate_overlap_table)
+      141    0.000    0.000    0.000    0.000 enum.py:1168(__init__)
+       71    0.000    0.000    0.000    0.000 enum.py:93(_is_single_bit)
+        4    0.000    0.000    0.000    0.000 enum.py:940(_check_for_existing_members_)
+        1    0.000    0.000    0.000    0.000 {method 'match' of '_regex.Pattern' objects}
+        4    0.000    0.000    0.000    0.000 _regex_core.py:3894(__init__)
+       70    0.000    0.000    0.000    0.000 enum.py:803(<genexpr>)
+       72    0.000    0.000    0.000    0.000 enum.py:925(<lambda>)
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:991(exec_module)
+       45    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:599(__init__)
+        1    0.000    0.000    0.000    0.000 __init__.py:450(validate)
+        1    0.000    0.000    0.000    0.000 contextlib.py:141(__exit__)
+       13    0.000    0.000    0.000    0.000 {built-in method _sre.compile}
+        1    0.000    0.000    0.000    0.000 threading.py:1022(_set_tstate_lock)
+        1    0.000    0.000    0.000    0.000 <frozen abc>:110(register)
+        9    0.000    0.000    0.000    0.000 _compiler.py:465(_get_charset_prefix)
+       15    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 _parser.py:267(getuntil)
+        1    0.000    0.000    0.000    0.000 threading.py:850(Thread)
+        9    0.000    0.000    0.000    0.000 {built-in method _locale.setlocale}
+       72    0.000    0.000    0.000    0.000 enum.py:236(__set_name__)
+        1    0.000    0.000    0.000    0.000 <frozen os>:779(getenv)
+        1    0.000    0.000    0.000    0.000 {method 'search' of 're.Pattern' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.next}
+       16    0.000    0.000    0.000    0.000 _regex_core.py:2838(__init__)
+        1    0.000    0.000    0.000    0.000 {built-in method _abc._abc_register}
+       13    0.000    0.000    0.000    0.000 _parser.py:946(fix_flags)
+    26/16    0.000    0.000    0.000    0.000 {built-in method builtins.hash}
+        1    0.000    0.000    0.000    0.000 selectors.py:290(SelectSelector)
+       52    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3622(rebuild)
+       11    0.000    0.000    0.000    0.000 _regex_core.py:2367(_flush_set_members)
+        2    0.000    0.000    0.000    0.000 threading.py:1463(current_thread)
+        1    0.000    0.000    0.000    0.000 threading.py:595(set)
+        4    0.000    0.000    0.000    0.000 enum.py:376(__init__)
+        1    0.000    0.000    0.000    0.000 <frozen _collections_abc>:804(get)
+        1    0.000    0.000    0.000    0.000 selectors.py:583(_can_use)
+       15    0.000    0.000    0.000    0.000 {method 'translate' of 'bytearray' objects}
+      2/1    0.000    0.000    0.000    0.000 <frozen abc>:121(__subclasscheck__)
+       64    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:158(__init__)
+       85    0.000    0.000    0.000    0.000 _compat_pickle.py:167(<genexpr>)
+        4    0.000    0.000    0.000    0.000 {built-in method _imp.exec_builtin}
+       31    0.000    0.000    0.000    0.000 {built-in method sys._getframemodulename}
+        1    0.000    0.000    0.000    0.000 socket.py:215(socket)
+       60    0.000    0.000    0.000    0.000 {built-in method builtins.chr}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.all}
+      2/1    0.000    0.000    0.000    0.000 {built-in method _abc._abc_subclasscheck}
+        6    0.000    0.000    0.000    0.000 _regex_core.py:2164(<genexpr>)
+        1    0.000    0.000    0.000    0.000 weakref.py:104(__init__)
+        4    0.000    0.000    0.000    0.000 _regex_core.py:3608(__init__)
+       45    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:412(__init__)
+       33    0.000    0.000    0.000    0.000 _compiler.py:31(_combine_flags)
+       26    0.000    0.000    0.000    0.000 {built-in method _imp._fix_co_filename}
+        1    0.000    0.000    0.000    0.000 pickle.py:401(_Pickler)
+       48    0.000    0.000    0.000    0.000 _regex_core.py:1631(<genexpr>)
+       70    0.000    0.000    0.000    0.000 signal.py:16(<lambda>)
+        1    0.000    0.000    0.000    0.000 contextlib.py:287(helper)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:1085(parse_flags)
+        1    0.000    0.000    0.000    0.000 __init__.py:1878(LoggerAdapter)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3394(Sequence)
+       71    0.000    0.000    0.000    0.000 signal.py:21(<lambda>)
+        1    0.000    0.000    0.000    0.000 <frozen os>:680(__getitem__)
+        1    0.000    0.000    0.000    0.000 __init__.py:958(createLock)
+       31    0.000    0.000    0.000    0.000 enum.py:1271(name)
+        4    0.000    0.000    0.000    0.000 _parser.py:258(getwhile)
+        1    0.000    0.000    0.000    0.000 traceback.py:377(StackSummary)
+       36    0.000    0.000    0.000    0.000 {method 'bit_length' of 'int' objects}
+       70    0.000    0.000    0.000    0.000 enum.py:246(__init__)
+       43    0.000    0.000    0.000    0.000 _compat_pickle.py:165(<genexpr>)
+       14    0.000    0.000    0.000    0.000 _regex_core.py:3236(_compile)
+        1    0.000    0.000    0.000    0.000 __init__.py:892(_addHandlerRef)
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:501(_requires_builtin_wrapper)
+       36    0.000    0.000    0.000    0.000 {built-in method _sre.unicode_iscased}
+       25    0.000    0.000    0.000    0.000 _compiler.py:426(_get_iscased)
+       10    0.000    0.000    0.000    0.000 enum.py:811(__members__)
+        9    0.000    0.000    0.000    0.000 <string>:1(<lambda>)
+        1    0.000    0.000    0.000    0.000 _common.py:633(outer)
+        1    0.000    0.000    0.000    0.000 __init__.py:1117(StreamHandler)
+        1    0.000    0.000    0.000    0.000 __init__.py:1353(Manager)
+        5    0.000    0.000    0.000    0.000 _regex_core.py:3654(_handle_case_folding)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2477(Character)
+        1    0.000    0.000    0.000    0.000 traceback.py:251(FrameSummary)
+        6    0.000    0.000    0.000    0.000 signal.py:49(decorator)
+        1    0.000    0.000    0.000    0.000 contextlib.py:132(__enter__)
+       37    0.000    0.000    0.000    0.000 enum.py:1276(value)
+       40    0.000    0.000    0.000    0.000 {built-in method _sre.unicode_tolower}
+        4    0.000    0.000    0.000    0.000 _regex_core.py:2507(get_firstset)
+        1    0.000    0.000    0.000    0.000 threading.py:403(notify_all)
+        8    0.000    0.000    0.000    0.000 _regex_core.py:559(parse_quantifier)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:1846(RegexBase)
+       32    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1569(<genexpr>)
+        1    0.000    0.000    0.000    0.000 subprocess.py:470(CompletedProcess)
+        3    0.000    0.000    0.000    0.000 _regex_core.py:3992(__init__)
+        2    0.000    0.000    0.000    0.000 {method 'tolist' of 'memoryview' objects}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3087(_compile)
+        1    0.000    0.000    0.000    0.000 traceback.py:653(TracebackException)
+        4    0.000    0.000    0.000    0.000 _regex_core.py:3922(_compile)
+        8    0.000    0.000    0.000    0.000 _regex_core.py:2852(pack_characters)
+       43    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:653(has_location)
+        4    0.000    0.000    0.000    0.000 _parser.py:297(checkgroupname)
+       13    0.000    0.000    0.000    0.000 _parser.py:73(__init__)
+        1    0.000    0.000    0.000    0.000 __init__.py:1482(Logger)
+        1    0.000    0.000    0.000    0.000 decoder.py:284(__init__)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3058(optimise)
+        4    0.000    0.000    0.000    0.000 enum.py:799(__iter__)
+        2    0.000    0.000    0.000    0.000 _weakrefset.py:37(__init__)
+        1    0.000    0.000    0.000    0.000 __init__.py:1867(__init__)
+        1    0.000    0.000    0.000    0.000 threading.py:834(_maintain_shutdown_locks)
+        1    0.000    0.000    0.000    0.000 __init__.py:262(_register_at_fork_reinit_lock)
+        2    0.000    0.000    0.000    0.000 _parser.py:886(_parse_flags)
+        8    0.000    0.000    0.000    0.000 _regex_core.py:2907(max_width)
+        3    0.000    0.000    0.000    0.000 regex.py:471(complain_unused_args)
+        1    0.000    0.000    0.000    0.000 {built-in method psutil._psutil_posix.getpagesize}
+       26    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1152(__init__)
+       12    0.000    0.000    0.000    0.000 _regex_core.py:2158(<genexpr>)
+        1    0.000    0.000    0.000    0.000 contextlib.py:104(__init__)
+        4    0.000    0.000    0.000    0.000 _regex_core.py:3230(get_firstset)
+        4    0.000    0.000    0.000    0.000 threading.py:110(RLock)
+        4    0.000    0.000    0.000    0.000 enum.py:969(_find_data_repr_)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:1970(Atomic)
+        2    0.000    0.000    0.000    0.000 {built-in method posix.register_at_fork}
+        8    0.000    0.000    0.000    0.000 _regex_core.py:2844(fix_groups)
+        1    0.000    0.000    0.000    0.000 <frozen codecs>:309(__init__)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3046(LookAround)
+        1    0.000    0.000    0.000    0.000 selectors.py:80(BaseSelector)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        1    0.000    0.000    0.000    0.000 {built-in method time.time}
+       33    0.000    0.000    0.000    0.000 __init__.py:108(<lambda>)
+        1    0.000    0.000    0.000    0.000 selectors.py:341(_PollLikeSelector)
+        1    0.000    0.000    0.000    0.000 __init__.py:1497(__init__)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3206(Property)
+        2    0.000    0.000    0.000    0.000 _weakrefset.py:85(add)
+        1    0.000    0.000    0.000    0.000 __init__.py:1367(Popen)
+        1    0.000    0.000    0.000    0.000 <frozen os>:762(encode)
+        2    0.000    0.000    0.000    0.000 __init__.py:234(_acquireLock)
+        3    0.000    0.000    0.000    0.000 {built-in method _locale.getencoding}
+        4    0.000    0.000    0.000    0.000 _regex_core.py:4070(get_while)
+       26    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:985(create_module)
+        1    0.000    0.000    0.000    0.000 threading.py:244(Condition)
+       30    0.000    0.000    0.000    0.000 _regex_core.py:1870(fix_groups)
+        7    0.000    0.000    0.000    0.000 {method 'setter' of 'property' objects}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3607(SetBase)
+        1    0.000    0.000    0.000    0.000 tracemalloc.py:179(Traceback)
+       26    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1177(get_filename)
+        4    0.000    0.000    0.000    0.000 _regex_core.py:2031(__init__)
+       29    0.000    0.000    0.000    0.000 _regex_core.py:2504(optimise)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3264(Range)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2956(Group)
+        2    0.000    0.000    0.000    0.000 __editable___cs336_basics_1_0_3_finder.py:15(find_spec)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3684(max_width)
+        5    0.000    0.000    0.000    0.000 _regex_core.py:1906(__eq__)
+        9    0.000    0.000    0.000    0.000 {method 'pop' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3626(get_firstset)
+        1    0.000    0.000    0.000    0.000 weakref.py:289(update)
+        2    0.000    0.000    0.000    0.000 _regex_core.py:3049(__init__)
+        1    0.000    0.000    0.000    0.000 __init__.py:919(Handler)
+        1    0.000    0.000    0.000    0.000 threading.py:649(Barrier)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2834(GreedyRepeat)
+        2    0.000    0.000    0.000    0.000 {method 'cast' of 'memoryview' objects}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3801(SetUnion)
+        1    0.000    0.000    0.000    0.000 socket.py:664(SocketIO)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3114(LookAroundConditional)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3887(String)
+        2    0.000    0.000    0.000    0.000 _regex_core.py:4186(expect)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3341(RefGroup)
+        1    0.000    0.000    0.000    0.000 subprocess.py:126(CalledProcessError)
+        1    0.000    0.000    0.000    0.000 {built-in method regex._regex.get_code_size}
+        7    0.000    0.000    0.000    0.000 enum.py:1663(_simple_enum)
+        1    0.000    0.000    0.000    0.000 __init__.py:255(escape)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2551(Conditional)
+        7    0.000    0.000    0.000    0.000 {method 'items' of 'mappingproxy' objects}
+       11    0.000    0.000    0.000    0.000 {method 'upper' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 _common.py:261(Error)
+        1    0.000    0.000    0.000    0.000 tracemalloc.py:415(Snapshot)
+        4    0.000    0.000    0.000    0.000 __init__.py:211(<genexpr>)
+        3    0.000    0.000    0.000    0.000 _parser.py:288(seek)
+        1    0.000    0.000    0.000    0.000 _common.py:656(__init__)
+        1    0.000    0.000    0.000    0.000 copyreg.py:12(pickle)
+        1    0.000    0.000    0.000    0.000 tracemalloc.py:353(Filter)
+        1    0.000    0.000    0.000    0.000 __init__.py:1358(__init__)
+        3    0.000    0.000    0.000    0.000 _regex_core.py:4277(_check_group_features)
+        1    0.000    0.000    0.000    0.000 string.py:188(Formatter)
+        1    0.000    0.000    0.000    0.000 threading.py:556(Event)
+        4    0.000    0.000    0.000    0.000 _regex_core.py:2540(max_width)
+        1    0.000    0.000    0.000    0.000 string.py:57(Template)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3990(Source)
+        1    0.000    0.000    0.000    0.000 __init__.py:806(Filterer)
+        2    0.000    0.000    0.000    0.000 __init__.py:243(_releaseLock)
+        1    0.000    0.000    0.000    0.000 __init__.py:546(Formatter)
+        3    0.000    0.000    0.000    0.000 __init__.py:208(_checkLevel)
+       13    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1275(__init__)
+        1    0.000    0.000    0.000    0.000 decoder.py:254(JSONDecoder)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3712(SetDiff)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:1069(parse_flag_set)
+        3    0.000    0.000    0.000    0.000 _regex_core.py:4190(at_end)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:1943(Any)
+        1    0.000    0.000    0.000    0.000 threading.py:373(notify)
+        1    0.000    0.000    0.000    0.000 tracemalloc.py:140(Frame)
+        1    0.000    0.000    0.000    0.000 {method 'difference_update' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3768(SetSymDiff)
+       11    0.000    0.000    0.000    0.000 {method 'isspace' of 'str' objects}
+       17    0.000    0.000    0.000    0.000 _regex_core.py:3227(optimise)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3738(SetInter)
+        1    0.000    0.000    0.000    0.000 tracemalloc.py:272(Trace)
+        1    0.000    0.000    0.000    0.000 threading.py:1437(_DummyThread)
+        1    0.000    0.000    0.000    0.000 subprocess.py:163(TimeoutExpired)
+        2    0.000    0.000    0.000    0.000 _regex_core.py:2074(_add_precheck)
+        1    0.000    0.000    0.000    0.000 encoder.py:74(JSONEncoder)
+        1    0.000    0.000    0.000    0.000 threading.py:123(_RLock)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2926(PossessiveRepeat)
+        4    0.000    0.000    0.000    0.000 _regex_core.py:3203(_compile)
+        3    0.000    0.000    0.000    0.000 _regex_core.py:3936(max_width)
+        1    0.000    0.000    0.000    0.000 {method 'finditer' of '_regex.Pattern' objects}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3199(PrecompiledCode)
+        1    0.000    0.000    0.000    0.000 threading.py:1019(_set_native_id)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:1916(ZeroWidthBase)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2422(CallGroup)
+        1    0.000    0.000    0.000    0.000 {method 'close' of 'select.kqueue' objects}
+       10    0.000    0.000    0.000    0.000 _regex_core.py:1876(pack_characters)
+        1    0.000    0.000    0.000    0.000 pickle.py:194(_Framer)
+        1    0.000    0.000    0.000    0.000 selectors.py:206(_BaseSelectorImpl)
+        1    0.000    0.000    0.000    0.000 __init__.py:503(StringTemplateStyle)
+        2    0.000    0.000    0.000    0.000 threading.py:1175(ident)
+        1    0.000    0.000    0.000    0.000 subprocess.py:695(_use_posix_spawn)
+        6    0.000    0.000    0.000    0.000 signal.py:48(_wraps)
+        1    0.000    0.000    0.000    0.000 tracemalloc.py:30(Statistic)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:4212(Info)
+        1    0.000    0.000    0.000    0.000 threading.py:278(__enter__)
+        2    0.000    0.000    0.000    0.000 {method 'copy' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 __init__.py:1373(disable)
+        1    0.000    0.000    0.000    0.000 {method 'translate' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 _regex_core.py:3200(__init__)
+        1    0.000    0.000    0.000    0.000 _common.py:651(_WrapNumbers)
+        1    0.000    0.000    0.000    0.000 threading.py:1333(_make_invoke_excepthook)
+        1    0.000    0.000    0.000    0.000 encoder.py:105(__init__)
+        1    0.000    0.000    0.000    0.000 threading.py:424(Semaphore)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3055(fix_groups)
+        1    0.000    0.000    0.000    0.000 decoder.py:20(JSONDecodeError)
+        1    0.000    0.000    0.000    0.000 threading.py:293(_is_owned)
+        1    0.000    0.000    0.000    0.000 __init__.py:2292(NullHandler)
+        1    0.000    0.000    0.000    0.000 tokenizer.py:7(__init__)
+        8    0.000    0.000    0.000    0.000 _regex_core.py:1900(is_empty)
+        1    0.000    0.000    0.000    0.000 selectors.py:506(KqueueSelector)
+        2    0.000    0.000    0.000    0.000 {method 'acquire' of '_thread.lock' objects}
+        1    0.000    0.000    0.000    0.000 selectors.py:60(_SelectorMapping)
+        2    0.000    0.000    0.000    0.000 __init__.py:811(__init__)
+        1    0.000    0.000    0.000    0.000 __init__.py:1287(_StderrHandler)
+        1    0.000    0.000    0.000    0.000 selectors.py:433(PollSelector)
+        4    0.000    0.000    0.000    0.000 <frozen abc>:7(abstractmethod)
+        1    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 tracemalloc.py:70(StatisticDiff)
+        1    0.000    0.000    0.000    0.000 __init__.py:1202(FileHandler)
+        1    0.000    0.000    0.000    0.000 __init__.py:286(LogRecord)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:30(error)
+        1    0.000    0.000    0.000    0.000 pickle.py:257(_Unframer)
+        4    0.000    0.000    0.000    0.000 {built-in method builtins.any}
+        1    0.000    0.000    0.000    0.000 tracemalloc.py:401(DomainFilter)
+        1    0.000    0.000    0.000    0.000 tracemalloc.py:311(_Traces)
+        2    0.000    0.000    0.000    0.000 {method 'acquire' of '_thread.RLock' objects}
+        2    0.000    0.000    0.000    0.000 <frozen _collections_abc>:341(__subclasshook__)
+        1    0.000    0.000    0.000    0.000 __init__.py:727(BufferingFormatter)
+        4    0.000    0.000    0.000    0.000 {built-in method builtins.globals}
+        1    0.000    0.000    0.000    0.000 threading.py:511(BoundedSemaphore)
+        1    0.000    0.000    0.000    0.000 __init__.py:443(__init__)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3949(StringSet)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:1962(AnyAll)
+        4    0.000    0.000    0.000    0.000 {built-in method _sre.ascii_iscased}
+        1    0.000    0.000    0.000    0.000 threading.py:281(__exit__)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2815(Grapheme)
+        1    0.000    0.000    0.000    0.000 traceback.py:630(_ExceptionPrintContext)
+        1    0.000    0.000    0.000    0.000 threading.py:1386(Timer)
+        1    0.000    0.000    0.000    0.000 traceback.py:90(_Sentinel)
+        4    0.000    0.000    0.000    0.000 _regex_core.py:3709(__del__)
+        4    0.000    0.000    0.000    0.000 {built-in method _sre.ascii_tolower}
+        1    0.000    0.000    0.000    0.000 threading.py:1015(_set_ident)
+        3    0.000    0.000    0.000    0.000 regex.py:642(<genexpr>)
+        1    0.000    0.000    0.000    0.000 <frozen posixpath>:52(normcase)
+        1    0.000    0.000    0.000    0.000 _common.py:294(NoSuchProcess)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3065(pack_characters)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:4337(Scanner)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2640(DefaultBoundary)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2468(CallRef)
+        1    0.000    0.000    0.000    0.000 _common.py:311(ZombieProcess)
+        2    0.000    0.000    0.000    0.000 {method '__exit__' of '_thread.lock' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method _thread._set_sentinel}
+        2    0.000    0.000    0.000    0.000 {method 'release' of '_thread.RLock' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method sys.getfilesystemencoding}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2668(EndOfStringLineU)
+        1    0.000    0.000    0.000    0.000 __init__.py:1861(RootLogger)
+        2    0.000    0.000    0.000    0.000 train_bpe.py:8(perf_monitor)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2660(EndOfString)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:1966(AnyU)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2902(__eq__)
+        1    0.000    0.000    0.000    0.000 _common.py:345(TimeoutExpired)
+        1    0.000    0.000    0.000    0.000 __init__.py:769(Filter)
+        1    0.000    0.000    0.000    0.000 __init__.py:1311(PlaceHolder)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2664(EndOfStringLine)
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1008(is_package)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3390(SearchAnchor)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3592(get_required_string)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3038(Keep)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2644(DefaultEndOfWord)
+        1    0.000    0.000    0.000    0.000 {method 'clear' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3867(Skip)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2648(DefaultStartOfWord)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3875(StartOfLineU)
+        1    0.000    0.000    0.000    0.000 _common.py:330(AccessDenied)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3942(Literal)
+        1    0.000    0.000    0.000    0.000 {built-in method sys.getfilesystemencodeerrors}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3482(has_simple_start)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3883(StartOfWord)
+        1    0.000    0.000    0.000    0.000 tracemalloc.py:345(BaseFilter)
+        1    0.000    0.000    0.000    0.000 _common.py:628(deprecated_method)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3258(Prune)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2026(Boundary)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2652(EndOfLine)
+        1    0.000    0.000    0.000    0.000 subprocess.py:123(SubprocessError)
+        1    0.000    0.000    0.000    0.000 pickle.py:97(_Stop)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3879(StartOfString)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2656(EndOfLineU)
+        1    0.000    0.000    0.000    0.000 pickle.py:73(PickleError)
+        1    0.000    0.000    0.000    0.000 {built-in method atexit.register}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3042(LazyRepeat)
+        1    0.000    0.000    0.000    0.000 {built-in method regex._regex.get_properties}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2830(GraphemeBoundary)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3871(StartOfLine)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2676(Failure)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:2672(EndOfWord)
+        1    0.000    0.000    0.000    0.000 socket.py:212(_GiveupOnSendfile)
+        1    0.000    0.000    0.000    0.000 threading.py:1416(_MainThread)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:262(Namespace)
+        1    0.000    0.000    0.000    0.000 <frozen codecs>:260(__init__)
+        1    0.000    0.000    0.000    0.000 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 threading.py:1213(daemon)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:61(_UnscopedFlagSet)
+        1    0.000    0.000    0.000    0.000 pickle.py:77(PicklingError)
+        1    0.000    0.000    0.000    0.000 pickle.py:84(UnpicklingError)
+        1    0.000    0.000    0.000    0.000 {method '__enter__' of '_thread.lock' objects}
+        1    0.000    0.000    0.000    0.000 {method 'insert' of 'list' objects}
+        2    0.000    0.000    0.000    0.000 _regex_core.py:1885(can_be_affix)
+        1    0.000    0.000    0.000    0.000 {built-in method _thread.get_native_id}
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3939(get_required_string)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
+        1    0.000    0.000    0.000    0.000 threading.py:810(BrokenBarrierError)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:69(_FirstSetError)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:65(ParseError)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:1894(has_simple_start)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3111(max_width)
+        1    0.000    0.000    0.000    0.000 _regex_core.py:3919(has_simple_start)
+        1    0.000    0.000    0.000    0.000 {method '__init_subclass__' of 'object' objects}
+
+
