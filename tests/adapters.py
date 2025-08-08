@@ -9,7 +9,7 @@ import numpy.typing as npt
 import torch
 from torch import Tensor
 
-from cs336_basics.train_bpe import Tokenizer
+from cs336_basics.tokenizer import Tokenizer
 
 
 
@@ -592,5 +592,4 @@ def run_train_bpe(
     """
     tokenizer = Tokenizer(special_tokens)
     return tokenizer.train_bpe(input_path, vocab_size)
-    # return train_bpe(input_path, vocab_size, special_tokens)
     # raise NotImplementedError

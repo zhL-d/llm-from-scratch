@@ -49,6 +49,33 @@ class Tokenizer:
         stokens_escaped = [re.escape(stoken) for stoken in self.special_tokens]
         return re.split("|".join(stokens_escaped), text)
     
+    # @staticmethod
+    # def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
+    #     token_count : dict[tuple[bytes], int] = {}
+    
+    #     for doc in docs:
+    #         pre_tokens = None
+    #         # Use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
+    #         if gpt2_regex:
+    #             PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+    #             pre_tokens = re.finditer(PAT, doc)
+    #         else:
+    #             # TODO: change to iter
+    #             pre_tokens = doc.split()
+    
+    #         for token in pre_tokens:
+    #             if gpt2_regex:
+    #                 # iter.match convert to string
+    #                 token_str = token.group(0)
+    #             else:
+    #                 token_str = token
+    #             bytes_token = token_str.encode("utf-8")
+                
+    #             tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
+    #             token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
+            
+    #     return token_count
+    
     @staticmethod
     def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
         token_count : dict[tuple[bytes], int] = {}
@@ -59,17 +86,12 @@ class Tokenizer:
             if gpt2_regex:
                 PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
                 pre_tokens = re.finditer(PAT, doc)
+                pre_tokens = [match.group(0) for match in pre_tokens]
             else:
-                # TODO: change to iter
                 pre_tokens = doc.split()
     
             for token in pre_tokens:
-                if gpt2_regex:
-                    # iter.match convert to string
-                    token_str = token.group(0)
-                else:
-                    token_str = token
-                bytes_token = token_str.encode("utf-8")
+                bytes_token = token.encode("utf-8")
                 
                 tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
                 token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
@@ -221,6 +243,7 @@ class Tokenizer:
             text = f.read()
     
         # Removing special tokens
+        # P
         docs = self.remove_special_tokens(text)
 
         # Pre-tokenization
