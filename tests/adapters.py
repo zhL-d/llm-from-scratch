@@ -591,5 +591,5 @@ def run_train_bpe(
                 Merges are ordered by order of creation.
     """
     tokenizer = Tokenizer(special_tokens)
-    return tokenizer.train_bpe(input_path, vocab_size)
+    return tokenizer.train_bpe(input_path, vocab_size, gpt2_regex=True, enable_parallel=True)
     # raise NotImplementedError

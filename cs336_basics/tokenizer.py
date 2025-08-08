@@ -2,6 +2,9 @@ import regex as re
 import json
 import logging
 from collections import defaultdict
+from typing import BinaryIO
+import os
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 class Tokenizer:
     def __init__(
@@ -48,6 +51,59 @@ class Tokenizer:
     def remove_special_tokens(self, text: str) -> list[str]:
         stokens_escaped = [re.escape(stoken) for stoken in self.special_tokens]
         return re.split("|".join(stokens_escaped), text)
+    
+    def remove_special_tokens_static(text: str, special_tokens: list[str]) -> list[str]:
+        stokens_escaped = [re.escape(stoken) for stoken in special_tokens]
+        return re.split("|".join(stokens_escaped), text)
+    
+    @staticmethod
+    def find_chunk_boundaries(
+        file: BinaryIO, 
+        desired_num_chunks: int, 
+        split_special_token: bytes
+    ) -> list[int]:
+        """
+        Chunk the file into parts that can be counted independently.
+        May return fewer chunks if the boundaries end up overlapping.
+        """
+        assert isinstance(split_special_token, bytes), (
+            "Must represent special token as a bytestring"
+        )
+    
+        # Get total file size in bytes
+        file.seek(0, os.SEEK_END)
+        file_size = file.tell()
+        file.seek(0)
+    
+        chunk_size = file_size // desired_num_chunks
+    
+        # Initial guesses for chunk boundary locations, uniformly spaced
+        # Chunks start on previous index, don't include last index
+        chunk_boundaries = [i * chunk_size for i in range(desired_num_chunks + 1)]
+        chunk_boundaries[-1] = file_size
+    
+        mini_chunk_size = 4096  # Read ahead by 4k bytes at a time
+    
+        for bi in range(1, len(chunk_boundaries) - 1):
+            initial_position = chunk_boundaries[bi]
+            file.seek(initial_position)  # Start at boundary guess
+            while True:
+                mini_chunk = file.read(mini_chunk_size)  # Read a mini chunk
+    
+                # If EOF, this boundary should be at the end of the file
+                if mini_chunk == b"":
+                    chunk_boundaries[bi] = file_size
+                    break
+    
+                # Find the special token in the mini chunk
+                found_at = mini_chunk.find(split_special_token)
+                if found_at != -1:
+                    chunk_boundaries[bi] = initial_position + found_at
+                    break
+                initial_position += mini_chunk_size
+    
+        # Make sure all boundaries are unique, but might be fewer than desired_num_chunks
+        return sorted(set(chunk_boundaries))
     
     # @staticmethod
     # def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
@@ -97,6 +153,56 @@ class Tokenizer:
                 token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
             
         return token_count
+    
+    def pretokenize_and_count_task(path: str, start: int, end :int, special_token: list[str], gpt2_regex: bool) -> dict[tuple[bytes], int]:
+        # Get chunk
+        with open(path, "rb") as f:
+            f.seek(start)
+            chunk = f.read(end - start).decode("utf-8", errors="ignore")
+        
+        # Remove special token
+        docs = Tokenizer.remove_special_tokens_static(chunk, special_token)
+
+        # Build pretoken counts dict
+        pretoken_counts = Tokenizer.pretokenize_and_count(docs, gpt2_regex)
+
+        return pretoken_counts
+    
+    def pretokenize(self, input_path: str, gpt2_regex: bool) -> dict[tuple[bytes], int]:
+        # Read training data
+        with open(input_path, "r", encoding="utf-8") as f:
+            text = f.read()
+    
+        # Removing special tokens
+        docs = self.remove_special_tokens(text)
+
+        # Pre-tokenization
+        pretokens = self.pretokenize_and_count(docs, gpt2_regex)
+
+        return pretokens
+    
+    def pretokenize_parallel(self, path: str, gpt2_regex: bool) -> dict[tuple[bytes], int]:
+        # Get logical core number
+        core_num = os.cpu_count()
+
+        # Get boundaries of chunks
+        # TODO: special token should not hardcode
+        with open(path, "rb") as f:
+            boundaries = Tokenizer.find_chunk_boundaries(
+                f, core_num, "<|endoftext|>".encode("utf-8"))
+        
+        # Parallel pretoken
+        with ProcessPoolExecutor() as executor:
+            futures = [executor.submit(Tokenizer.pretokenize_and_count_task, path, start, end, self.special_tokens, gpt2_regex) for start, end in zip(boundaries[:-1], boundaries[1:])]
+        
+        pretoken_counts = {}
+
+        for future in as_completed(futures):
+            for pretoken, count in future.result().items():
+                pretoken_counts[pretoken] = pretoken_counts.get(pretoken, 0) + count
+        
+        return pretoken_counts
+
     
     @staticmethod
     def build_paircount_and_cache(
@@ -234,20 +340,60 @@ class Tokenizer:
     
         self.vocab[new_index] = k
         
-    def train_bpe(self, input_path: str, vocab_size: int) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+    # def train_bpe(self, input_path: str, vocab_size: int) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+    #     # Init vocab
+    #     self.init_vocab()
+    
+    #     # Read training data
+    #     with open(input_path, "r", encoding="utf-8") as f:
+    #         text = f.read()
+    
+    #     # Removing special tokens
+    #     # P
+    #     docs = self.remove_special_tokens(text)
+
+    #     # Pre-tokenization
+    #     pretokens = self.pretokenize_and_count(docs, True)
+    
+    #     # Build the first pair count and cache(pair to corresponding pretokens)
+    #     pair_counts, reversed_cache = self.build_paircount_and_cache(pretokens)
+    
+    #     for i in range(vocab_size - 256 - len(self.special_tokens)):
+    #         # Pick best adjcent tokens to merge
+    #         best_pair = self._pick_best_mergetoken(pair_counts)
+    
+    #         # Log pair counts, best pair and step
+    #         self.dump_pair_count(pair_counts, best_pair, i)
+    
+    #         # Update pair counts and cache
+    #         pair_counts,  reversed_cache = self.merge_new(pair_counts, reversed_cache, best_pair[0])
+    
+    #         # TODO: optimize point, insert vocab and merges two times
+    #         # Update vocabs
+    #         self.update_vocab(best_pair)
+    #         # Update merges
+    #         self.merge.append((best_pair[0][0], best_pair[0][1]))
+        
+    #     return self.vocab, self.merge
+
+    def train_bpe(self, input_path: str, vocab_size: int, gpt2_regex: bool, enable_parallel: bool) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
         # Init vocab
         self.init_vocab()
-    
-        # Read training data
-        with open(input_path, "r", encoding="utf-8") as f:
-            text = f.read()
-    
-        # Removing special tokens
-        # P
-        docs = self.remove_special_tokens(text)
 
-        # Pre-tokenization
-        pretokens = self.pretokenize_and_count(docs, True)
+        if enable_parallel:
+            pretokens = self.pretokenize_parallel(input_path, gpt2_regex)
+        else:
+            pretokens = self.pretokenize(input_path, gpt2_regex)
+    
+        # # Read training data
+        # with open(input_path, "r", encoding="utf-8") as f:
+        #     text = f.read()
+    
+        # # Removing special tokens
+        # docs = self.remove_special_tokens(text)
+
+        # # Pre-tokenization
+        # pretokens = self.pretokenize_and_count(docs, gpt2_regex)
     
         # Build the first pair count and cache(pair to corresponding pretokens)
         pair_counts, reversed_cache = self.build_paircount_and_cache(pretokens)

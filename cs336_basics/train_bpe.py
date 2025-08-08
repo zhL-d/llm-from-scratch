@@ -44,7 +44,7 @@ def main():
         tokenizer = Tokenizer(["<|endoftext|>"], False, "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log")
     
         # Training
-        vocab, merges = tokenizer.train_bpe("/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/training_data.txt", 500)
+        vocab, merges = tokenizer.train_bpe("/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/training_data.txt", 500, gpt2_regex=True, enable_parallel=True)
 
     # Build report
     report = f"""
