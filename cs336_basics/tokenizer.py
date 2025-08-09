@@ -5,6 +5,19 @@ from collections import defaultdict
 from typing import BinaryIO
 import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
+import heapq
+
+# Wrapper for heap comparasion, lexical greater
+class _Desc:
+    def __init__(self, x):
+        self.x = x
+    
+    def __lt__(self, other):
+        """
+        Overwrite reversice, lexical greater
+        """
+        return self.x > other.x
+    
 
 class Tokenizer:
     def __init__(
@@ -18,6 +31,7 @@ class Tokenizer:
         self.vocab: dict[int, bytes] = {}
         self.merge: list[tuple[bytes, bytes]] = []
         self.enable_log = enable_log
+        self._heap = []
 
         if enable_log:
             if not log_path:
@@ -33,7 +47,6 @@ class Tokenizer:
             level=logging.INFO, 
             format="%(message)s"
         )
-
     
     def dump_pair_count(self, pair_count: dict[tuple[bytes], int], merged_token: tuple[tuple[bytes], int], index: int):
         if self.enable_log:
@@ -179,7 +192,25 @@ class Tokenizer:
                 pretoken_counts[pretoken] = pretoken_counts.get(pretoken, 0) + count
         
         return pretoken_counts
-
+  
+    # @staticmethod
+    # def build_paircount_and_cache(
+    #     pretokens : dict[tuple[bytes, ...], int]
+    # ) -> tuple[
+    #     dict[tuple[bytes], int], 
+    #     dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]
+    #     ]:
+    
+    #     pair_count: dict[tuple[bytes], int] = {}
+    #     cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]] = defaultdict(set)
+    
+    #     for k, v in pretokens.items():
+    #         for i in range(len(k)-1):
+    #             pair_count[k[i : i+2]] = pair_count.get(k[i : i+2], 0) + v
+    
+    #             cache[k[i : i+2]].add((k, v))
+    
+    #     return pair_count, cache
     
     @staticmethod
     def build_paircount_and_cache(
@@ -200,18 +231,39 @@ class Tokenizer:
     
         return pair_count, cache
     
-    @staticmethod
-    def _pick_best_mergetoken(pair_count: dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
-        try:
-            return max(
-                pair_count.items(),
-                key = lambda kv: (kv[1], kv[0])
-            )
-        except Exception as e:
+    def build_heap(self, pair_count: dict[tuple[bytes], int]):
+        # Prepare for heapify
+        self._heap = [(-count, _Desc(pair)) for pair, count in pair_count.items()]
 
-        # Log or print the freqs that caused the failure
-            print("Error picking best token, pair_count was:", pair_count)
-            raise
+        heapq.heapify(self._heap)
+    
+    def update_heap(self, changed_paircount: dict[tuple[bytes], int]):
+        for pair, count in changed_paircount:
+            heapq.heappush((-count, _Desc(pair)))
+    
+    # @staticmethod
+    # def _pick_best_mergetoken(pair_count: dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
+    #     try:
+    #         return max(
+    #             pair_count.items(),
+    #             key = lambda kv: (kv[1], kv[0])
+    #         )
+    #     except Exception as e:
+
+    #     # Log or print the freqs that caused the failure
+    #         print("Error picking best token, pair_count was:", pair_count)
+    #         raise
+    
+    def _pick_best_mergetoken(self, pair_count: dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
+        while len(self._heap):
+            best_heap = self._heap[0]
+            pair = best_heap[1].x
+            count = -best_heap[0]
+
+            if pair_count.get(pair, 0) == count:
+                return (pair, count)
+            else:
+                heapq.heappop(self._heap)
     
     @staticmethod
     def _build_new_pretoken(
@@ -244,12 +296,36 @@ class Tokenizer:
     
         return new_pretoken
     
+    # @staticmethod
+    # def _delete_old_contribution(
+    #     pretoken: tuple[tuple[bytes, ...], int], 
+    #     pair_count: dict[tuple[bytes], int], 
+    #     reversed_cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]
+    #     ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]]:
+
+    #     pretoken_pair = pretoken[0]
+    #     pretoken_count = pretoken[1]
+    
+    #     for i in range (len(pretoken_pair)-1):
+    #         pair = pretoken_pair[i : i+2]
+    
+    #         pair_count[pair] = pair_count[pair] - pretoken_count
+    #         if pair_count[pair] == 0:
+    #             del pair_count[pair]
+    
+    #         reversed_cache[pair].discard(pretoken)
+    #         if not reversed_cache[pair]:
+    #             del reversed_cache[pair]
+        
+    #     return pair_count, reversed_cache
+    
     @staticmethod
     def _delete_old_contribution(
         pretoken: tuple[tuple[bytes, ...], int], 
         pair_count: dict[tuple[bytes], int], 
-        reversed_cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]
-        ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]]:
+        reversed_cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]],
+        changed_paircount: dict[tuple[bytes], int]
+        ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]], dict[tuple[bytes], int]]:
 
         pretoken_pair = pretoken[0]
         pretoken_count = pretoken[1]
@@ -258,6 +334,10 @@ class Tokenizer:
             pair = pretoken_pair[i : i+2]
     
             pair_count[pair] = pair_count[pair] - pretoken_count
+            
+            # Record negative change 
+            changed_paircount[pair] = changed_paircount.get(pair, 0) - pretoken_count
+
             if pair_count[pair] == 0:
                 del pair_count[pair]
     
@@ -265,14 +345,35 @@ class Tokenizer:
             if not reversed_cache[pair]:
                 del reversed_cache[pair]
         
-        return pair_count, reversed_cache
+        return pair_count, reversed_cache, changed_paircount
+    
+    # @staticmethod
+    # def _add_new_contribution(
+    #     pretoken: tuple[tuple[bytes, ...], int], 
+    #     pair_count: dict[tuple[bytes], int], 
+    #     reversed_cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]
+    #     ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]]:
+
+    #     reversed_cache = defaultdict(set, reversed_cache)
+    #     pretoken_pair = pretoken[0]
+    #     pretoken_count = pretoken[1]
+    
+    #     for i in range (len(pretoken_pair)-1):
+    #         pair = pretoken_pair[i : i+2]
+    
+    #         pair_count[pair] = pair_count.get(pair, 0) + pretoken_count
+    
+    #         reversed_cache[pair].add(pretoken)
+        
+    #     return pair_count, reversed_cache
     
     @staticmethod
     def _add_new_contribution(
         pretoken: tuple[tuple[bytes, ...], int], 
         pair_count: dict[tuple[bytes], int], 
-        reversed_cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]
-        ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]]:
+        reversed_cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]],
+        changed_paircount: dict[tuple[bytes], int]
+        ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]], dict[tuple[bytes], int]]:
 
         reversed_cache = defaultdict(set, reversed_cache)
         pretoken_pair = pretoken[0]
@@ -282,27 +383,59 @@ class Tokenizer:
             pair = pretoken_pair[i : i+2]
     
             pair_count[pair] = pair_count.get(pair, 0) + pretoken_count
+
+            # Record positive change
+            changed_paircount = changed_paircount.get(pair, 0) + pretoken_count
     
             reversed_cache[pair].add(pretoken)
         
-        return pair_count, reversed_cache
+        return pair_count, reversed_cache, changed_paircount
 
+    # @staticmethod
+    # def merge_new(
+    #     pair_counts: dict[tuple[bytes], int], 
+    #     reversed_cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]],
+    #     best_pair: tuple[bytes, ...]
+    # ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]]:
+
+    #     affected_pretokens = reversed_cache[best_pair].copy()
+    
+    #     for old_pretoken in affected_pretokens:
+    #         new_pretoken = Tokenizer._build_new_pretoken(old_pretoken, best_pair)
+    
+    #         # Update, delete old pretoken contribution
+    #         pair_counts, reversed_cache = Tokenizer._delete_old_contribution(old_pretoken, pair_counts, reversed_cache)
+    #         # update, add new pretoken contrbution
+    #         pair_counts, reversed_cache = Tokenizer._add_new_contribution(new_pretoken, pair_counts, reversed_cache)
+
+    #     return pair_counts, reversed_cache
+    
     @staticmethod
     def merge_new(
         pair_counts: dict[tuple[bytes], int], 
         reversed_cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]],
         best_pair: tuple[bytes, ...]
-    ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]]:
+    ) -> tuple[dict[tuple[bytes], int], dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]], dict[tuple[bytes], int]]:
 
         affected_pretokens = reversed_cache[best_pair].copy()
+
+        changed_paircount: dict[tuple[bytes], int] = {}
     
         for old_pretoken in affected_pretokens:
             new_pretoken = Tokenizer._build_new_pretoken(old_pretoken, best_pair)
     
             # Update, delete old pretoken contribution
-            pair_counts, reversed_cache = Tokenizer._delete_old_contribution(old_pretoken, pair_counts, reversed_cache)
-            # update, add new pretoken contrbution
-            pair_counts, reversed_cache = Tokenizer._add_new_contribution(new_pretoken, pair_counts, reversed_cache)
+            pair_counts, reversed_cache, changed_paircount = Tokenizer._delete_old_contribution(old_pretoken, pair_counts, reversed_cache, changed_paircount)
+            # Update, add new pretoken contrbution
+            pair_counts, reversed_cache, changed_paircount = Tokenizer._add_new_contribution(new_pretoken, pair_counts, reversed_cache, changed_paircount)
+        
+        # Build changed pair count dict
+        for changed_pair, changed_count in changed_paircount:
+            # If the changed count is zero, which means no changed, should not include here
+            if not changed_count:
+                del changed_paircount[changed_count]
+            elif changed_pair in pair_counts:
+                changed_paircount[changed_pair] = pair_counts[changed_pair]
 
         return pair_counts, reversed_cache
     
@@ -318,6 +451,36 @@ class Tokenizer:
 
         self.next_id += 1
     
+    # def train_bpe(self, input_path: str, vocab_size: int, gpt2_regex: bool, enable_parallel: bool) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+    #     # Init vocab
+    #     self.init_vocab()
+
+    #     if enable_parallel:
+    #         pretokens = self.pretokenize_parallel(input_path, gpt2_regex)
+    #     else:
+    #         pretokens = self.pretokenize(input_path, gpt2_regex)
+      
+    #     # Build the first pair count and cache(pair to corresponding pretokens)
+    #     pair_counts, reversed_cache = self.build_paircount_and_cache(pretokens)
+    
+    #     for i in range(vocab_size - 256 - len(self.special_tokens)):
+    #         # Pick best adjcent tokens to merge
+    #         best_pair = self._pick_best_mergetoken(pair_counts)
+    
+    #         # Log pair counts, best pair and step
+    #         self.dump_pair_count(pair_counts, best_pair, i)
+    
+    #         # Update pair counts and cache
+    #         pair_counts,  reversed_cache = self.merge_new(pair_counts, reversed_cache, best_pair[0])
+    
+    #         # TODO: optimize point, insert vocab and merges two times
+    #         # Update vocabs
+    #         self.update_vocab(best_pair)
+    #         # Update merges
+    #         self.merge.append((best_pair[0][0], best_pair[0][1]))
+        
+    #     return self.vocab, self.merge
+
     def train_bpe(self, input_path: str, vocab_size: int, gpt2_regex: bool, enable_parallel: bool) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
         # Init vocab
         self.init_vocab()
@@ -329,6 +492,8 @@ class Tokenizer:
       
         # Build the first pair count and cache(pair to corresponding pretokens)
         pair_counts, reversed_cache = self.build_paircount_and_cache(pretokens)
+
+        self.build_heap(pair_counts)
     
         for i in range(vocab_size - 256 - len(self.special_tokens)):
             # Pick best adjcent tokens to merge
@@ -338,7 +503,9 @@ class Tokenizer:
             self.dump_pair_count(pair_counts, best_pair, i)
     
             # Update pair counts and cache
-            pair_counts,  reversed_cache = self.merge_new(pair_counts, reversed_cache, best_pair[0])
+            pair_counts, reversed_cache = self.merge_new(pair_counts, reversed_cache, best_pair[0])
+
+            self.update_heap(pair_counts)
     
             # TODO: optimize point, insert vocab and merges two times
             # Update vocabs
