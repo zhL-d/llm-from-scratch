@@ -14,6 +14,7 @@ class Tokenizer:
             log_path: str = ""
         ):
         self.special_tokens = special_tokens or []
+        self.next_id = 0
         self.vocab: dict[int, bytes] = {}
         self.merge: list[tuple[bytes, bytes]] = []
         self.enable_log = enable_log
@@ -46,7 +47,10 @@ class Tokenizer:
     
         for i, special_token in enumerate(self.special_tokens):
             s_bytes = special_token.encode("utf-8")
-            self.vocab[token_id_start + i] = s_bytes
+            special_token_id = token_id_start + i
+            self.vocab[special_token_id] = s_bytes
+        
+        self.next_id = special_token_id + 1
     
     def remove_special_tokens(self, text: str) -> list[str]:
         stokens_escaped = [re.escape(stoken) for stoken in self.special_tokens]
@@ -104,33 +108,6 @@ class Tokenizer:
     
         # Make sure all boundaries are unique, but might be fewer than desired_num_chunks
         return sorted(set(chunk_boundaries))
-    
-    # @staticmethod
-    # def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
-    #     token_count : dict[tuple[bytes], int] = {}
-    
-    #     for doc in docs:
-    #         pre_tokens = None
-    #         # Use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
-    #         if gpt2_regex:
-    #             PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
-    #             pre_tokens = re.finditer(PAT, doc)
-    #         else:
-    #             # TODO: change to iter
-    #             pre_tokens = doc.split()
-    
-    #         for token in pre_tokens:
-    #             if gpt2_regex:
-    #                 # iter.match convert to string
-    #                 token_str = token.group(0)
-    #             else:
-    #                 token_str = token
-    #             bytes_token = token_str.encode("utf-8")
-                
-    #             tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
-    #             token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
-            
-    #     return token_count
     
     @staticmethod
     def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
@@ -329,53 +306,18 @@ class Tokenizer:
 
         return pair_counts, reversed_cache
     
-    # Update vocab
+    
     def update_vocab(self, best_pair: tuple[tuple[bytes], int]):
-        # TODO: optimize point
-        sorted_vocab = sorted(self.vocab.items(), reverse=True)
-        new_index =  sorted_vocab[0][0] + 1
+        # sorted_vocab = sorted(self.vocab.items(), reverse=True)
+        # new_index =  sorted_vocab[0][0] + 1
         
         k = best_pair[0]
         k = k[0] + k[1]
     
-        self.vocab[new_index] = k
-        
-    # def train_bpe(self, input_path: str, vocab_size: int) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
-    #     # Init vocab
-    #     self.init_vocab()
-    
-    #     # Read training data
-    #     with open(input_path, "r", encoding="utf-8") as f:
-    #         text = f.read()
-    
-    #     # Removing special tokens
-    #     # P
-    #     docs = self.remove_special_tokens(text)
+        self.vocab[self.next_id] = k
 
-    #     # Pre-tokenization
-    #     pretokens = self.pretokenize_and_count(docs, True)
+        self.next_id += 1
     
-    #     # Build the first pair count and cache(pair to corresponding pretokens)
-    #     pair_counts, reversed_cache = self.build_paircount_and_cache(pretokens)
-    
-    #     for i in range(vocab_size - 256 - len(self.special_tokens)):
-    #         # Pick best adjcent tokens to merge
-    #         best_pair = self._pick_best_mergetoken(pair_counts)
-    
-    #         # Log pair counts, best pair and step
-    #         self.dump_pair_count(pair_counts, best_pair, i)
-    
-    #         # Update pair counts and cache
-    #         pair_counts,  reversed_cache = self.merge_new(pair_counts, reversed_cache, best_pair[0])
-    
-    #         # TODO: optimize point, insert vocab and merges two times
-    #         # Update vocabs
-    #         self.update_vocab(best_pair)
-    #         # Update merges
-    #         self.merge.append((best_pair[0][0], best_pair[0][1]))
-        
-    #     return self.vocab, self.merge
-
     def train_bpe(self, input_path: str, vocab_size: int, gpt2_regex: bool, enable_parallel: bool) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
         # Init vocab
         self.init_vocab()
@@ -384,17 +326,7 @@ class Tokenizer:
             pretokens = self.pretokenize_parallel(input_path, gpt2_regex)
         else:
             pretokens = self.pretokenize(input_path, gpt2_regex)
-    
-        # # Read training data
-        # with open(input_path, "r", encoding="utf-8") as f:
-        #     text = f.read()
-    
-        # # Removing special tokens
-        # docs = self.remove_special_tokens(text)
-
-        # # Pre-tokenization
-        # pretokens = self.pretokenize_and_count(docs, gpt2_regex)
-    
+      
         # Build the first pair count and cache(pair to corresponding pretokens)
         pair_counts, reversed_cache = self.build_paircount_and_cache(pretokens)
     
