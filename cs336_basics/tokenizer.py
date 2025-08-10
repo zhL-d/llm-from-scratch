@@ -238,8 +238,8 @@ class Tokenizer:
         heapq.heapify(self._heap)
     
     def update_heap(self, changed_paircount: dict[tuple[bytes], int]):
-        for pair, count in changed_paircount:
-            heapq.heappush((-count, _Desc(pair)))
+        for pair, count in changed_paircount.items():
+            heapq.heappush(self._heap, (-count, _Desc(pair)))
     
     # @staticmethod
     # def _pick_best_mergetoken(pair_count: dict[tuple[bytes], int]) -> tuple[tuple[bytes], int]:
@@ -385,7 +385,7 @@ class Tokenizer:
             pair_count[pair] = pair_count.get(pair, 0) + pretoken_count
 
             # Record positive change
-            changed_paircount = changed_paircount.get(pair, 0) + pretoken_count
+            changed_paircount[pair] = changed_paircount.get(pair, 0) + pretoken_count
     
             reversed_cache[pair].add(pretoken)
         
@@ -419,25 +419,26 @@ class Tokenizer:
 
         affected_pretokens = reversed_cache[best_pair].copy()
 
-        changed_paircount: dict[tuple[bytes], int] = {}
+        delta_changed_paircount: dict[tuple[bytes], int] = {}
     
         for old_pretoken in affected_pretokens:
             new_pretoken = Tokenizer._build_new_pretoken(old_pretoken, best_pair)
     
             # Update, delete old pretoken contribution
-            pair_counts, reversed_cache, changed_paircount = Tokenizer._delete_old_contribution(old_pretoken, pair_counts, reversed_cache, changed_paircount)
+            pair_counts, reversed_cache, delta_changed_paircount = Tokenizer._delete_old_contribution(old_pretoken, pair_counts, reversed_cache, delta_changed_paircount)
             # Update, add new pretoken contrbution
-            pair_counts, reversed_cache, changed_paircount = Tokenizer._add_new_contribution(new_pretoken, pair_counts, reversed_cache, changed_paircount)
+            pair_counts, reversed_cache, delta_changed_paircount = Tokenizer._add_new_contribution(new_pretoken, pair_counts, reversed_cache, delta_changed_paircount)
         
         # Build changed pair count dict
-        for changed_pair, changed_count in changed_paircount:
+        changed_paircount = {}
+
+        for changed_pair, changed_count in delta_changed_paircount.items():
             # If the changed count is zero, which means no changed, should not include here
-            if not changed_count:
-                del changed_paircount[changed_count]
-            elif changed_pair in pair_counts:
+            if changed_count and changed_pair in pair_counts:
+            # if changed_count and pair_counts.get(changed_pair, 0) != 0:
                 changed_paircount[changed_pair] = pair_counts[changed_pair]
 
-        return pair_counts, reversed_cache
+        return pair_counts, reversed_cache, changed_paircount
     
     
     def update_vocab(self, best_pair: tuple[tuple[bytes], int]):
@@ -503,9 +504,9 @@ class Tokenizer:
             self.dump_pair_count(pair_counts, best_pair, i)
     
             # Update pair counts and cache
-            pair_counts, reversed_cache = self.merge_new(pair_counts, reversed_cache, best_pair[0])
+            pair_counts, reversed_cache, changed_paircount = self.merge_new(pair_counts, reversed_cache, best_pair[0])
 
-            self.update_heap(pair_counts)
+            self.update_heap(changed_paircount)
     
             # TODO: optimize point, insert vocab and merges two times
             # Update vocabs
