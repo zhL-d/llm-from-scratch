@@ -236,6 +236,28 @@ class Tokenizer:
     #             cache[k[i : i+2]].add((k, v))
     
     #     return pair_count, cache
+
+
+    # @staticmethod
+    # def build_paircount_and_cache(
+    #     pretokens : dict[tuple[bytes, ...], int]
+    # ) -> tuple[
+    #     dict[tuple[bytes], int], 
+    #     dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]]
+    #     ]:
+    
+    #     pair_count: dict[tuple[bytes], int] = {}
+    #     cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]] = defaultdict(set)
+    
+    #     for k, v in pretokens.items():
+    #         for i in range(len(k)-1):
+    #             pair = k[i : i+2]
+
+    #             pair_count[pair] = pair_count.get(pair, 0) + v
+    
+    #             cache[pair].add((k, v))
+    
+    #     return pair_count, cache
     
     @staticmethod
     def build_paircount_and_cache(
@@ -247,12 +269,17 @@ class Tokenizer:
     
         pair_count: dict[tuple[bytes], int] = {}
         cache: dict[tuple[bytes, ...], set[tuple[tuple[bytes, ...], int]]] = defaultdict(set)
+
+        pc_get = pair_count.get
     
         for k, v in pretokens.items():
             for i in range(len(k)-1):
-                pair_count[k[i : i+2]] = pair_count.get(k[i : i+2], 0) + v
-    
-                cache[k[i : i+2]].add((k, v))
+                pair = k[i : i+2]
+
+                # pair_count[pair] = pair_count.get(pair, 0) + v
+                pair_count[pair] = pc_get(pair, 0) + v
+
+                cache[pair].add((k, v))
     
         return pair_count, cache
     
