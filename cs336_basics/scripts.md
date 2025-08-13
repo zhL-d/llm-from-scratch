@@ -19,4 +19,6 @@ python -m cProfile -o cs336_basics/profile/baseline.prof cs336_basics/train_bpe.
 snakeviz baseline.prof
 
 
-python3 -m cProfile -s cumtime /Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/train_bpe.py > /Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/profile_cum_op__pick_best_mergetoken.txt
+python3 -m cProfile -s cumtime /Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/train_bpe.py > /Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/profile_cum_op_regex.txt
+
+python3 -m cProfile -o cs336_basics/profile/archive/heap_pick_best_pair/profile_cum_op__pick_best_mergetoken.prof cs336_basics/train_bpe.py

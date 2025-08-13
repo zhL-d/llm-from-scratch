@@ -7,6 +7,9 @@ import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import heapq
 
+PAT_PATTERN = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+PAT = re.compile(PAT_PATTERN)
+
 # Wrapper for heap comparasion, lexical greater
 class _Desc:
     def __init__(self, x):
@@ -122,6 +125,28 @@ class Tokenizer:
         # Make sure all boundaries are unique, but might be fewer than desired_num_chunks
         return sorted(set(chunk_boundaries))
     
+    # @staticmethod
+    # def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
+    #     token_count : dict[tuple[bytes], int] = {}
+    
+    #     for doc in docs:
+    #         pre_tokens = None
+    #         # Use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
+    #         if gpt2_regex:
+    #             PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+    #             pre_tokens = re.finditer(PAT, doc)
+    #             pre_tokens = [match.group(0) for match in pre_tokens]
+    #         else:
+    #             pre_tokens = doc.split()
+    
+    #         for token in pre_tokens:
+    #             bytes_token = token.encode("utf-8")
+                
+    #             tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
+    #             token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
+            
+    #     return token_count
+
     @staticmethod
     def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
         token_count : dict[tuple[bytes], int] = {}
@@ -130,8 +155,8 @@ class Tokenizer:
             pre_tokens = None
             # Use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
             if gpt2_regex:
-                PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
-                pre_tokens = re.finditer(PAT, doc)
+                # PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+                pre_tokens = PAT.finditer(doc)
                 pre_tokens = [match.group(0) for match in pre_tokens]
             else:
                 pre_tokens = doc.split()
