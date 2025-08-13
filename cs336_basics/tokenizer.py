@@ -12,6 +12,8 @@ PAT = re.compile(PAT_PATTERN)
 
 # Wrapper for heap comparasion, lexical greater
 class _Desc:
+    # __slots__ = ['x']
+
     def __init__(self, x):
         self.x = x
     
@@ -147,9 +149,33 @@ class Tokenizer:
             
     #     return token_count
 
+    # @staticmethod
+    # def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
+    #     token_count : dict[tuple[bytes], int] = {}
+    #     # token_count_get = token_count.get
+    
+    #     for doc in docs:
+    #         pre_tokens = None
+    #         # Use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
+    #         if gpt2_regex:
+    #             # PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+    #             pre_tokens = PAT.finditer(doc)
+    #             pre_tokens = [match.group(0) for match in pre_tokens]
+    #         else:
+    #             pre_tokens = doc.split()
+    
+    #         for token in pre_tokens:
+    #             bytes_token = token.encode("utf-8")
+                
+    #             tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
+    #             token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
+            
+    #     return token_count
+
     @staticmethod
     def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
         token_count : dict[tuple[bytes], int] = {}
+        token_count_get = token_count.get
     
         for doc in docs:
             pre_tokens = None
@@ -165,7 +191,7 @@ class Tokenizer:
                 bytes_token = token.encode("utf-8")
                 
                 tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
-                token_count[tuple_bytes_token] = token_count.get(tuple_bytes_token, 0) + 1
+                token_count[tuple_bytes_token] = token_count_get(tuple_bytes_token, 0) + 1
             
         return token_count
     
@@ -211,10 +237,11 @@ class Tokenizer:
             futures = [executor.submit(Tokenizer.pretokenize_and_count_task, path, start, end, self.special_tokens, gpt2_regex) for start, end in zip(boundaries[:-1], boundaries[1:])]
         
         pretoken_counts = {}
+        pretoken_counts_get = pretoken_counts.get
 
         for future in as_completed(futures):
             for pretoken, count in future.result().items():
-                pretoken_counts[pretoken] = pretoken_counts.get(pretoken, 0) + count
+                pretoken_counts[pretoken] = pretoken_counts_get(pretoken, 0) + count
         
         return pretoken_counts
   
@@ -381,6 +408,8 @@ class Tokenizer:
 
         pretoken_pair = pretoken[0]
         pretoken_count = pretoken[1]
+
+        changed_paircount_get = changed_paircount.get
     
         for i in range (len(pretoken_pair)-1):
             pair = pretoken_pair[i : i+2]
@@ -388,7 +417,7 @@ class Tokenizer:
             pair_count[pair] = pair_count[pair] - pretoken_count
             
             # Record negative change 
-            changed_paircount[pair] = changed_paircount.get(pair, 0) - pretoken_count
+            changed_paircount[pair] = changed_paircount_get(pair, 0) - pretoken_count
 
             if pair_count[pair] == 0:
                 del pair_count[pair]
@@ -430,14 +459,17 @@ class Tokenizer:
         reversed_cache = defaultdict(set, reversed_cache)
         pretoken_pair = pretoken[0]
         pretoken_count = pretoken[1]
+
+        pair_count_get = pair_count.get
+        changed_paircount_get = changed_paircount.get
     
         for i in range (len(pretoken_pair)-1):
             pair = pretoken_pair[i : i+2]
     
-            pair_count[pair] = pair_count.get(pair, 0) + pretoken_count
+            pair_count[pair] = pair_count_get(pair, 0) + pretoken_count
 
             # Record positive change
-            changed_paircount[pair] = changed_paircount.get(pair, 0) + pretoken_count
+            changed_paircount[pair] = changed_paircount_get(pair, 0) + pretoken_count
     
             reversed_cache[pair].add(pretoken)
         
