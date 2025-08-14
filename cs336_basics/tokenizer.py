@@ -233,10 +233,53 @@ class Tokenizer:
             
     #     return token_count
     
+    # @staticmethod
+    # def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
+    #     token_count : dict[tuple[bytes], int] = {}
+    #     token_count_get = token_count.get
+    
+    #     for doc in docs:
+    #         # pre_tokens = None
+    #         # Use a regex-based pre-tokenizer (used by GPT-2; Radford et al., 2019)
+    #         if gpt2_regex:
+    #             for token in PAT.finditer(doc):
+    #                 token_str = token.group(0)
+    #                 bytes_token = token_str.encode("utf-8")
+
+    #                 length_bytes_token = len(bytes_token)
+
+    #                 tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (length_bytes_token))
+    #                 token_count[tuple_bytes_token] = token_count_get(tuple_bytes_token, 0) + 1
+    #         else:
+    #             for token in doc.split():
+    #                 bytes_token = token.encode("utf-8")
+
+    #                 tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
+    #                 token_count[tuple_bytes_token] = token_count_get(tuple_bytes_token, 0) + 1
+
+    #         # if gpt2_regex:
+    #         #     # PAT = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
+    #         #     pre_tokens = PAT.finditer(doc)
+    #         #     pre_tokens = [match.group(0) for match in pre_tokens]
+    #         # else:
+    #         #     pre_tokens = doc.split()
+    
+    #         # for token in pre_tokens:
+    #         #     bytes_token = token.encode("utf-8")
+                
+    #         #     tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (len(bytes_token)))
+    #         #     token_count[tuple_bytes_token] = token_count_get(tuple_bytes_token, 0) + 1
+            
+    #     return token_count
+    
     @staticmethod
     def pretokenize_and_count(docs: list[str], gpt2_regex: bool = False) -> dict[tuple[bytes], int]:
         token_count : dict[tuple[bytes], int] = {}
         token_count_get = token_count.get
+        
+        # Build cache mapping pretoken bytes format to tuple byte format 
+        cache :dict[bytes, tuple[bytes]] = {}
+        cache_get = cache.get
     
         for doc in docs:
             # pre_tokens = None
@@ -246,10 +289,15 @@ class Tokenizer:
                     token_str = token.group(0)
                     bytes_token = token_str.encode("utf-8")
 
-                    length_bytes_token = len(bytes_token)
+                    pretoken_tuplebytes = cache_get(bytes_token)
 
-                    tuple_bytes_token = tuple(bytes_token[i : i+1] for i in range (length_bytes_token))
-                    token_count[tuple_bytes_token] = token_count_get(tuple_bytes_token, 0) + 1
+                    if pretoken_tuplebytes is None:
+                        # Build cache
+                        length_bytes_token = len(bytes_token)
+                        pretoken_tuplebytes = tuple(bytes_token[i : i+1] for i in range (length_bytes_token))
+                        cache[bytes_token] = pretoken_tuplebytes
+                                        
+                    token_count[pretoken_tuplebytes] = token_count_get(pretoken_tuplebytes, 0) + 1
             else:
                 for token in doc.split():
                     bytes_token = token.encode("utf-8")
