@@ -382,34 +382,74 @@ class Tokenizer:
             else:
                 heapq.heappop(self._heap)
     
+    # @staticmethod
+    # def _build_new_pretoken(
+    #     old_pretoken: tuple[tuple[bytes, ...], int], 
+    #     best_paircount: tuple[bytes, ...]
+    #     ) ->  tuple[tuple[bytes, ...], int]:
+    
+    #     new_pretoken_pair = ()
+    #     old_pretoken_pair = old_pretoken[0]
+    #     best_pair = best_paircount
+    #     i = 0
+    
+    #     while i < len(old_pretoken_pair)-1:
+    #         if old_pretoken_pair[i : i+2] == best_pair:
+    #             new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i] + old_pretoken_pair[i+1],)
+    
+    #             if i == len(old_pretoken_pair)-3:
+    #                 new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i+2],)
+    
+    #             i = i+2
+    #         else:
+    #             new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i],)
+    
+    #             if i == len(old_pretoken_pair)-2:
+    #                 new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i+1],)
+    
+    #             i = i+1
+        
+    #     new_pretoken = (new_pretoken_pair, old_pretoken[1])
+    
+    #     return new_pretoken
+    
     @staticmethod
     def _build_new_pretoken(
         old_pretoken: tuple[tuple[bytes, ...], int], 
         best_paircount: tuple[bytes, ...]
         ) ->  tuple[tuple[bytes, ...], int]:
     
-        new_pretoken_pair = ()
+        # new_pretoken_pair = ()
+        new_pretoken_pair: list[bytes] = []
+
         old_pretoken_pair = old_pretoken[0]
         best_pair = best_paircount
+
         i = 0
+        L = len(old_pretoken_pair) - 1
     
-        while i < len(old_pretoken_pair)-1:
+        while i < L:
             if old_pretoken_pair[i : i+2] == best_pair:
-                new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i] + old_pretoken_pair[i+1],)
+                # new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i] + old_pretoken_pair[i+1],)
+                new_pretoken_pair.append(old_pretoken_pair[i] + old_pretoken_pair[i+1])
     
-                if i == len(old_pretoken_pair)-3:
-                    new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i+2],)
+                # if i == len(old_pretoken_pair)-3:
+                #     new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i+2],)
     
                 i = i+2
             else:
-                new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i],)
+                # new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i],)
+                new_pretoken_pair.append(old_pretoken_pair[i])
     
-                if i == len(old_pretoken_pair)-2:
-                    new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i+1],)
+                # if i == len(old_pretoken_pair)-2:
+                #     new_pretoken_pair = new_pretoken_pair + (old_pretoken_pair[i+1],)
     
                 i = i+1
+            
+            if i == L:
+                new_pretoken_pair.append(old_pretoken_pair[i])
         
-        new_pretoken = (new_pretoken_pair, old_pretoken[1])
+        new_pretoken = (tuple(new_pretoken_pair), old_pretoken[1])
     
         return new_pretoken
     
