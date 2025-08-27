@@ -4,6 +4,7 @@ import tracemalloc
 import os
 import psutil
 import contextlib
+import yaml
 
 @contextlib.contextmanager
 def perf_monitor(enabled: bool = True):
@@ -40,11 +41,27 @@ def perf_monitor(enabled: bool = True):
 
 def main():
     with perf_monitor(enabled=False):
+
+        with open("cs336_basics/config_local.yaml", "r") as f:
+            config = yaml.safe_load(f)
+
         # Init tokenizer
-        tokenizer = Tokenizer(["<|endoftext|>"], False, "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log")
+        tokenizer = Tokenizer(
+            config["special_tokens"], 
+            enable_log=config["enable_log"], 
+            log_path=config["log_path"],
+            serialization=config["serialization"],
+            serialization_vocab_path= config["serialization_vocab_path"],
+            serialization_merge_path= config["serialization_merge_path"]
+        )
     
         # Training
-        vocab, merges = tokenizer.train_bpe("/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/training_data.txt", 500, gpt2_regex=True, enable_parallel=True)
+        vocab, merges = tokenizer.train_bpe(
+            config["traindata_path"], 
+            vocab_size=config["vocab_size"], 
+            gpt2_regex=config["gpt2_regex"], 
+            enable_parallel=config["parallel"]
+        )
 
     # Build report
     report = f"""

@@ -29,7 +29,10 @@ class Tokenizer:
             self, 
             special_tokens: list[str] | None = None, 
             enable_log: bool = False, 
-            log_path: str = ""
+            log_path: str = "",
+            serialization: bool = False,
+            serialization_vocab_path: str | None = None,
+            serialization_merge_path: str | None = None,
         ):
         self.special_tokens = special_tokens or []
         self.next_id = 0
@@ -37,6 +40,10 @@ class Tokenizer:
         self.merge: list[tuple[bytes, bytes]] = []
         self.enable_log = enable_log
         self._heap = []
+
+        self.serialization = serialization
+        self.serialization_vocab_path = serialization_vocab_path
+        self.serialization_merge_path = serialization_merge_path
 
         if enable_log:
             if not log_path:
@@ -759,6 +766,30 @@ class Tokenizer:
 
         self.next_id += 1
     
+    def _save_vocabulary_merges(self):
+        """
+        Serialize the resulting vocabulary and merges to disk for further inspection
+
+        Args:
+
+        Returns:
+        """
+        vocab_serialized = {
+            str(token_id): vocab_bytes.decode("utf-8", "replace")
+            for token_id, vocab_bytes in self.vocab.items()
+        }
+
+        merge_serialized = [
+            [first_bytes.decode("utf-8", "replace"), second_bytes.decode("utf-8", "replace")]
+            for first_bytes, second_bytes in self.merge
+        ]
+
+        with open(self.serialization_vocab_path, 'w', encoding="utf-8") as f:
+            json.dump(vocab_serialized, f, indent=2, ensure_ascii=False)
+        
+        with open(self.serialization_merge_path, 'w', encoding="utf-8") as f:
+            json.dump(merge_serialized, f, indent=2, ensure_ascii=False)
+    
     # def train_bpe(self, input_path: str, vocab_size: int, gpt2_regex: bool, enable_parallel: bool) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
     #     # Init vocab
     #     self.init_vocab()
@@ -822,5 +853,8 @@ class Tokenizer:
             self.update_vocab(best_pair)
             # Update merges
             self.merge.append((best_pair[0][0], best_pair[0][1]))
+        
+        if self.serialization:
+            self._save_vocabulary_merges()
         
         return self.vocab, self.merge
