@@ -1,4 +1,4 @@
-from tokenizer import Tokenizer
+from cs336_basics.tokenizer import Tokenizer
 import time
 import tracemalloc
 import os
@@ -42,7 +42,7 @@ def perf_monitor(enabled: bool = True):
 def main():
     with perf_monitor(enabled=False):
 
-        with open("cs336_basics/config_local.yaml", "r") as f:
+        with open("cs336_basics/config_azure_trial.yaml", "r") as f:
             config = yaml.safe_load(f)
 
         # Init tokenizer
