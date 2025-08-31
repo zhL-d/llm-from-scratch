@@ -1,11 +1,11 @@
 special_tokens:
   - "<|endoftext|>"
 enable_log: False
-log_path: "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/gold.log"
+log_path: "cs336_basics/outputs/gold.log"
 serialization: True
-serialization_vocab_path: "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/serialization_vocab.json"
-serialization_merge_path: "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/serialization_merge.json"
-traindata_path: "/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/training_data.txt"
+serialization_vocab_path: "cs336_basics/outputs/serialization_vocab.json"
+serialization_merge_path: "cs336_basics/outputs/serialization_merge.json"
+traindata_path: "tests/fixtures/corpus.en"
 vocab_size: 500
 gpt2_regex: True
 parallel: True
