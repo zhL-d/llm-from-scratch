@@ -50,7 +50,11 @@ START_TS=$(date +%s)
 set +e
 # Keep deps in sync with lockfile; idempotent in container
 # uv sync --frozen
-uv run python -m "$MODULE" 2>&1 | tee -a "$LOG_FILE"
+# uv run python -m "$MODULE" 2>&1 | tee -a "$LOG_FILE"
+
+# venv already active via PATH -> just use python
+python -m "$MODULE" 2>&1 | tee -a "$LOG_FILE"
+
 STATUS=${PIPESTATUS[0]}
 set -e
 END_TS=$(date +%s)
