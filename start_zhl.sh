@@ -53,6 +53,9 @@ set +e
 # uv run python -m "$MODULE" 2>&1 | tee -a "$LOG_FILE"
 
 # venv already active via PATH -> just use python
+# ensure project is importable + provides package metadata
+python -m pip install -q -e .   # editable install from /app into /opt/venv
+
 python -m "$MODULE" 2>&1 | tee -a "$LOG_FILE"
 
 STATUS=${PIPESTATUS[0]}
