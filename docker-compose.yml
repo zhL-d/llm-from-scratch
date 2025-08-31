@@ -2,16 +2,16 @@ version: "3.9"
 
 services:
   bpe:
-    image: cs336-bpe:dev
+    image: cs336-bpe:dev-optvenv-1.0.0
     build:
       context: .
-      tags: ["cs336-bpe:dev"]   # builds only if image missing or you run with --build
+      tags: ["cs336-bpe:dev-optvenv-1.0.0"]   # builds only if image missing or you run with --build
     working_dir: /app
     volumes:
       - ./:/app                 # bind-mount code for fast iteration
     env_file:
       - .env       # env file location
-    command: ["./start.sh"]
+    command: ["./start_zhl.sh"]
     # healthcheck:
     #   test: ["CMD-SHELL", "test -f /app/cs336_basics/outputs/health.ok || exit 1"]
     #   interval: 30s
