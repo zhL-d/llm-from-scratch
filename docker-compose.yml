@@ -9,6 +9,7 @@ services:
     working_dir: /app
     volumes:
       - ./:/app                 # bind-mount code for fast iteration
+      - /mnt/bpe_data:/data:ro
     env_file:
       - .env       # env file location
     command: ["./start_zhl.sh"]

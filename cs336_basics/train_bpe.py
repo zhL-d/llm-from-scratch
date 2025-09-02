@@ -42,17 +42,22 @@ def perf_monitor(enabled: bool = True):
 def main():
     with perf_monitor(enabled=False):
 
-        with open("cs336_basics/config_local.yaml", "r") as f:
+        with open("cs336_basics/config_azure_trial.yaml", "r") as f:
             config = yaml.safe_load(f)
+
+            # Apply env-var overrides (env > YAML)
+            config["traindata_path"] = os.getenv("TRAINDATA_PATH", config["traindata_path"])
+            config["vocab_size"] = int(os.getenv("VOCAB_SIZE", config["vocab_size"]))
 
         # Init tokenizer
         tokenizer = Tokenizer(
-            config["special_tokens"], 
+            config["special_tokens"],
+            config["outputs_path"],
             enable_log=config["enable_log"], 
-            log_path=config["log_path"],
+            # log_path=config["log_path"],
             serialization=config["serialization"],
-            serialization_vocab_path= config["serialization_vocab_path"],
-            serialization_merge_path= config["serialization_merge_path"]
+            # serialization_vocab_path= config["serialization_vocab_path"],
+            # serialization_merge_path= config["serialization_merge_path"]
         )
     
         # Training

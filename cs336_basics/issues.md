@@ -1,0 +1,1 @@
+current Dockerfile creates .venv inside /app, but you bind-mount /app, which hides that venv. Pick one (both are fine):

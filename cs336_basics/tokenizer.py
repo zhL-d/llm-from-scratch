@@ -6,6 +6,8 @@ from typing import BinaryIO
 import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import heapq
+from datetime import datetime
+from pathlib import Path
 
 PAT_PATTERN = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
 PAT = re.compile(PAT_PATTERN)
@@ -26,13 +28,14 @@ class _Desc:
 
 class Tokenizer:
     def __init__(
-            self, 
-            special_tokens: list[str] | None = None, 
+            self,
+            special_tokens: list[str] | None = None,
+            output_path: str | None = None,
             enable_log: bool = False, 
-            log_path: str = "",
+            # log_path: str = "",
             serialization: bool = False,
-            serialization_vocab_path: str | None = None,
-            serialization_merge_path: str | None = None,
+            # serialization_vocab_path: str | None = None,
+            # serialization_merge_path: str | None = None,
         ):
         self.special_tokens = special_tokens or []
         self.next_id = 0
@@ -40,14 +43,28 @@ class Tokenizer:
         self.merge: list[tuple[bytes, bytes]] = []
         self.enable_log = enable_log
         self._heap = []
+        self.timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
         self.serialization = serialization
-        self.serialization_vocab_path = serialization_vocab_path
-        self.serialization_merge_path = serialization_merge_path
+        # self.serialization_vocab_path = serialization_vocab_path
+        # self.serialization_merge_path = serialization_merge_path
+
+        # Create output path dir
+        # default path
+        if not output_path:
+            self.output_path = Path(__file__).parent / "outputs"
+        else:
+            p = Path(output_path)
+            self.output_path = p if p.is_absolute() else Path(__file__).parent.parent / output_path
+        
+        self.output_path.mkdir(parents=True, exist_ok=True)
 
         if enable_log:
-            if not log_path:
-                raise ValueError("Logging is enable but no log path was provided")
+            # if not log_path:
+            #     raise ValueError("Logging is enable but no log path was provided")
+            
+            log_name = f"training_{self.timestamp}.log"
+            log_path = self.output_path / log_name
             
             self._set_log_conifg(log_path)
 
@@ -784,6 +801,11 @@ class Tokenizer:
             for first_bytes, second_bytes in self.merge
         ]
 
+        # Create path
+        self.serialization_vocab_path = self.output_path / f"{self.traindata_path.stem}_serialization_vocab_{self.timestamp}.json"
+        self.serialization_merge_path = self.output_path / f"{self.traindata_path.stem}_serialization_merge_{self.timestamp}.json"
+
+
         with open(self.serialization_vocab_path, 'w', encoding="utf-8") as f:
             json.dump(vocab_serialized, f, indent=2, ensure_ascii=False)
         
@@ -821,6 +843,8 @@ class Tokenizer:
     #     return self.vocab, self.merge
 
     def train_bpe(self, input_path: str, vocab_size: int, gpt2_regex: bool, enable_parallel: bool) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
+        self.traindata_path = Path(input_path)
+
         # Init vocab
         self.init_vocab()
 

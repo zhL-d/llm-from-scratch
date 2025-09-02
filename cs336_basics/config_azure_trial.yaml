@@ -1,11 +1,12 @@
 special_tokens:
   - "<|endoftext|>"
+outputs_path: "cs336_basics/outputs"
 enable_log: False
-log_path: "cs336_basics/outputs/gold.log"
+# log_path: "cs336_basics/outputs/gold.log"
 serialization: True
-serialization_vocab_path: "cs336_basics/outputs/serialization_vocab.json"
-serialization_merge_path: "cs336_basics/outputs/serialization_merge.json"
-traindata_path: "cs336_basics/training_corpus.txt"
-vocab_size: 500
+# serialization_vocab_path: "cs336_basics/outputs/serialization_vocab.json"
+# serialization_merge_path: "cs336_basics/outputs/serialization_merge.json"
+traindata_path: "cs336_basics/training_data.txt"
+vocab_size: 263
 gpt2_regex: True
 parallel: True
