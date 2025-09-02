@@ -49,14 +49,14 @@ upload_outputs() {
 START_TS=$(date +%s)
 set +e
 # Keep deps in sync with lockfile; idempotent in container
-# uv sync --frozen
-# uv run python -m "$MODULE" 2>&1 | tee -a "$LOG_FILE"
+uv sync --frozen
+uv run python -m "$MODULE" 2>&1 | tee -a "$LOG_FILE"
 
 # venv already active via PATH -> just use python
 # ensure project is importable + provides package metadata
-python -m pip install -q -e .   # editable install from /app into /opt/venv
+# python -m pip install -q -e .   # editable install from /app into /opt/venv
 
-python -m "$MODULE" 2>&1 | tee -a "$LOG_FILE"
+# python -m "$MODULE" 2>&1 | tee -a "$LOG_FILE"
 
 STATUS=${PIPESTATUS[0]}
 set -e
