@@ -2,13 +2,13 @@ version: "3.9"
 
 services:
   bpe:
-    image: cs336-bpe:dev-1.0.0
+    image: cs336-bpe:prod-1.0.0
     build:
       context: .
-      tags: ["cs336-bpe:dev-1.0.0"]   # builds only if image missing or you run with --build
+      tags: ["cs336-bpe:prod-1.0.0"]   # builds only if image missing or you run with --build
     working_dir: /app
     volumes:
-      - ./:/app                 # bind-mount code for fast iteration
+      # - ./:/app                 # bind-mount code for fast iteration
       - /Users/lucas/Downloads/temp_sft/data:/data:ro
     env_file:
       - .env       # env file location
