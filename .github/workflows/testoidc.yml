@@ -13,4 +13,5 @@ jobs:
       - name: Who am I?
         run: |
           az account show
+          az acr list -o table
           az acr show -n zhlacr --query "name"
