@@ -1,21 +1,25 @@
 name: Test Azure OIDC Login
-on: { workflow_dispatch: {} }
-permissions: { id-token: write, contents: read }
+on:
+  workflow_dispatch: {}
+permissions:
+  id-token: write
+  contents: read
 jobs:
   test:
     env:
       ACR: zhlacr
     runs-on: ubuntu-latest
     steps:
+      # This step logs in to Azure and sets up the az CLI on the runner.
       - uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: ACR login
-        uses: azure/cli@v2
-        with:
-          inlineScript: az acr login -n $ACR
+        run: az acr login -n $ACR
+
       - name: Who am I?
         run: |
           az account show
