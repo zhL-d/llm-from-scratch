@@ -5,9 +5,12 @@ version: '3.9'
 
 services:
   bpe-job:
+    image: cs336-bpe:dev
     # Specifies that the Docker image should be built from the Dockerfile
     # located in the current directory (the project root).
-    build: .
+    build:
+      context: .
+      tags: ["cs336-bpe:dev"]   # builds only if image missing or you run with --build
     
     # Loads all environment variables from the .env file. This is how you
     # configure the container for the local run context, ntfy, etc.
