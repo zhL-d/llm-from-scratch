@@ -86,13 +86,14 @@ class Tokenizer:
     def init_vocab(self):
         self.vocab = {x: bytes([x]) for x in range (256)}
         token_id_start = 256
-    
+
         for i, special_token in enumerate(self.special_tokens):
             s_bytes = special_token.encode("utf-8")
             special_token_id = token_id_start + i
             self.vocab[special_token_id] = s_bytes
-        
-        self.next_id = special_token_id + 1
+
+        # Start assigning after base bytes + special tokens
+        self.next_id = 256 + len(self.special_tokens)
     
     def remove_special_tokens(self, text: str) -> list[str]:
         stokens_escaped = [re.escape(stoken) for stoken in self.special_tokens]
@@ -344,6 +345,7 @@ class Tokenizer:
             
         return token_count
     
+    @staticmethod
     def pretokenize_and_count_task(path: str, start: int, end :int, special_token: list[str], gpt2_regex: bool) -> dict[tuple[bytes], int]:
         # Get chunk
         with open(path, "rb") as f:
@@ -372,14 +374,15 @@ class Tokenizer:
         return pretokens
     
     def pretokenize_parallel(self, path: str, gpt2_regex: bool) -> dict[tuple[bytes], int]:
-        # Get logical core number
-        core_num = os.cpu_count()
+        # Get logical core number (allow override via env to control memory spikes)
+        core_num = int(os.getenv("PRETOKEN_PROCS", os.cpu_count() or 1))
 
         # Get boundaries of chunks
-        # TODO: special token should not hardcode
+        # Use provided special tokens if available, fallback to endoftext
+        split_tok = (self.special_tokens[0] if self.special_tokens else "<|endoftext|>")
         with open(path, "rb") as f:
             boundaries = Tokenizer.find_chunk_boundaries(
-                f, core_num, "<|endoftext|>".encode("utf-8"))
+                f, core_num, split_tok.encode("utf-8"))
         
         # Parallel pretoken
         with ProcessPoolExecutor(max_workers=core_num) as executor:

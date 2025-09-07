@@ -24,9 +24,8 @@ RUN useradd -m -u 1000 appuser \
  && install -d -o appuser -g appuser /app   # ensure /app is writable by appuser
 
 WORKDIR /app
-# Copy code; make them owned by appuser
-# COPY --chown=appuser:appuser pyproject.toml uv.lock ./
-COPY --chown=appuser:appuser . .
+# Copy only lockfiles for layer caching; make them owned by appuser
+COPY --chown=appuser:appuser pyproject.toml uv.lock ./
 
 USER appuser
 

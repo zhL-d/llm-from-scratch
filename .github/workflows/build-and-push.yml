@@ -1,0 +1,54 @@
+name: Build & Push (BPE)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Optional tag (defaults to commit SHA)"
+        default: ""
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: { id-token: write, contents: read }
+    env:
+      ACR: zhlacr
+      IMAGE_REPO: cs336-bpe
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: ACR login
+        uses: azure/cli@v2
+        with:
+          inlineScript: az acr login -n $ACR
+
+      - name: Resolve tag
+        id: vars
+        run: |
+          T="${{ inputs.tag }}"
+          [ -z "$T" ] && T="${GITHUB_SHA}"
+          echo "tag=$T" >> "$GITHUB_OUTPUT"
+
+      - name: Build & push
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile.prod
+          push: true
+          tags: |
+            ${{ env.ACR }}.azurecr.io/${{ env.IMAGE_REPO }}:${{ steps.vars.outputs.tag }}
+            ${{ env.ACR }}.azurecr.io/${{ env.IMAGE_REPO }}:latest
+          provenance: false
+          outputs: type=registry
+
+      - name: Output image refs
+        run: |
+          echo "IMAGE=${{ env.ACR }}.azurecr.io/${{ env.IMAGE_REPO }}:${{ steps.vars.outputs.tag }}"
+          echo "DIGEST=${{ steps.build.outputs.digest }}"

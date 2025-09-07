@@ -1,0 +1,92 @@
+name: Train BPE (ACA Job)
+
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       imageTag: { default: '${{ github.sha }}' }
+#       traindataPath: { description: 'Path in mounted Files', default: '/data/TinyStoriesV2-GPT4-train.txt' }
+#       vocabSize: { default: '1000' }
+#       cpu: { default: '4' }
+#       memoryGi: { default: '16' }
+#       workloadProfile: { description: 'Optional Dedicated profile', default: '' }
+
+on:
+  workflow_dispatch:
+    inputs:
+      imageTag:
+        description: Docker tag to deploy
+        default: latest   # do NOT quote this
+      traindataPath:
+        description: Path in mounted Files
+        default: /data/tokenizer/TinyStoriesV2-GPT4-train.txt
+      vocabSize:
+        description: Vocabulary size (string)
+        default: "1000"
+      cpu:
+        description: vCPU (string)
+        default: "4"
+      memoryGi:
+        description: Memory in Gi (string, we’ll add Gi)
+        default: "16"
+      workloadProfile:
+        description: Optional Dedicated profile (leave blank to use default)
+        default: ""
+
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  RG: bpe-rg                        # change to your resource group
+  JOB: bpe-train                    # must match infra/main.bicep output name
+  ACR: zhlacr                       # change to your ACR name
+  IMAGE_REPO: cs336-bpe
+  LOCATION: switzerlandnorth        # change if needed
+
+jobs:
+  build-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build & Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile.prod
+          push: true
+          tags: ${{ env.ACR }}.azurecr.io/${{ env.IMAGE_REPO }}:${{ inputs.imageTag }}
+          provenance: true
+
+      - name: Update ACA Job
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            set -euo pipefail
+            IMAGE="${ACR}.azurecr.io/${IMAGE_REPO}:${{ inputs.imageTag }}"
+            CPU="${{ inputs.cpu }}"
+            MEM="${{ inputs.memoryGi }}Gi"
+            WP="${{ inputs.workloadProfile }}"
+            ARGS=( --image "$IMAGE" --cpu "$CPU" --memory "$MEM" --set-env-vars TRAINDATA_PATH='${{ inputs.traindataPath }}' VOCAB_SIZE='${{ inputs.vocabSize }}' LOG_DIR='cs336_basics/outputs' IMAGE_TAG='${{ inputs.imageTag }}' STORAGE_ACCOUNT='<your-storage-account>' ARTIFACTS_CONTAINER='bpe-artifacts' )
+            if [ -n "$WP" ]; then ARGS+=( --workload-profile "$WP" ); fi
+            az containerapp job update -g "$RG" -n "$JOB" "${ARGS[@]}"
+
+      - name: Start Execution + Stream Logs
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            set -euo pipefail
+            EXEC=$(az containerapp job start -g "$RG" -n "$JOB" --query name -o tsv)
+            echo "Execution: $EXEC"
+            az containerapp job execution logs show -g "$RG" -n "$JOB" --execution "$EXEC" --follow || true
+            STATUS=$(az containerapp job execution show -g "$RG" -n "$JOB" --execution "$EXEC" --query properties.status -o tsv)
+            echo "Final status: $STATUS"
+            test "$STATUS" = "Succeeded"
+

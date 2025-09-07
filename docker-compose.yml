@@ -1,24 +1,34 @@
-version: "3.9"
+version: '3.9'
+
+# This file defines the services, networks, and volumes for local testing.
+# To run this, use the command: docker-compose up --build
 
 services:
-  bpe:
-    image: cs336-bpe:dev-1.0.0
-    build:
-      context: .
-      tags: ["cs336-bpe:dev-1.0.0"]   # builds only if image missing or you run with --build
-    working_dir: /app
-    volumes:
-      - ./:/app                 # bind-mount code for fast iteration
-      - /Users/lucas/Downloads/temp_sft/data:/data:ro
-    env_file:
-      - .env       # env file location
-    command: ["./start_zhl.sh"]
-    # healthcheck:
-    #   test: ["CMD-SHELL", "test -f /app/cs336_basics/outputs/health.ok || exit 1"]
-    #   interval: 30s
-    #   timeout: 5s
-    #   retries: 5
-    #   start_period: 30s         # optional: give the job a moment to start
-
-
+  bpe-job:
+    # Specifies that the Docker image should be built from the Dockerfile
+    # located in the current directory (the project root).
+    build: .
     
+    # Loads all environment variables from the .env file. This is how you
+    # configure the container for the local run context, ntfy, etc.
+    env_file:
+      - .env
+      
+    # Mounts local directories into the container. This is essential for
+    # providing data and enabling live code changes without rebuilding.
+    volumes:
+      # Mounts your local 'data' directory into the '/data' directory inside
+      # the container. The ':ro' flag makes it read-only, which is a good
+      # practice for input data.
+      # IMPORTANT: You must have a './data/corpus.en' file for this to work.
+      - /Users/lucas/Downloads/temp_sft/data:/data:ro
+      
+      # Mounts your Python application code into the container. This allows
+      # you to edit your Python files locally and have the changes immediately
+      # reflected in the container, speeding up development.
+      # This assumes your module is in a 'cs336_basics' directory.
+      # - ./cs336_basics:/app/cs336_basics
+
+    # Overrides the default command to run our entrypoint script.
+    # Assumes start.sh is in your project root and copied into /app in the Dockerfile.
+    command: ["/app/start_zhl.sh"]
