@@ -15,18 +15,20 @@ on:
     inputs:
       imageTag:
         description: Docker tag to deploy
-        default: latest   # do NOT quote this
+        default: latest   # aligns with .env IMAGE_TAG
       traindataPath:
-        description: Path in mounted Files
-        default: /data/tokenizer/TinyStoriesV2-GPT4-train.txt
+        description: Path of training data
+        default: /data/TinyStoriesV2-GPT4-train.txt
       vocabSize:
         description: Vocabulary size (string)
-        default: "1000"
+        default: "10000"  # aligns with .env VOCAB_SIZE
+      storageAccount:
+        description: set azure Storage Account
       cpu:
         description: vCPU (string)
         default: "4"
       memoryGi:
-        description: Memory in Gi (string, we’ll add Gi)
+        description: Memory in Gi (string, it will add Gi)
         default: "16"
       workloadProfile:
         description: Optional Dedicated profile (leave blank to use default)
@@ -43,6 +45,8 @@ env:
   ACR: zhlacr                       # change to your ACR name
   IMAGE_REPO: cs336-bpe
   LOCATION: switzerlandnorth        # change if needed
+  ARTIFACTS_CONTAINER: bpe-artifacts  # aligns with .env default
+  # STORAGE_ACCOUNT: ""                # optional; set only if needed
 
 jobs:
   build-run:
@@ -56,14 +60,14 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Build & Push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile.prod
-          push: true
-          tags: ${{ env.ACR }}.azurecr.io/${{ env.IMAGE_REPO }}:${{ inputs.imageTag }}
-          provenance: true
+      # - name: Build & Push
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: Dockerfile.prod
+      #     push: true
+      #     tags: ${{ env.ACR }}.azurecr.io/${{ env.IMAGE_REPO }}:${{ inputs.imageTag }}
+      #     provenance: true
 
       - name: Update ACA Job
         uses: azure/cli@v2
@@ -74,7 +78,14 @@ jobs:
             CPU="${{ inputs.cpu }}"
             MEM="${{ inputs.memoryGi }}Gi"
             WP="${{ inputs.workloadProfile }}"
-            ARGS=( --image "$IMAGE" --cpu "$CPU" --memory "$MEM" --set-env-vars TRAINDATA_PATH='${{ inputs.traindataPath }}' VOCAB_SIZE='${{ inputs.vocabSize }}' LOG_DIR='cs336_basics/outputs' IMAGE_TAG='${{ inputs.imageTag }}' STORAGE_ACCOUNT='<your-storage-account>' ARTIFACTS_CONTAINER='bpe-artifacts' )
+            # Build env vars string aligned with .env defaults
+            ENV_VARS="TRAINDATA_PATH='${{ inputs.traindataPath }}' VOCAB_SIZE='${{ inputs.vocabSize }}' LOG_DIR='cs336_basics/outputs' IMAGE_TAG='${{ inputs.imageTag }}' ARTIFACTS_CONTAINER='${ARTIFACTS_CONTAINER}'"
+            # Only include STORAGE_ACCOUNT if provided
+            if [ -n "${{ inputs.storageAccount }}" ]; then
+              ENV_VARS="$ENV_VARS STORAGE_ACCOUNT='${STORAGE_ACCOUNT}'"
+            fi
+
+            ARGS=( --image "$IMAGE" --cpu "$CPU" --memory "$MEM" --set-env-vars $ENV_VARS )
             if [ -n "$WP" ]; then ARGS+=( --workload-profile "$WP" ); fi
             az containerapp job update -g "$RG" -n "$JOB" "${ARGS[@]}"
 
