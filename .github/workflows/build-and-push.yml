@@ -24,9 +24,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: ACR login
-        uses: azure/cli@v2
-        with:
-          inlineScript: az acr login -n $ACR
+        run: az acr login -n $ACR
 
       - name: Resolve tag
         id: vars
