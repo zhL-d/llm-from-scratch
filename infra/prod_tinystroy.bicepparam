@@ -6,7 +6,7 @@ param location = 'Switzerland North' // '' = use resource group's location; or '
 param acrName = 'zhlacr'
 param storageAccountName = 'transformer336zhl'
 @secure()
-param storageAccountKey = 'EhZjZHpnDoZvJ6zgAuES4ORg1WzZ32XEd3bMo1r6HJDFzNj3mnL6X0ZImas2EBiUh7q6irIK68Xi+ASttCbpqA=='
+param storageAccountKey = ''
 
 param fileShareName = 'cs336zhl'
 param artifactsContainer = 'bpe-artifacts'
