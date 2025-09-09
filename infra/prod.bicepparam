@@ -13,6 +13,7 @@ param artifactsContainer = 'bpe-artifacts'
 param workloadProfileName = ''  // leave empty to use default
 
 param imageRepo = 'cs336-bpe'
+param imageTag = '9647f9ae898501dbb734600cb15ac7eb6072ca23'
 // Keep imageTag at module default ('latest'); workflow updates image out-of-band
 
 param cpu = 4
