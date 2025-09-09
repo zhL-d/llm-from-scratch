@@ -13,7 +13,7 @@ param storageAccountName string
 param storageAccountKey string
 
 @description('Azure Files share name for training data.')
-param fileShareName string = 'data'
+param fileShareName string = 'cs336zhl'
 
 @description('Blob containers for artifacts')
 // param datasetsContainer string = 'datasets'
@@ -26,13 +26,13 @@ param workloadProfileName string = ''
 // Defaults (can be overridden at runtime/CI)
 @description('Initial image repo and tag; runtime pipeline will update tag.')
 param imageRepo string = 'cs336-bpe'
-param imageTag string = 'initial'
+param imageTag string = 'latest'
 @description('Initial CPU and Memory for the job (update later via pipeline).')
 param cpu int = 4
 param memory string = '16Gi'
 @description('Initial training params.')
-param trainDataPath string = '/data/tokenizer/TinyStoriesV2-GPT4-train.txt'
-param vocabSize string = '1000'
+param trainDataPath string = '/data/tokenizer/corpus.en'
+param vocabSize string = '500'
 
 // ----- Existing resources -----
 resource acr 'Microsoft.ContainerRegistry/registries@2025-04-01' existing = {
@@ -162,7 +162,7 @@ resource job 'Microsoft.App/jobs@2025-01-01' = {
             memory: memory
           }
           env: [
-            { name: 'LOG_DIR', value: 'cs336_basics/outputs' }, { name: 'TRAINDATA_PATH', value: trainDataPath }, { name: 'VOCAB_SIZE', value: vocabSize }
+            { name: 'LOG_DIR', value: 'cs336_basics/outputs' }, { name: 'TRAINDATA_PATH', value: trainDataPath }, { name: 'VOCAB_SIZE', value: vocabSize }, { name: 'RUN_CONTEXT', value: 'AZURE' }
           ]
           volumeMounts: [
             { mountPath: '/data', volumeName: 'dataset' }

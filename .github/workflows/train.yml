@@ -79,25 +79,25 @@ jobs:
             MEM="${{ inputs.memoryGi }}Gi"
             WP="${{ inputs.workloadProfile }}"
             # Build env vars string aligned with .env defaults
-            ENV_VARS="TRAINDATA_PATH='${{ inputs.traindataPath }}' VOCAB_SIZE='${{ inputs.vocabSize }}' LOG_DIR='cs336_basics/outputs' IMAGE_TAG='${{ inputs.imageTag }}' ARTIFACTS_CONTAINER='${ARTIFACTS_CONTAINER}'"
+            ENV_VARS="TRAINDATA_PATH='${{ inputs.traindataPath }}' VOCAB_SIZE='${{ inputs.vocabSize }}' LOG_DIR='cs336_basics/outputs' IMAGE_TAG='${{ inputs.imageTag }}' ARTIFACTS_CONTAINER='${ARTIFACTS_CONTAINER}' RUN_CONTEXT='AZURE' AZURE_MONITOR_WEBHOOK=''"
             # Only include STORAGE_ACCOUNT if provided
             if [ -n "${{ inputs.storageAccount }}" ]; then
-              ENV_VARS="$ENV_VARS STORAGE_ACCOUNT='${STORAGE_ACCOUNT}'"
+              ENV_VARS="$ENV_VARS STORAGE_ACCOUNT='${{ inputs.storageAccount }}'"
             fi
 
             ARGS=( --image "$IMAGE" --cpu "$CPU" --memory "$MEM" --set-env-vars $ENV_VARS )
             if [ -n "$WP" ]; then ARGS+=( --workload-profile "$WP" ); fi
             az containerapp job update -g "$RG" -n "$JOB" "${ARGS[@]}"
 
-      - name: Start Execution + Stream Logs
-        uses: azure/cli@v2
-        with:
-          inlineScript: |
-            set -euo pipefail
-            EXEC=$(az containerapp job start -g "$RG" -n "$JOB" --query name -o tsv)
-            echo "Execution: $EXEC"
-            az containerapp job execution logs show -g "$RG" -n "$JOB" --execution "$EXEC" --follow || true
-            STATUS=$(az containerapp job execution show -g "$RG" -n "$JOB" --execution "$EXEC" --query properties.status -o tsv)
-            echo "Final status: $STATUS"
-            test "$STATUS" = "Succeeded"
+      # - name: Start Execution + Stream Logs
+      #   uses: azure/cli@v2
+      #   with:
+      #     inlineScript: |
+      #       set -euo pipefail
+      #       EXEC=$(az containerapp job start -g "$RG" -n "$JOB" --query name -o tsv)
+      #       echo "Execution: $EXEC"
+      #       az containerapp job execution logs show -g "$RG" -n "$JOB" --execution "$EXEC" --follow || true
+      #       STATUS=$(az containerapp job execution show -g "$RG" -n "$JOB" --execution "$EXEC" --query properties.status -o tsv)
+      #       echo "Final status: $STATUS"
+      #       test "$STATUS" = "Succeeded"
 
