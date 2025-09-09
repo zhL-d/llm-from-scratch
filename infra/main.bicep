@@ -8,9 +8,7 @@ param acrName string
 @description('Existing Storage Account name for Files+Blob (e.g., transformer336zhl)')
 param storageAccountName string
 
-@secure()
-@description('Storage Account key used to configure the Azure Files mount (kept out of repo).')
-param storageAccountKey string
+// Storage Account key is resolved at deploy time via listKeys; not passed via params.
 
 @description('Azure Files share name for training data.')
 param fileShareName string = 'cs336zhl'
@@ -116,7 +114,8 @@ resource envStorage 'Microsoft.App/managedEnvironments/storages@2025-01-01' = {
   properties: {
     azureFile: {
       accountName: storageAccountName
-      accountKey: storageAccountKey
+      // Resolve the key at deploy time to avoid handling secrets in CI
+      accountKey: listKeys(stg.id, '2024-01-01').keys[0].value
       shareName: fileShareName
       accessMode: 'ReadOnly'
     }
@@ -190,4 +189,3 @@ output jobName string = job.name
 output uamiId string = uami.id
 output acrLoginServer string = acr.properties.loginServer
 output storageName string = stg.name
-

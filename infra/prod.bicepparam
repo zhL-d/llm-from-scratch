@@ -1,12 +1,10 @@
 using './main.bicep'
 
 param namePrefix = 'bpe'
-// param location = 'switzerlandnorth' // '' = use resource group's location; or 'westeurope'
+param location = 'switzerlandnorth' // '' = use resource group's location; or 'westeurope'
 
 param acrName = 'zhlacr'
 param storageAccountName = 'transformer336zhl'
-@secure()
-param storageAccountKey = ''
 
 param fileShareName = 'cs336zhl'
 param artifactsContainer = 'bpe-artifacts'
