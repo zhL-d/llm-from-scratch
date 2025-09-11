@@ -1,6 +1,12 @@
 param namePrefix string = 'bpe'
 param location string = resourceGroup().location
 
+// The email address that will receive the job completion notifications.
+param alertEmailAddress string
+
+// // The name of the Container App Job to monitor.
+// param containerAppJobName string = 'bpe-train'
+
 // Existing resources you already created
 @description('Existing ACR name (e.g., zhlacr). We do NOT create ACR here.')
 param acrName string
@@ -60,6 +66,64 @@ resource cae 'Microsoft.App/managedEnvironments@2025-01-01' = {
     }
   }
 }
+
+// ---- Notify ----
+// --- Action Group ---
+// Defines who to notify when an alert is triggered.
+
+resource actionGroup 'Microsoft.Insights/actionGroups@2023-01-01' = {
+  name: '${namePrefix}-job-completion-ag'
+  location: 'Global' // Action Groups are always global
+  properties: {
+    groupShortName: '${namePrefix}AG'
+    enabled: true
+    emailReceivers: [
+      {
+        name: 'JobAdmins'
+        emailAddress: alertEmailAddress
+        useCommonAlertSchema: true
+      }
+    ]
+  }
+}
+
+
+resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+  name: '${namePrefix}-job-exec-alert'
+  // Metric alerts are global
+  location: 'global'
+  properties: {
+    description: 'Notify when a job run completes (success or failure).'
+    severity: 3
+    enabled: true
+    scopes: [ job.id ]
+    evaluationFrequency: 'PT1M'
+    windowSize: 'PT5M'
+    criteria: {
+      'odata.type': 'Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria'
+      allOf: [
+        {
+          // REQUIRED for each condition:
+          criterionType: 'StaticThresholdCriterion'
+          name: 'Job executions increased'
+          metricNamespace: 'microsoft.app/jobs'
+          metricName: 'Executions'
+          timeAggregation: 'Total'
+          operator: 'GreaterThan'
+          threshold: 0
+          // dimensions: []  // optional
+        }
+      ]
+    }
+    actions: [
+      {
+        actionGroupId: actionGroup.id
+      }
+    ]
+    autoMitigate: true // optional
+  }
+}
+
 
 // ----- UAMI + RBAC: AcrPull + Blob Data Contributor -----
 resource uami 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {

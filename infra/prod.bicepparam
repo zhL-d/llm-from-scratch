@@ -17,5 +17,7 @@ param imageTag = '9647f9ae898501dbb734600cb15ac7eb6072ca23'
 param cpu = 1
 param memory = '2Gi'
 
+param alertEmailAddress = 'lucas.zeh.lu@gmail.com'
+
 // param trainDataPath = '/data/corpus.en'
 // param vocabSize = '500'
