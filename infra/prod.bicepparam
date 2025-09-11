@@ -14,8 +14,8 @@ param imageRepo = 'cs336-bpe'
 param imageTag = '9647f9ae898501dbb734600cb15ac7eb6072ca23'
 // Keep imageTag at module default ('latest'); workflow updates image out-of-band
 
-param cpu = 4
-param memory = '16Gi'
+param cpu = 1
+param memory = '2Gi'
 
 // param trainDataPath = '/data/corpus.en'
 // param vocabSize = '500'

@@ -18,10 +18,10 @@ on:
         default: latest   # aligns with .env IMAGE_TAG
       traindataPath:
         description: Path of training data
-        default: /data/TinyStoriesV2-GPT4-train.txt
+        default: /data/tokenizer/corpus.en
       vocabSize:
         description: Vocabulary size (string)
-        default: "10000"  # aligns with .env VOCAB_SIZE
+        default: "500"  # aligns with .env VOCAB_SIZE
       storageAccount:
         description: set azure Storage Account
       cpu:
