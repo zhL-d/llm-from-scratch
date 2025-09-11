@@ -82,7 +82,7 @@ jobs:
             MEM="${{ inputs.memoryGi }}Gi"
             WP="${{ inputs.workloadProfile }}"
             # Build env vars string aligned with .env defaults
-            ENV_VARS="TRAINDATA_PATH='${{ inputs.traindataPath }}' VOCAB_SIZE='${{ inputs.vocabSize }}' LOG_DIR='cs336_basics/outputs' IMAGE_TAG='${{ inputs.imageTag }}' ARTIFACTS_CONTAINER='${ARTIFACTS_CONTAINER}' RUN_CONTEXT='AZURE' AZURE_MONITOR_WEBHOOK=''"
+            ENV_VARS="TRAINDATA_PATH='${{ inputs.traindataPath }}' VOCAB_SIZE=${{ inputs.vocabSize }} LOG_DIR='cs336_basics/outputs' IMAGE_TAG='${{ inputs.imageTag }}' ARTIFACTS_CONTAINER='${ARTIFACTS_CONTAINER}' RUN_CONTEXT='AZURE' AZURE_MONITOR_WEBHOOK=''"
             # Only include STORAGE_ACCOUNT if provided
             if [ -n "${{ inputs.storageAccount }}" ]; then
               ENV_VARS="$ENV_VARS STORAGE_ACCOUNT='${{ inputs.storageAccount }}'"
