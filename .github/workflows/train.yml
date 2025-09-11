@@ -26,10 +26,10 @@ on:
         description: set azure Storage Account
       cpu:
         description: vCPU (string)
-        default: "4"
+        default: "1"
       memoryGi:
         description: Memory in Gi (string, it will add Gi)
-        default: "16"
+        default: "2"
       workloadProfile:
         description: Optional Dedicated profile (leave blank to use default)
         default: ""
