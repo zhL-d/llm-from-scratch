@@ -53,24 +53,43 @@ upload_outputs() {
   local dest_url=""
   if [[ "$RUN_CONTEXT" == "AZURE" ]]; then
     [[ -z "${STORAGE_ACCOUNT}" ]] && { echo "INFO: STORAGE_ACCOUNT not set for Azure context; skipping upload."; return 0; }
-    echo "==> Authenticating azcopy with Managed Identity..."
-    export AZCOPY_AUTO_LOGIN_TYPE="MSI"
-    local azcopy_args=(--identity)
-    if [[ -n "${AZCOPY_MSI_CLIENT_ID:-}" ]]; then
-      azcopy_args+=(--identity-client-id "${AZCOPY_MSI_CLIENT_ID}")
-    fi
-    # export AZCOPY_DISABLE_KEYRING=1
-    export AZCOPY_DISABLE_PERSISTENT_CONFIG=TRUE
-    azcopy login "${azcopy_args[@]}" || { echo "ERROR: MSI login failed."; return 1; }
+    # echo "==> Authenticating azcopy with Managed Identity..."
+    # export AZCOPY_AUTO_LOGIN_TYPE="MSI"
+    # local azcopy_args=(--identity)
+    # if [[ -n "${AZCOPY_MSI_CLIENT_ID:-}" ]]; then
+    #   azcopy_args+=(--identity-client-id "${AZCOPY_MSI_CLIENT_ID}")
+    # fi
+    # # export AZCOPY_DISABLE_KEYRING=1
+    # export AZCOPY_DISABLE_PERSISTENT_CONFIG=TRUE
+    # azcopy login "${azcopy_args[@]}" || { echo "ERROR: MSI login failed."; return 1; }
+    # dest_url="https://${STORAGE_ACCOUNT}.blob.core.windows.net/${ARTIFACTS_CONTAINER}/${run_id}/"
+    # echo "==> Uploading outputs to ${dest_url} via MI..."
+
+    # no need azlogin
     dest_url="https://${STORAGE_ACCOUNT}.blob.core.windows.net/${ARTIFACTS_CONTAINER}/${run_id}/"
+    export AZCOPY_AUTO_LOGIN_TYPE=MSI           # tell AzCopy to use MSI
+    # only if using a user-assigned MI:
+    if [[ -n "${AZCOPY_MSI_CLIENT_ID:-}" ]]; then
+      echo "==> Set AZCOPY MSI CLIENT ID..."
+      export AZCOPY_MSI_CLIENT_ID = "${AZCOPY_MSI_CLIENT_ID}"
+    fi
+
+    export AZCOPY_DISABLE_PERSISTENT_CONFIG=true
+    export AZCOPY_LOG_LOCATION=/tmp/azcopy
+    export AZCOPY_JOB_PLAN_LOCATION=/tmp/azcopy
+    mkdir -p /tmp/azcopy
     echo "==> Uploading outputs to ${dest_url} via MI..."
+    azcopy copy "${LOG_DIR}/*" \
+      "${dest_url}" \
+      --from-to=LocalBlob --recursive
+
   else
     [[ -z "${OUTPUT_SAS_URL}" ]] && { echo "INFO: OUTPUT_SAS_URL not set for local context; skipping upload."; return 0; }
     dest_url="$OUTPUT_SAS_URL"
     echo "==> Uploading outputs to Blob container via SAS URL..."
   fi
   
-  azcopy copy "${LOG_DIR}/*" "${dest_url}" --recursive >/dev/null
+  # azcopy copy "${LOG_DIR}/*" "${dest_url}" --recursive >/dev/null
   echo "==> Upload complete."
 }
 
