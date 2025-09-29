@@ -54,15 +54,14 @@ upload_outputs() {
   if [[ "$RUN_CONTEXT" == "AZURE" ]]; then
     [[ -z "${STORAGE_ACCOUNT}" ]] && { echo "INFO: STORAGE_ACCOUNT not set for Azure context; skipping upload."; return 0; }
     echo "==> Authenticating azcopy with Managed Identity..."
-    # export AZCOPY_AUTO_LOGIN_TYPE="MSI"
-    # local azcopy_args=(--identity)
-    local azcopy_args=(--recursive --from-to=LocalBlob --auth-type=MSI)
+    export AZCOPY_AUTO_LOGIN_TYPE="MSI"
+    local azcopy_args=(--identity)
     if [[ -n "${AZCOPY_MSI_CLIENT_ID:-}" ]]; then
       azcopy_args+=(--identity-client-id "${AZCOPY_MSI_CLIENT_ID}")
     fi
     # export AZCOPY_DISABLE_KEYRING=1
     export AZCOPY_DISABLE_PERSISTENT_CONFIG=TRUE
-    # azcopy login "${azcopy_args[@]}" || { echo "ERROR: MSI login failed."; return 1; }
+    azcopy login "${azcopy_args[@]}" || { echo "ERROR: MSI login failed."; return 1; }
     dest_url="https://${STORAGE_ACCOUNT}.blob.core.windows.net/${ARTIFACTS_CONTAINER}/${run_id}/"
     echo "==> Uploading outputs to ${dest_url} via MI..."
   else
@@ -71,8 +70,7 @@ upload_outputs() {
     echo "==> Uploading outputs to Blob container via SAS URL..."
   fi
   
-  # azcopy copy "${LOG_DIR}/*" "${dest_url}" --recursive >/dev/null
-  azcopy copy "${LOG_DIR}/*" "${dest_url}" "${azcopy_args[@]}"
+  azcopy copy "${LOG_DIR}/*" "${dest_url}" --recursive >/dev/null
   echo "==> Upload complete."
 }
 
