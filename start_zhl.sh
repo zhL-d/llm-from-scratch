@@ -59,6 +59,7 @@ upload_outputs() {
     if [[ -n "${AZCOPY_MSI_CLIENT_ID:-}" ]]; then
       azcopy_args+=(--identity-client-id "${AZCOPY_MSI_CLIENT_ID}")
     fi
+    export AZCOPY_DISABLE_KEYRING=1
     azcopy login "${azcopy_args[@]}" || { echo "ERROR: MSI login failed."; return 1; }
     dest_url="https://${STORAGE_ACCOUNT}.blob.core.windows.net/${ARTIFACTS_CONTAINER}/${run_id}/"
     echo "==> Uploading outputs to ${dest_url} via MI..."
