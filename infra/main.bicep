@@ -225,7 +225,7 @@ resource job 'Microsoft.App/jobs@2025-01-01' = {
             memory: memory
           }
           env: [
-            { name: 'LOG_DIR', value: 'cs336_basics/outputs' }, { name: 'TRAINDATA_PATH', value: trainDataPath }, { name: 'VOCAB_SIZE', value: vocabSize }, { name: 'RUN_CONTEXT', value: 'AZURE' }
+            { name: 'LOG_DIR', value: 'cs336_basics/outputs' }, { name: 'TRAINDATA_PATH', value: trainDataPath }, { name: 'VOCAB_SIZE', value: vocabSize }, { name: 'RUN_CONTEXT', value: 'AZURE' }, { name: 'AZCOPY_MSI_CLIENT_ID', value: uami.properties.clientId }
           ]
           volumeMounts: [
             { mountPath: '/data', volumeName: 'dataset' }

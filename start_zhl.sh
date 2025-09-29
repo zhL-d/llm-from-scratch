@@ -55,7 +55,11 @@ upload_outputs() {
     [[ -z "${STORAGE_ACCOUNT}" ]] && { echo "INFO: STORAGE_ACCOUNT not set for Azure context; skipping upload."; return 0; }
     echo "==> Authenticating azcopy with Managed Identity..."
     export AZCOPY_AUTO_LOGIN_TYPE="MSI"
-    azcopy login --identity >/dev/null 2>&1 || { echo "ERROR: MSI login failed."; return 1; }
+    local azcopy_args=(--identity)
+    if [[ -n "${AZCOPY_MSI_CLIENT_ID:-}" ]]; then
+      azcopy_args+=(--identity-client-id "${AZCOPY_MSI_CLIENT_ID}")
+    fi
+    azcopy login "${azcopy_args[@]}" >/dev/null 2>&1 || { echo "ERROR: MSI login failed."; return 1; }
     dest_url="https://${STORAGE_ACCOUNT}.blob.core.windows.net/${ARTIFACTS_CONTAINER}/${run_id}/"
     echo "==> Uploading outputs to ${dest_url} via MI..."
   else
