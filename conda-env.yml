@@ -1,0 +1,12 @@
+# Conda environment for Azure ML
+# Minimal dependencies - uv handles the rest
+
+name: bpe-training
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - uv>=0.1.0
