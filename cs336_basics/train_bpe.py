@@ -48,12 +48,12 @@ def main():
             # Apply env-var overrides (env > YAML)
             config["traindata_path"] = os.getenv("TRAINDATA_PATH", config["traindata_path"])
             config["vocab_size"] = int(os.getenv("VOCAB_SIZE", config["vocab_size"]))
-
+            config["outputs_path"] = os.getenv("OUTPUTS_PATH", config["outputs_path"])
         # Init tokenizer
         tokenizer = Tokenizer(
             config["special_tokens"],
-            # config["outputs_path"],
-            os.getenv("OUTPUTS_PATH", config["outputs_path"]),
+            config["outputs_path"],
+            # os.getenv("OUTPUTS_PATH", config["outputs_path"]),
             enable_log=config["enable_log"], 
             # log_path=config["log_path"],
             serialization=config["serialization"],
@@ -79,6 +79,9 @@ def main():
     """
 
     print(report)
+
+    op = config["outputs_path"]
+    print(f"outputs_path: {op}")
 
 if __name__ == "__main__":
     main()
