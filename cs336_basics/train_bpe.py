@@ -52,7 +52,8 @@ def main():
         # Init tokenizer
         tokenizer = Tokenizer(
             config["special_tokens"],
-            config["outputs_path"],
+            # config["outputs_path"],
+            os.getenv("OUTPUTS_PATH", config["outputs_path"]),
             enable_log=config["enable_log"], 
             # log_path=config["log_path"],
             serialization=config["serialization"],
