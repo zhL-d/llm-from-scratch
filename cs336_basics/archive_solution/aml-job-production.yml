@@ -1,0 +1,58 @@
+# Azure ML Production Job - BPE Training with Spot Instances
+# Cost-optimized configuration for 100GB memory training
+
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+
+# Job metadata
+display_name: bpe-production-vocab32k
+experiment_name: bpe-tokenizer-production
+description: Full BPE training with 32k vocab on large dataset (spot instances)
+
+# Compute - Using spot instances for 80% cost savings
+compute: azureml:cpu-cluster-spot
+
+# Code
+code: .
+
+# Command - Export environment variables and run training
+command: >-
+  bash -c '
+  export TRAINDATA_PATH="${{inputs.training_data}}/owt_train.txt";
+  export OUTPUTS_PATH="${{outputs.model}}";
+  export VOCAB_SIZE="32000";
+  export PRETOKEN_PROCS="32";
+  export ENABLE_LOG="true";
+  export SERIALIZATION="true";
+  pip install uv &&
+  uv sync --frozen &&
+  uv run python cs336_basics/train_bpe.py
+  '
+
+# Environment - Use base Python image
+environment:
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04:latest
+  conda_file: conda-env.yml
+
+# Inputs - Your training data
+inputs:
+  training_data:
+    type: uri_folder
+    path: azureml:bpe-training-data@latest
+    mode: ro_mount
+
+# Outputs - Model artifacts
+outputs:
+  model:
+    type: uri_folder
+    mode: rw_mount
+
+# Resource limits
+limits:
+  timeout: 43200  # 12 hours max
+
+# Tags
+tags:
+  dataset: openwebtext
+  vocab_size: "32000"
+  compute_tier: spot
+  cost_optimized: "true"

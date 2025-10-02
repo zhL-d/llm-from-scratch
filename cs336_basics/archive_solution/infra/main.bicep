@@ -1,31 +1,49 @@
+// ========================================
+// PARAMETERS
+// ========================================
+
 param namePrefix string = 'bpe'
 param location string = resourceGroup().location
 
 // The email address that will receive the job completion notifications.
 param alertEmailAddress string
 
-// // The name of the Container App Job to monitor.
-// param containerAppJobName string = 'bpe-train'
+// ========================================
+// SHARED RESOURCE REFERENCES
+// These resources typically live in a separate long-lived resource group
+// ========================================
 
-// Existing resources you already created
 @description('Existing ACR name (e.g., zhlacr). We do NOT create ACR here.')
 param acrName string
+
+@description('Resource group containing the ACR. If empty, assumes same RG as this deployment.')
+param acrResourceGroup string = ''
 
 @description('Existing Storage Account name for Files+Blob (e.g., transformer336zhl)')
 param storageAccountName string
 
-// Storage Account key is resolved at deploy time via listKeys; not passed via params.
+@description('Resource group containing the Storage Account. If empty, assumes same RG.')
+param storageResourceGroup string = ''
 
 @description('Azure Files share name for training data.')
 param fileShareName string = 'cs336zhl'
 
-@description('Blob containers for artifacts')
-// param datasetsContainer string = 'datasets'
+@description('Blob container for artifacts')
 param artifactsContainer string = 'bpe-artifacts'
 
-// Optional: workload profile name (Dedicated). Leave empty to use default.
-@description('Container Apps workload profile name (Dedicated). Leave empty for default.')
+// Note: UAMI is created per environment for isolation and easier cleanup
+// (Best practice for ephemeral dedicated environments)
+
+// ========================================
+// CONTAINER APPS ENVIRONMENT CONFIG
+// ========================================
+
+@description('Workload profile name for dedicated environments. Leave empty for consumption.')
 param workloadProfileName string = ''
+
+@description('Create dedicated workload profile (D4/D8/D16/D32). Leave empty to skip profile creation.')
+@allowed(['', 'D4', 'D8', 'D16', 'D32'])
+param dedicatedProfileSku string = ''
 
 // Defaults (can be overridden at runtime/CI)
 @description('Initial image repo and tag; runtime pipeline will update tag.')
@@ -38,21 +56,47 @@ param memory string = '16Gi'
 param trainDataPath string = '/data/tokenizer/corpus.en'
 param vocabSize string = '500'
 
-// ----- Existing resources -----
-resource acr 'Microsoft.ContainerRegistry/registries@2025-04-01' existing = {
+// ========================================
+// SHARED RESOURCES (EXISTING)
+// For cross-RG scenarios, we build resource IDs manually
+// ========================================
+
+// ACR - only reference if in same RG
+resource acr 'Microsoft.ContainerRegistry/registries@2025-04-01' existing = if (empty(acrResourceGroup)) {
   name: acrName
 }
-resource stg 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
+
+// Storage Account - only reference if in same RG
+resource stg 'Microsoft.Storage/storageAccounts@2025-01-01' existing = if (empty(storageResourceGroup)) {
   name: storageAccountName
 }
 
-// ----- Log Analytics + Container Apps Env -----
+// For cross-RG scenarios, build resource IDs manually
+var acrResourceId = empty(acrResourceGroup)
+  ? acr.id
+  : resourceId(acrResourceGroup, 'Microsoft.ContainerRegistry/registries', acrName)
+
+var stgResourceId = empty(storageResourceGroup)
+  ? stg.id
+  : resourceId(storageResourceGroup, 'Microsoft.Storage/storageAccounts', storageAccountName)
+
+var acrLoginServer = empty(acrResourceGroup)
+  ? acr.properties.loginServer
+  : '${acrName}.azurecr.io'
+
+// ========================================
+// ENVIRONMENT-SPECIFIC RESOURCES
+// These are created in this deployment's RG
+// ========================================
+
+// ----- Log Analytics -----
 resource law 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: '${namePrefix}-law'
   location: location
   properties: { retentionInDays: 30 }
 }
 
+// ----- Container Apps Environment -----
 resource cae 'Microsoft.App/managedEnvironments@2025-01-01' = {
   name: '${namePrefix}-cae'
   location: location
@@ -64,6 +108,15 @@ resource cae 'Microsoft.App/managedEnvironments@2025-01-01' = {
         sharedKey: listKeys(law.id, '2020-08-01').primarySharedKey
       }
     }
+    // Add workload profiles for dedicated environments
+    workloadProfiles: !empty(dedicatedProfileSku) ? [
+      {
+        name: workloadProfileName
+        workloadProfileType: dedicatedProfileSku
+        minimumCount: 1
+        maximumCount: 1
+      }
+    ] : []
   }
 }
 
@@ -125,16 +178,23 @@ resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
 }
 
 
-// ----- UAMI + RBAC: AcrPull + Blob Data Contributor -----
+// ========================================
+// MANAGED IDENTITY + RBAC
+// Each environment gets its own UAMI for isolation
+// ========================================
+
 resource uami 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
   name: '${namePrefix}-uami'
   location: location
 }
 
+// Role definitions
 var acrPullRole = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d')
 var blobDataContributor = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
 
-resource raAcr 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+// RBAC: ACR Pull (same RG only)
+// For cross-RG RBAC, assign manually or use a separate deployment to the shared RG
+resource raAcr 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (empty(acrResourceGroup)) {
   name: guid(acr.id, uami.id, 'acr-pull')
   scope: acr
   properties: {
@@ -144,7 +204,9 @@ resource raAcr 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   }
 }
 
-resource raBlob 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+// RBAC: Blob Data Contributor (same RG only)
+// For cross-RG RBAC, assign manually or use a separate deployment to the shared RG
+resource raBlob 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (empty(storageResourceGroup)) {
   name: guid(stg.id, uami.id, 'blob-w')
   scope: stg
   properties: {
@@ -155,21 +217,23 @@ resource raBlob 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
 }
 
 // ----- Blob containers: datasets + artifacts -----
-resource blobSvc 'Microsoft.Storage/storageAccounts/blobServices@2025-01-01' existing = {
+// Only create blob container if storage is in the same RG (dev scenario)
+// For cross-RG deployments (prod), containers must already exist in the shared storage account
+// Create manually if needed: az storage container create --account-name <storage> --name bpe-artifacts
+
+resource blobSvc 'Microsoft.Storage/storageAccounts/blobServices@2025-01-01' existing = if (empty(storageResourceGroup)) {
   parent: stg
   name: 'default'
 }
 
-// resource datasets 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
-//   name: datasetsContainer
-//   parent: blobSvc
-//   properties: { publicAccess: 'None' }
-// }
-resource artifacts 'Microsoft.Storage/storageAccounts/blobServices/containers@2025-01-01' = {
+resource artifacts 'Microsoft.Storage/storageAccounts/blobServices/containers@2025-01-01' = if (empty(storageResourceGroup)) {
   name: artifactsContainer
   parent: blobSvc
   properties: { publicAccess: 'None' }
 }
+
+// Note: For cross-RG scenarios, we don't create or reference containers here.
+// The Container Apps job will access containers directly using UAMI credentials.
 
 // ----- Azure Files: register storage with CAE (uses account key) -----
 resource envStorage 'Microsoft.App/managedEnvironments/storages@2025-01-01' = {
@@ -178,8 +242,8 @@ resource envStorage 'Microsoft.App/managedEnvironments/storages@2025-01-01' = {
   properties: {
     azureFile: {
       accountName: storageAccountName
-      // Resolve the key at deploy time to avoid handling secrets in CI
-      accountKey: listKeys(stg.id, '2024-01-01').keys[0].value
+      // Use listKeys with manually constructed resource ID for cross-RG scenario
+      accountKey: listKeys(stgResourceId, '2025-01-01').keys[0].value
       shareName: fileShareName
       accessMode: 'ReadOnly'
     }
@@ -202,7 +266,7 @@ resource job 'Microsoft.App/jobs@2025-01-01' = {
     configuration: {
       registries: [
         {
-          server: acr.properties.loginServer
+          server: acrLoginServer
           identity: uami.id
         }
       ]
@@ -218,7 +282,7 @@ resource job 'Microsoft.App/jobs@2025-01-01' = {
     template: {
       containers: [
         {
-          image: '${acr.properties.loginServer}/${imageRepo}:${imageTag}'
+          image: '${acrLoginServer}/${imageRepo}:${imageTag}'
           name: 'trainer'
           resources: {
             cpu: cpu
@@ -251,5 +315,6 @@ resource job 'Microsoft.App/jobs@2025-01-01' = {
 output containerAppsEnvName string = cae.name
 output jobName string = job.name
 output uamiId string = uami.id
-output acrLoginServer string = acr.properties.loginServer
-output storageName string = stg.name
+output uamiPrincipalId string = uami.properties.principalId
+output acrLoginServer string = acrLoginServer
+output storageName string = storageAccountName

@@ -1,0 +1,15 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install uv
+RUN pip install uv
+
+# Copy project files (you'll upload these)
+COPY . /app
+
+# Install dependencies
+RUN uv sync --frozen
+
+# Entrypoint
+ENTRYPOINT ["uv", "run", "python", "cs336_basics/train_bpe.py"]

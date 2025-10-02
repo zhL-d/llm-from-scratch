@@ -28,3 +28,19 @@ TRAINDATA_PATH=tests/fixtures/corpus.en VOCAB_SIZE=500 uv run python -m cs336_ba
 
 
 TRAINDATA_PATH=tests/fixtures/corpus.en VOCAB_SIZE=500 uv run python -m cProfile -s cumtime -m cs336_basics.train_bpe > cs336_basics/profile/profile_cum_envconfig.txt
+
+bash -c ' export TRAINDATA_PATH="${{inputs.smokedata}}/corpus.en"; export OUTPUTS_PATH="${{outputs.smokeartifact}}"; export VOCAB_SIZE=500; pip install uv && uv sync --frozen && uv run python cs336_basics/train_bpe.py; 
+
+
+
+
+Your job is still active. You may view the status of your job with the command
+
+  $ gcloud ai custom-jobs describe projects/449740342413/locations/europe-west3/customJobs/5305134258170363904
+
+or continue streaming the logs with the command
+
+  $ gcloud ai custom-jobs stream-logs projects/449740342413/locations/europe-west3/customJobs/5305134258170363904
+
+
+  bash -c ' export TRAINDATA_PATH="${{inputs.bpetrainlarge}}/owt_train.txt"; export OUTPUTS_PATH="${{outputs.bpetrainlarge}}"; export VOCAB_SIZE=32000; pip install uv && uv sync --frozen && uv run python cs336_basics/train_bpe.py; 
