@@ -44,3 +44,8 @@ or continue streaming the logs with the command
 
 
   bash -c ' export TRAINDATA_PATH="${{inputs.bpetrainlarge}}/owt_train.txt"; export OUTPUTS_PATH="${{outputs.bpetrainlarge}}"; export VOCAB_SIZE=32000; pip install uv && uv sync --frozen && uv run python cs336_basics/train_bpe.py; 
+
+
+
+
+  gcloud ai custom-jobs create   --region=europe-west3   --display-name=bpe-training-job   --config=vertex-job.json
