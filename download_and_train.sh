@@ -26,5 +26,20 @@ fi
 echo "=== Training Stage ==="
 echo "Using data path: ${TRAINDATA_PATH}"
 
+# Store original GCS output path
+GCS_OUTPUTS_PATH="${OUTPUTS_PATH}"
+
+# Use local output path for training
+export OUTPUTS_PATH="/tmp/outputs"
+mkdir -p "${OUTPUTS_PATH}"
+
 # Run training with local path
 uv run python cs336_basics/train_bpe.py
+
+# Upload results to GCS if original path was GCS
+if [[ "${GCS_OUTPUTS_PATH}" == gs://* ]]; then
+    echo "=== Upload Stage ==="
+    echo "Uploading results to: ${GCS_OUTPUTS_PATH}"
+    gsutil -m cp -r "${OUTPUTS_PATH}/*" "${GCS_OUTPUTS_PATH}/"
+    echo "Upload complete"
+fi
