@@ -9,7 +9,7 @@ import numpy.typing as npt
 import torch
 from torch import Tensor
 
-from cs336_basics.tokenizer import Tokenizer
+from cs336_basics.bpetokenizer_trainer import BPETokenizerTrainer
 
 
 
@@ -590,6 +590,6 @@ def run_train_bpe(
                 representing that <token1> was merged with <token2>.
                 Merges are ordered by order of creation.
     """
-    tokenizer = Tokenizer(special_tokens)
+    tokenizer = BPETokenizerTrainer(special_tokens)
     return tokenizer.train_bpe(input_path, vocab_size, gpt2_regex=True, enable_parallel=True)
     # raise NotImplementedError

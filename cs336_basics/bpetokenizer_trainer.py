@@ -26,7 +26,7 @@ class _Desc:
         return self.x > other.x
     
 
-class Tokenizer:
+class BPETokenizerTrainer:
     def __init__(
             self,
             special_tokens: list[str] | None = None,
@@ -353,10 +353,10 @@ class Tokenizer:
             chunk = f.read(end - start).decode("utf-8", errors="ignore")
         
         # Remove special token
-        docs = Tokenizer.remove_special_tokens_static(chunk, special_token)
+        docs = BPETokenizerTrainer.remove_special_tokens_static(chunk, special_token)
 
         # Build pretoken counts dict
-        pretoken_counts = Tokenizer.pretokenize_and_count(docs, gpt2_regex)
+        pretoken_counts = BPETokenizerTrainer.pretokenize_and_count(docs, gpt2_regex)
 
         return pretoken_counts
     
@@ -381,12 +381,12 @@ class Tokenizer:
         # Use provided special tokens if available, fallback to endoftext
         split_tok = (self.special_tokens[0] if self.special_tokens else "<|endoftext|>")
         with open(path, "rb") as f:
-            boundaries = Tokenizer.find_chunk_boundaries(
+            boundaries = BPETokenizerTrainer.find_chunk_boundaries(
                 f, core_num, split_tok.encode("utf-8"))
         
         # Parallel pretoken
         with ProcessPoolExecutor(max_workers=core_num) as executor:
-            futures = [executor.submit(Tokenizer.pretokenize_and_count_task, path, start, end, self.special_tokens, gpt2_regex) for start, end in zip(boundaries[:-1], boundaries[1:])]
+            futures = [executor.submit(BPETokenizerTrainer.pretokenize_and_count_task, path, start, end, self.special_tokens, gpt2_regex) for start, end in zip(boundaries[:-1], boundaries[1:])]
         
         pretoken_counts = {}
         pretoken_counts_get = pretoken_counts.get
@@ -756,12 +756,12 @@ class Tokenizer:
         delta_changed_paircount: dict[tuple[bytes], int] = {}
     
         for old_pretoken in affected_pretokens:
-            new_pretoken = Tokenizer._build_new_pretoken(old_pretoken, best_pair)
+            new_pretoken = BPETokenizerTrainer._build_new_pretoken(old_pretoken, best_pair)
     
             # Update, delete old pretoken contribution
-            pair_counts, reversed_cache, delta_changed_paircount = Tokenizer._delete_old_contribution(old_pretoken, pair_counts, reversed_cache, delta_changed_paircount)
+            pair_counts, reversed_cache, delta_changed_paircount = BPETokenizerTrainer._delete_old_contribution(old_pretoken, pair_counts, reversed_cache, delta_changed_paircount)
             # Update, add new pretoken contrbution
-            pair_counts, reversed_cache, delta_changed_paircount = Tokenizer._add_new_contribution(new_pretoken, pair_counts, reversed_cache, delta_changed_paircount)
+            pair_counts, reversed_cache, delta_changed_paircount = BPETokenizerTrainer._add_new_contribution(new_pretoken, pair_counts, reversed_cache, delta_changed_paircount)
         
         # Build changed pair count dict
         changed_paircount = {}

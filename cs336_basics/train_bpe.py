@@ -1,4 +1,4 @@
-from cs336_basics.tokenizer import Tokenizer
+from cs336_basics.bpetokenizer_trainer import BPETokenizerTrainer
 import time
 import tracemalloc
 import os
@@ -50,7 +50,7 @@ def main():
             config["vocab_size"] = int(os.getenv("VOCAB_SIZE", config["vocab_size"]))
             config["outputs_path"] = os.getenv("OUTPUTS_PATH", config["outputs_path"])
         # Init tokenizer
-        tokenizer = Tokenizer(
+        tokenizer = BPETokenizerTrainer(
             config["special_tokens"],
             config["outputs_path"],
             # os.getenv("OUTPUTS_PATH", config["outputs_path"]),
