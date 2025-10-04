@@ -1,4 +1,13 @@
 import regex as re
+import logging
+
+# logging.basicConfig(
+#     level=logging.DEBUG,
+#     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+# )
+
+logger = logging.getLogger(__name__)
+
 
 
 PAT_PATTERN = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
@@ -34,6 +43,8 @@ class Tokenizer:
         Returns:
             List of pretokens
         """
+        logger.debug(f"Starting pretokenize: text_length={len(text)}, gpt_pattern={is_gpt}")
+
         pretokens: list[list[bytes]] = []
 
         if is_gpt:
@@ -52,5 +63,8 @@ class Tokenizer:
                 pretokens.append(pretoken_byteslist)
         else:
             pass
+
+        logger.debug(f"Pretokenization result: {pretokens}")
+        logger.info("Pretokenization complete")
 
         return pretokens
