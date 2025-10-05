@@ -15,7 +15,7 @@ def smoketest_vocab_merge():
         7: b" c",
         8: b" a",
         9: b"the",
-        10: b"at",
+        10: b" at",
     }
 
     merge_list = [(b"t", b"h"), (b" ", b"c"), (b" ", "a"), (b"th", b"e"), (b" a", b"t")]
@@ -37,7 +37,7 @@ def test_encode(smoketest_vocab_merge, smoketest_corpus):
     tokenizer = Tokenizer(vocab, merge)
     tokenid_list = tokenizer.encode(corpus)
 
-    assert tokenid_list == [9]
+    assert tokenid_list == [9, 7, 1, 5, 10, 3]
 
 
 def test_pretoken(smoketest_corpus):
