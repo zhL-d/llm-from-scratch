@@ -40,23 +40,30 @@ class Tokenizer:
         Returns:
             List of tokenid corresponding to the tokenized corpus
         """
-        logger.debug(f"Starting encode: corpus={text[:50]}")
+        logger.debug(f"Starting encode: text_length={len(text)}, corpus_preview={text[:50]}")
 
         pretokens = Tokenizer.pretokenize(text)
         token_ids: list[int] = []
 
-        for pretoken in pretokens:
+        for idx, pretoken in enumerate(pretokens):
             # May include multi tokens
             tokenized_pretoken = self.tokenize(pretoken)
 
-            logger.debug(f"Pretoken={pretoken}, Tokenized pretoken={tokenized_pretoken}")
+            logger.debug(f"Tokenizing: Pretoken[{idx}]={pretoken} -> Tokenized Pretoken={tokenized_pretoken}")
 
-            for token in tokenized_pretoken:
-                token_id = self.reverse_vocab[token]
+            for token_idx, token in enumerate(tokenized_pretoken):
+                try:
+                    token_id = self.reverse_vocab[token]
+                except KeyError:
+                    raise ValueError(
+                        f"Token {token} not found in vocabulary."
+                    )
                 
-                logger.debug(f"Token={token}, Token_id={token_id}")
+                logger.debug(f"Mapping token id: Token[{token_idx}]={token} -> Token_id={token_id}")
 
                 token_ids.append(token_id)
+
+        logger.info("Encoding complete")
 
         return token_ids
 
