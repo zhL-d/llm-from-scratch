@@ -1,5 +1,6 @@
 import regex as re
 import logging
+import json
 
 # logging.basicConfig(
 #     level=logging.DEBUG,
@@ -26,11 +27,34 @@ class Tokenizer:
 
             special_tokens: list[str] | None = None
         """
+
+        logger.debug("Starting construct tokenizer")
+
         self.vocab = vocab
         self.reverse_vocab = {token: id for id, token in vocab.items()}
         self.merges = merges
         self.special_tokens = special_tokens
 
+        logger.debug(f"Constructed vocab, merges, special tokens: vocab={self.vocab}, merges={self.merges}, special tokens={self.special_tokens}")
+        logger.info("Construct tokenizer complete")
+    
+    @classmethod
+    def from_files(cls, vocab_filepath: str, merges_filepath: str, special_tokens: list[str] | None = None):
+
+        logger.debug("Starting construct tokenizer from files")
+
+        with open(vocab_filepath) as vf:
+            vocab_raw = json.load(vf)
+            vocab_serialized = {int(token_id): token.encode("utf-8") for token_id, token in vocab_raw.items()}
+        with open(merges_filepath) as mf:
+            merges_raw = json.load(mf)
+            merges_serialized = [(merge[0].encode("utf-8"), merge[1].encode("utf-8")) for merge in merges_raw]
+        
+        logger.debug(f"Constructed from files vocab, merge: vocab={vocab_serialized}, merges={merges_serialized}")
+        logger.info("Construct tokenizer from files complete")
+
+        return cls(vocab_serialized, merges_serialized, special_tokens)
+    
     def encode(self, text: str) -> list[int]:
         """Encode an input text into a sequence of token IDs.
 

@@ -18,7 +18,7 @@ def smoketest_vocab_merge():
         10: b" at",
     }
 
-    merge_list = [(b"t", b"h"), (b" ", b"c"), (b" ", "a"), (b"th", b"e"), (b" a", b"t")]
+    merge_list = [(b"t", b"h"), (b" ", b"c"), (b" ", b"a"), (b"th", b"e"), (b" a", b"t")]
 
     return vocab_table, merge_list
 
@@ -39,9 +39,16 @@ def smoketest_vocab_merge_with_special_tokens():
         11: b"<|endoftext|>"
     }
 
-    merge_list = [(b"t", b"h"), (b" ", b"c"), (b" ", "a"), (b"th", b"e"), (b" a", b"t")]
+    merge_list = [(b"t", b"h"), (b" ", b"c"), (b" ", b"a"), (b"th", b"e"), (b" a", b"t")]
 
     return vocab_table, merge_list
+
+@pytest.fixture
+def smoketest_vocab_merge_path():
+    vocab_table_path = "cs336_basics/smoke_test_fixture/vocab_table/vocab.json"
+    merge_list_path = "cs336_basics/smoke_test_fixture/vocab_table/merge.json" 
+
+    return vocab_table_path, merge_list_path
 
 
 @pytest.fixture
@@ -97,3 +104,12 @@ def test_decode(smoketest_vocab_merge, smoketest_tokenids):
     text = tokenizer.decode(token_ids)
 
     assert text == "the cat ate"
+
+def test_from_files(smoketest_vocab_merge, smoketest_vocab_merge_path):
+    right_vocab, right_merge = smoketest_vocab_merge
+    vocab_path, merge_path = smoketest_vocab_merge_path
+
+    tokenizer = Tokenizer.from_files(vocab_path, merge_path, None)
+    
+    assert tokenizer.vocab == right_vocab
+    assert tokenizer.merges == right_merge
