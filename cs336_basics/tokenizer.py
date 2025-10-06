@@ -1,7 +1,7 @@
 import regex as re
 import logging
 import json
-
+from collections.abc import Iterable
 # logging.basicConfig(
 #     level=logging.DEBUG,
 #     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -101,6 +101,80 @@ class Tokenizer:
         logger.info("Encoding complete")
 
         return token_ids
+    
+    def encode_iterable(self, iterable: Iterable[str]) -> Iterable[int]:
+
+        logger.debug("Starting iterable encode:")
+
+        for chunk_idx, chunk in enumerate(iterable):
+            logger.debug(f"Process chunk[{chunk_idx}]: text_length={len(chunk)}, corpus_preview={chunk[:50]}")
+
+            if self.special_tokens:
+                
+                logger.debug(f"Special token has set: {self.special_tokens}")
+
+                corpus_parts = self._spillt_by_specialtoken(chunk)
+
+                logger.debug(f"Corpus parts: {corpus_parts}")
+
+                for part_idx, part in enumerate(corpus_parts):        
+                    # TODO: optimize performance
+                    if part in self.special_tokens:
+
+                        logger.debug(f"Part[{part_idx}]: '{part}' is special token")
+
+                        token_id = self._encode_specialtoken(part)
+
+                        logger.debug(f"Mapping token id: Token={part} -> Token_id={token_id}")
+
+                        yield token_id
+                    else:
+                        logger.debug(f"Part[{part_idx}]: '{part}' is normal part")
+
+                        pretokens = Tokenizer.pretokenize(part)
+
+                        for idx, pretoken in enumerate(pretokens):
+                            # May include multi tokens
+                            tokenized_pretoken = self.tokenize(pretoken)
+
+                            logger.debug(f"Tokenizing: Pretoken[{idx}]={pretoken} -> Tokenized Pretoken={tokenized_pretoken}")
+
+                            for token_idx, token in enumerate(tokenized_pretoken):
+                                try:
+                                    token_id = self.reverse_vocab[token]
+                                except KeyError:
+                                    raise ValueError(
+                                        f"Token {token} not found in vocabulary table."
+                                    )
+
+                                logger.debug(f"Mapping token id: Token[{token_idx}]={token} -> Token_id={token_id}")
+
+                                yield token_id                      
+            else:
+                logger.debug("Special token has NOT set")
+
+                pretokens = Tokenizer.pretokenize(chunk)
+
+                for idx, pretoken in enumerate(pretokens):
+                    # May include multi tokens
+                    tokenized_pretoken = self.tokenize(pretoken)
+
+                    logger.debug(f"Tokenizing: Pretoken[{idx}]={pretoken} -> Tokenized Pretoken={tokenized_pretoken}")
+
+                    for token_idx, token in enumerate(tokenized_pretoken):
+                        try:
+                            token_id = self.reverse_vocab[token]
+                        except KeyError:
+                            raise ValueError(
+                                f"Token {token} not found in vocabulary table."
+                            )
+
+                        logger.debug(f"Mapping token id: Token[{token_idx}]={token} -> Token_id={token_id}")
+
+                        yield token_id
+
+            logger.debug(f"Encoding chunk[{chunk_idx}] complete")
+        logger.info("Iterable encoding complete")
     
     def decode(self, ids: list[int]) -> str:
         """Decode a sequence of token IDs into text

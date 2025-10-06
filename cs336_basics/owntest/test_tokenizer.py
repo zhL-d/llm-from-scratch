@@ -44,6 +44,27 @@ def smoketest_vocab_merge_with_special_tokens():
     return vocab_table, merge_list
 
 @pytest.fixture
+def smoketest_vocab_with_newline():
+    vocab_table = {
+        0: b" ",
+        1: b"a",
+        2: b"c",
+        3: b"e",
+        4: b"h",
+        5: b"t",
+        6: b"th",
+        7: b" c",
+        8: b" a",
+        9: b"the",
+        10: b" at",
+        11: b"\n"
+    }
+
+    merge_list = [(b"t", b"h"), (b" ", b"c"), (b" ", b"a"), (b"th", b"e"), (b" a", b"t")]
+
+    return vocab_table, merge_list
+
+@pytest.fixture
 def smoketest_vocab_merge_path():
     vocab_table_path = "cs336_basics/smoke_test_fixture/vocab_table/vocab.json"
     merge_list_path = "cs336_basics/smoke_test_fixture/vocab_table/merge.json" 
@@ -62,6 +83,12 @@ def smoketest_corpus_with_specialtokens():
     corpus = "the cat ate<|endoftext|>the cat ate"
 
     return corpus
+
+@pytest.fixture
+def smoketest_corpus_path():
+    corpus_path = "cs336_basics/smoke_test_fixture/data/smoke_test_corpus.txt"
+
+    return corpus_path
 
 @pytest.fixture
 def smoketest_tokenids():
@@ -113,3 +140,12 @@ def test_from_files(smoketest_vocab_merge, smoketest_vocab_merge_path):
     
     assert tokenizer.vocab == right_vocab
     assert tokenizer.merges == right_merge
+
+def test_encode_iterable(smoketest_vocab_merge, smoketest_corpus_path):
+    vocab, merge = smoketest_vocab_merge
+
+    tokenizer = Tokenizer(vocab, merge)
+    with open(smoketest_corpus_path) as f:
+        tokenid_list = list(tokenizer.encode_iterable(f))
+
+    assert tokenid_list == [9, 7, 1, 5, 10, 3, 11, 9, 7, 1, 5, 10, 3]
