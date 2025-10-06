@@ -49,3 +49,10 @@ or continue streaming the logs with the command
 
 
   gcloud ai custom-jobs create   --region=europe-west3   --display-name=bpe-training-job   --config=vertex-job.json
+
+
+  TRAINDATA_PATH=/Users/lucas/Documents/GitHub/stf-assignment1-basics/tests/fixtures/corpus.en OUTPUTS_PATH=/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/outputs VOCAB_SIZE=500 PRETOKEN_PROCS=4 uv run cs336_basics/train_bpe.py
+
+
+  TRAINDATA_PATH=/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/owedataset/owt_valid.txt OUTPUTS_PATH=/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/outputs VOCAB_SIZE=1500 PRETOKEN_PROCS=4 uv run cs336_basics/train_bpe.py
+  
