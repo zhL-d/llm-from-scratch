@@ -78,97 +78,41 @@ class Tokenizer:
 
         return token_ids
     
+    def decode(self, ids: list[int]) -> str:
+        """Decode a sequence of token IDs into text
 
-        # def encode(self, text: str) -> list[int]:
-        # """Encode an input text into a sequence of token IDs.
+        Args:
+            ids: a sequence of token IDs
 
-        # Args:
-        #     test: Corpus used for tokenization
+        Returns:
+            text 
+        """
+        logger.debug(f"Starting decode: length={len(ids)}, preview token ids={ids[:20]}")
 
-        # Returns:
-        #     List of tokenid corresponding to the tokenized corpus
-        # """
-        # logger.debug(f"Starting encode: text_length={len(text)}, corpus_preview={text[:50]}")
+        text_bytes: bytes = b""
 
-        # token_ids: list[int] = []
-
-        # if self.special_tokens:
+        for token_id in ids:
+            try:
+                token_bytes = self.vocab[token_id]
+            except KeyError:
+                raise ValueError(
+                    f"Token id {token_id} is not found in vocabulary table"
+                )
             
-        #     logger.debug(f"Special token has set: {self.special_tokens}")
+            logger.debug(f"Maping token id to token bytes: token id={token_id} -> token bytes={token_bytes}")
+            
+            # TODO: optimize performence
+            text_bytes = text_bytes + token_bytes
+        
+        logger.debug(f"Converting token bytes to text: length={len(text_bytes)}, preview token bytes={text_bytes[:20]}")
 
-        #     corpus_parts = self._spillt_by_specialtoken(text)
+        decoded_text = text_bytes.decode("utf-8", errors='replace')
 
-        #     logger.debug(f"Corpus parts: {corpus_parts}")
+        logger.debug(f"Decoded text: preview token ids={ids[:20]} -> preview decoded text={decoded_text[:20]}")
+        logger.info("Decode complete")
 
-        #     for part_idx, part in enumerate(corpus_parts):        
-        #         # TODO: optimize performance
-        #         if part in self.special_tokens:
-
-        #             logger.debug(f"Part[{part_idx}]: '{part}' is special token")
-
-        #             # specialtoken_bytes = part.encode("utf-8")
-        #             # try:
-        #             #     token_id = self.reverse_vocab[specialtoken_bytes]
-        #             # except KeyError:
-        #             #     raise ValueError(
-        #             #         f"Special token {part} is not found in vocabulary table"
-        #             #     )
-
-        #             token_id = self._encode_specialtoken(part)
-
-        #             logger.debug(f"Mapping token id: Token={part} -> Token_id={token_id}")
-
-        #             token_ids.append(token_id)
-        #         else:
-        #             logger.debug(f"Part[{part_idx}]: '{part}' is normal part")
-
-        #             part_token_ids = self._encode_nomal(part)
-
-        #             token_ids.extend(part_token_ids)
-
-        #             # pretokens = Tokenizer.pretokenize(part)
-
-        #             # for idx, pretoken in enumerate(pretokens):
-        #             #     # May include multi tokens
-        #             #     tokenized_pretoken = self.tokenize(pretoken)
-
-        #             #     logger.debug(f"Tokenizing: Pretoken[{idx}]={pretoken} -> Tokenized Pretoken={tokenized_pretoken}")
-
-        #             #     for token_idx, token in enumerate(tokenized_pretoken):
-        #             #         try:
-        #             #             token_id = self.reverse_vocab[token]
-        #             #         except KeyError:
-        #             #             raise ValueError(
-        #             #                 f"Token {token} not found in vocabulary table."
-        #             #             )
-
-        #             #         logger.debug(f"Mapping token id: Token[{token_idx}]={token} -> Token_id={token_id}")
-
-        #             #         token_ids.append(token_id)
-        # else:
-        #     logger.debug("Special token has NOT set")
-
-        #     token_ids = self._encode_nomal(text)
-
-        #     # pretokens = Tokenizer.pretokenize(text)
-
-        #     # for idx, pretoken in enumerate(pretokens):
-        #     #     # May include multi tokens
-        #     #     tokenized_pretoken = self.tokenize(pretoken)
-        #     #     logger.debug(f"Tokenizing: Pretoken[{idx}]={pretoken} -> Tokenized Pretoken={tokenized_pretoken}")
-        #     #     for token_idx, token in enumerate(tokenized_pretoken):
-        #     #         try:
-        #     #             token_id = self.reverse_vocab[token]
-        #     #         except KeyError:
-        #     #             raise ValueError(
-        #     #                 f"Token {token} not found in vocabulary table."
-        #     #             )
-        #     #         logger.debug(f"Mapping token id: Token[{token_idx}]={token} -> Token_id={token_id}")
-        #     #         token_ids.append(token_id)
-
-        # logger.info("Encoding complete")
-
-        # return token_ids
+        return decoded_text
+        
 
     @staticmethod
     def pretokenize(text: str, is_gpt: bool = True) -> list[list[bytes]]:

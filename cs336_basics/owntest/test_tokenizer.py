@@ -56,6 +56,12 @@ def smoketest_corpus_with_specialtokens():
 
     return corpus
 
+@pytest.fixture
+def smoketest_tokenids():
+    token_ids = [9, 7, 1, 5, 10, 3]
+
+    return token_ids
+
 
 def test_encode(smoketest_vocab_merge, smoketest_corpus):
     vocab, merge = smoketest_vocab_merge
@@ -82,3 +88,12 @@ def test_pretoken(smoketest_corpus):
     pretokens = Tokenizer.pretokenize(smoketest_corpus, True)
 
     assert pretokens == right_version
+
+def test_decode(smoketest_vocab_merge, smoketest_tokenids):
+    vocab, merge = smoketest_vocab_merge
+    token_ids = smoketest_tokenids
+
+    tokenizer = Tokenizer(vocab, merge)
+    text = tokenizer.decode(token_ids)
+
+    assert text == "the cat ate"
