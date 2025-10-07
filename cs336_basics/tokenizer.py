@@ -255,7 +255,7 @@ class Tokenizer:
             Tokenized pretoken
         """
 
-        logger.debug(f"Start tokenize: pretoken={pretoken}")
+        # logger.debug(f"Start tokenize: pretoken={pretoken}")
 
         for merge_idx, merge in enumerate(self.merges):
 
@@ -274,9 +274,9 @@ class Tokenizer:
                 else:
                     i += 1
 
-            logger.debug(f"Complete merge[{merge_idx}]: merge item={merge}, pretoken{pretoken}")
+            # logger.debug(f"Complete merge[{merge_idx}]: merge item={merge}, pretoken{pretoken}")
         
-        logger.debug(f"Finish tokenize: tokenized pretoken={pretoken}")
+        # logger.debug(f"Finish tokenize: tokenized pretoken={pretoken}")
         return pretoken
     
     def _spillt_by_specialtoken(self, text: str) -> list[str]:
@@ -288,7 +288,8 @@ class Tokenizer:
             Returns:
                 Corpus in parts list format while keeping special tokens in the parts list
         """
-        escaped_specialtokens = [re.escape(stoken) for stoken in self.special_tokens]
+        sorted_special_tokens = sorted(self.special_tokens, key=len, reverse=True)
+        escaped_specialtokens = [re.escape(stoken) for stoken in sorted_special_tokens]
         pattern = "(" + "|".join(escaped_specialtokens) + ")"
         return re.split(pattern, text)
     
