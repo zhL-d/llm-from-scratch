@@ -258,21 +258,29 @@ class Tokenizer:
         Returns:
             Tokenized pretoken
         """
-        for merge in self.merges:
+
+        logger.debug(f"Start tokenize: pretoken={pretoken}")
+
+        for merge_idx, merge in enumerate(self.merges):
+
+            logger.debug(f"Start merge[{merge_idx}]: merge item={merge}, pretoken={pretoken}")
+
             i = 0
             while i < len(pretoken)-1:
-                if pretoken[:i+2] == list(merge):
-                    if len(pretoken) == 2:
-                        token = pretoken[i] + pretoken[i+1]
-                        pretoken = [token]
-                        return pretoken
+                if pretoken[i:i+2] == list(merge):    
+                    token = pretoken[i] + pretoken[i+1]
+                    temp_pretoken = pretoken[:i] + [token]
+                    if i+1 == len(pretoken)-1:
+                        pretoken = temp_pretoken
                     else:
-                        token = pretoken[i] + pretoken[i+1]
-                        pretoken = [token] + pretoken[i+2:]
+                        pretoken = temp_pretoken + pretoken[i+2:]
                     i += 1
                 else:
                     i += 1
+
+            logger.debug(f"Complete merge[{merge_idx}]: merge item={merge}, pretoken{pretoken}")
         
+        logger.debug(f"Finish tokenize: tokenized pretoken={pretoken}")
         return pretoken
     
     def _spillt_by_specialtoken(self, text: str) -> list[str]:

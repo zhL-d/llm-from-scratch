@@ -71,6 +71,13 @@ def smoketest_vocab_merge_path():
 
     return vocab_table_path, merge_list_path
 
+# @pytest.fixture
+# def gpt2_vocab_merge_path():
+#     vocab_table_path = "cs336_basics/smoke_test_fixture/vocab_table/gpt2/gpt2_vocab.json"
+#     merge_list_path = "cs336_basics/smoke_test_fixture/vocab_table/gpt2/gpt2_merges.txt" 
+
+#     return vocab_table_path, merge_list_path
+
 
 @pytest.fixture
 def smoketest_corpus():
@@ -154,7 +161,7 @@ def test_encode_aligh_with_encode_iterable(smoketest_vocab_with_newline, smokete
     vocab, merge = smoketest_vocab_with_newline
 
     tokenizer = Tokenizer(vocab, merge)
-    
+
     with open(smoketest_corpus_path) as f:
         tokenids_from_iterable = list(tokenizer.encode_iterable(f))
 
@@ -163,3 +170,13 @@ def test_encode_aligh_with_encode_iterable(smoketest_vocab_with_newline, smokete
         tokenids_from_normal = tokenizer.encode(corpus_in_mem)
 
     assert tokenids_from_normal == tokenids_from_iterable
+
+
+# def test_encode_with_gpt2_vocab_merge(gpt2_vocab_merge_path, smoketest_corpus):
+#     vocab, merge = smoketest_vocab_merge
+#     corpus = smoketest_corpus
+
+#     tokenizer = Tokenizer(vocab, merge)
+#     tokenid_list = tokenizer.encode(corpus)
+
+#     assert tokenid_list == [9, 7, 1, 5, 10, 3]
