@@ -233,12 +233,8 @@ class Tokenizer:
                 pretoken_bytes = pretoken_str.encode("utf-8")
 
                 pretoken_byteslist: list[bytes] = []
-
-                if len(pretoken_bytes) > 1 and pretoken_bytes[0] == 0x20:
-                    pretoken_byteslist.append(pretoken_bytes[:2])
-                    pretoken_byteslist.extend([bytes([pretoken_byte]) for pretoken_byte in pretoken_bytes[2:]])
-                else:
-                    pretoken_byteslist = [bytes([pretoken_byte]) for pretoken_byte in pretoken_bytes]
+                
+                pretoken_byteslist = [bytes([pretoken_byte]) for pretoken_byte in pretoken_bytes]
 
                 pretokens.append(pretoken_byteslist)
         else:

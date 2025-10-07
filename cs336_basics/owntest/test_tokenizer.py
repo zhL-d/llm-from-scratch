@@ -124,7 +124,7 @@ def test_encode_with_special_tokens(smoketest_vocab_merge_with_special_tokens, s
 
 
 def test_pretoken(smoketest_corpus):
-    right_version = [[b"t", b"h", b"e"], [b" c", b"a", b"t"], [b" a", b"t", b"e"]]
+    right_version = [[b"t", b"h", b"e"], [b" ", b"c", b"a", b"t"], [b" ", b"a", b"t", b"e"]]
 
     pretokens = Tokenizer.pretokenize(smoketest_corpus, True)
 
