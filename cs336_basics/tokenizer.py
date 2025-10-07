@@ -35,7 +35,7 @@ class Tokenizer:
         self.merges = merges
         self.special_tokens = special_tokens
 
-        logger.debug(f"Constructed vocab, merges, special tokens: vocab={self.vocab}, merges={self.merges}, special tokens={self.special_tokens}")
+        logger.debug(f"Constructed tokenizer with vocab, merges, special tokens: vocab={self.vocab}, merges={self.merges}, special tokens={self.special_tokens}")
         logger.info("Construct tokenizer complete")
     
     @classmethod

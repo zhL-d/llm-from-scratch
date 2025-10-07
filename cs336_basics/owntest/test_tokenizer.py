@@ -141,8 +141,8 @@ def test_from_files(smoketest_vocab_merge, smoketest_vocab_merge_path):
     assert tokenizer.vocab == right_vocab
     assert tokenizer.merges == right_merge
 
-def test_encode_iterable(smoketest_vocab_merge, smoketest_corpus_path):
-    vocab, merge = smoketest_vocab_merge
+def test_encode_iterable(smoketest_vocab_with_newline, smoketest_corpus_path):
+    vocab, merge = smoketest_vocab_with_newline
 
     tokenizer = Tokenizer(vocab, merge)
     with open(smoketest_corpus_path) as f:
