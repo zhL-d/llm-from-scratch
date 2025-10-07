@@ -149,3 +149,17 @@ def test_encode_iterable(smoketest_vocab_with_newline, smoketest_corpus_path):
         tokenid_list = list(tokenizer.encode_iterable(f))
 
     assert tokenid_list == [9, 7, 1, 5, 10, 3, 11, 9, 7, 1, 5, 10, 3]
+
+def test_encode_aligh_with_encode_iterable(smoketest_vocab_with_newline, smoketest_corpus_path):
+    vocab, merge = smoketest_vocab_with_newline
+
+    tokenizer = Tokenizer(vocab, merge)
+    
+    with open(smoketest_corpus_path) as f:
+        tokenids_from_iterable = list(tokenizer.encode_iterable(f))
+
+    with open(smoketest_corpus_path) as f:     
+        corpus_in_mem = f.read()
+        tokenids_from_normal = tokenizer.encode(corpus_in_mem)
+
+    assert tokenids_from_normal == tokenids_from_iterable
