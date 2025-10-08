@@ -1,0 +1,593 @@
+In the second game of last year's Eastern Conference Semifinals, which Sporting KC came into trailing 2-0 on aggregate and came out of with another big sad chapter in Dominic Kinnear's book of big sad chapters, to which he adds new material every November, Sporting held the Houston Dynamo to a single cross from open play.
+
+That, and they allowed the Dynamo less than 29 percent of possession on the day. That's really good.
+
+Here's what Houston's successful passes in the final third looked like:
+
+Of all the passes that Houston attempted in the final third on that day, only two kept them in the final third. And both were throw-ins. I don't think there was a more dominant defensive performance last season, or this.
+
+The problem was down the other end. And that's where we'll start this tactical preview, as Sporting and Houston head to Kansas City scoreless.
+
+#WatchThis: SKC-HOU, 7:30 pm ET; NBCSN, NBC LiveExtra, Univision Dep., TSN2/RDS2 in Canada
+
+Will the Dynamo coax Sporting into half-chances?
+
+This is Sporting's final third activity from that same game. Seriously:
+
+First off: Bobby Boswell, Andre Hainault and Tally Hall all deserve some dap for their work. Hainault actually had more clearances than completed passes – 15 to 14. Boswell was close at 11 clearances to 14 completed passes. And Hall lived about six yards off his line, saving everything but one, catching what he could and barking directions at his defense.
+
+Second off: The Dynamo would not mind, at all, if Sporting's final third map looked something like this after the game on Saturday night. They wouldn't want it to be as busy, but the idea here was to keep SKC to the fringes, let them generate half chances, and trust Hall to get the job done.
+
+That's Sporting's weak spot. For all their talent (and they've got a ton, back to front) and all their final third quality (not as much, but still), they are weirdly susceptible to the worse angels of their nature. Which, in a word, is impatience.
+
+SKC have a tendency to get frustrated, get it wide, and bomb in crosses by the score. And when they start doing that, they also start shooting on sight, leading to the fourth-lowest shot quality (for 2013) in all of MLS.
+
+Check the column at the far right:
+
+Team Expected Open Play Goals Total Open Play Goals Differential Shot Quality New York Red Bulls 41.81 53 11.18 0.104 Montreal Impact 41.05 46 4.94 0.099 Houston Dynamo 44.17 37 -7.17 0.094 San Jose Earthquakes 40.97 32 -8.97 0.093 Philadelphia Union 41.87 42 0.12 0.091 Real Salt Lake 40.12 50 9.87 0.09 LA Galaxy 42.94 46 3.05 0.089 FC Dallas 38.09 43 4.9 0.089 New England Revolution 35.07 45 9.92 0.089 Seattle Sounders FC 36.22 36 -0.22 0.088 Portland Timbers 38.51 50 11.48 0.087 Chicago Fire 40.92 42 1.07 0.081 Vancouver Whitecaps 35.02 47 11.97 0.081 Colorado Rapids 36.93 40 3.06 0.08 Toronto FC 26.58 26 -0.58 0.077 Sporting Kansas City 37.3 42 4.69 0.075 Columbus Crew 35.38 35 -0.38 0.075 Chivas USA 22.32 27 4.67 0.07 D.C. United 27.83 19 -8.83 0.07
+
+That's exactly what happened in this second leg game last year, when SKC drove in 31 open play crosses, and largely eschewed the patient build or top-of-the-box combination. They put up lots of bad shots, and Houston designed their defense to deal with exactly that.
+
+Kinnear will have done the same this year, even though the Dynamo won't have a lead to protect. Sporting actually finished just mid-table in terms of open play crosses in 2013, but as the chart above emphasizes, they still lack patience near goal.
+
+What can the Dynamo get out of central midfield?
+
+After a midsummer stretch in which Houston went uncharacteristically soft, allowing far too much build-up through the middle, they made one big adjustment: Push Ricardo Clark higher up the pitch, allow him to disrupt and distribute almost as a real No. 8, and reap the benefits.
+
+It led to plays like this:
+
+And like this:
+
+And – my favorite – like this:
+
+I don't think anybody in either conference had as big an influence on the playoff race as Clark did. Once he moved to an advanced destroyer position, with Warren Creavalle cleaning up behind him, the Dynamo started to look like the team that's been to two straight MLS Cups.
+
+And now he's hurt. He hasn't been ruled out for the game, and Kinnear is being coy about who'll play and who won't (of course). But Clark hasn't trained since before the first leg, when he came off "left leg" injury, and if you haven't played in two weeks, you're a big fat question mark. Even if he does play, nobody should reasonably expect 90 minutes, or anything close to full fitness.
+
+Where does that leave Houston? The two most obvious choices are probably Boniek Garcia or Brad Davis sliding inside, since both are comfortable on the ball in tight quarters and both have the vision to do damage there. I mean, of that group, Clark is clearly the least threatening in the final third (above GIFs not withstanding).
+
+That would leave Kinnear to bring on Andrew Driver for one of the wide spots, and while he's had moments of quality this year, Houston tend to struggle to hold onto the ball when he's out there – everything he does is vertical.
+
+The other option is the one I'd choose, pairing Servando Carrasco with Creavalle in the central midfield for the extra coverage. Carrasco ain't Clark, but wins a ton of second balls, switches the field of play well, and he's been very, very good in patches this season. Plus – this is the big issue for me – he can allow both Boniek and Davis to get higher up field.
+
+If Houston are going to generate chances, both those guys will need to be involved. Carrasco gives them that flexibility.
+
+Two bonus thoughts:
+
+First, Clark isn't the only one who's missed the last two weeks of training in Houston. Will Bruin struggled badly in the first half of the first leg, then was subbed for Cam Weaver at halftime as Kinnear went to a 4-3-3.
+
+While the 4-3-3 didn't result in a goal, it did result in more possession, higher forays into the attacking end, and a few very good chances. It also pinned the Sporting fullbacks, preventing those killer overlaps:
+
+Don't be surprised if Houston goes in that direction from the start.
+
+Second, set pieces. I've been saying for two weeks that this one has the feel of a game that'll be decided in extra time on a restart. Aurelien Collin continues to be absolutely dominant attacking dead balls, and the Dynamo simply aren't as well equipped to deal with such a physical presence this year.<|endoftext|>This post is a guide for setting up a solid development environment, for having the best Angular learning and working experience.
+
+Let's make sure that we have the best development experience possible and don’t run into constant development environment problems.
+
+This might be one of the largest obstacles for someone just arriving at the Angular Ecosystem, maybe even more so than the reactive concepts – getting that environment setup right from the start is crucial.
+
+We are going to setup up a development environment that is easily upgradeable and causes minimum problems over time due to things like semantic versioning.
+
+In this post we are going to:
+
+Setup a Node development environment
+
+Learn and install the Yarn Package Manager
+
+Setup the Angular CLI
+
+Scaffold our first Hello World Angular application
+
+Setup an IDE, we are going to be using Webstorm
+
+If you are looking to install Angular in the specific context of an enterprise network, have a look at this post for some tips on how to do that.
+
+This post is part of the ongoing Angular for Beginners series, here is the complete series:
+
+Setting Up A Node Development Environment
+
+In order to get the best possible development experience, and if you don’t have node yet installed: I advise you to go the nodejs.org website and install the latest version of node:
+
+Please make sure not to use the long-term support version (LTS), but the latest version instead. We will be using node for frontend tooling purposes and for running our development server, and for that specific purpose, you will usually run into fewer issues if you use the latest version.
+
+But, if you already have node installed (any version almost), there is a much better way to upgrade your node version than to run an installer - why you might not be able to in a company computer.
+
+To avoid running into any issues with constant reinstallations of node, I suggest the following: instead of overwriting your current version of node with the latest one, let's use a simple command line tool that easily allows switching node versions.
+
+Why use a command line node versioning tool?
+
+Using a tool like that has several advantages:
+
+It’s very useful to be able to quickly change node versions if for example, we have multiple projects to maintain on the same machine, and each project needs different versions of node.
+
+with such tool, upgrading to newer versions of node in the future will be much easier – we will not have to run an installer in your machine again
+
+So first before starting, let’s make sure that you have at least some version of node installed on your machine.
+
+Installing The Nave Command Line Tool
+
+If you are using a Linux or Mac environment, then let’s go ahead and install the nave command line tool, which is available on npm:
+
+The command to install this tool is:
+
+npm install -g nave
+
+Please remember that you might have to add “sudo” at the beginning of some of the commands in this book if you are not an administrator on this machine.
+
+If you are on Windows, you can instead install the nvm-windows tool that gives you equivalent functionality:
+
+With a node version changing tool in place, lets then install a given version of node. For example, lets bring the version 7.9.0 to our development machine, and start a shell with it:
+
+> nave use 7.9.0 #################################################### 100.0% installed from binary > node -v v7.9.0
+
+If using nvm-windows, the command would then be:
+
+nvm use 7.9.0
+
+In both cases the result would be the same, we have just started a new shell with the chosen version of on the path.
+
+if you are on Windows and looking for a Bash shell that does not take administration privileges to install, have a look at Git Bash
+
+We will now be able in the future to easily upgrade versions – that's a great start! Now let’s continue laying the foundation for our development environment.
+
+Npm is the official node package manager, but we will be using a different alternative. Let’s learn why we would want to use the Facebook Yarn Package Manager instead.
+
+Why Use The Yarn Package Manager instead of NPM?
+
+While using npm, you might notice that sometimes you run into the following situations:
+
+You run npm install, and you get an error on the terminal, then you run the same command again and the error is gone. This is sometimes caused by proxies and network issues, but a lot of times it's not the case
+
+you have a project running on on your machine in one folder, but you checkout the code to another folder and install it there, and it's somehow not working there due to dependencies issues
+
+your production or staging environment build fails due to dependency related errors that you don’t have on your local machine
+
+Another developer working on the same project is running into dependencies issues but on your machine it's working great: or the other way around 🙂
+
+All these issues are related to a couple of inherent problems of the way that the npm package manager works by default.
+
+The biggest difference between Yarn and NPM
+
+Npm uses semantic versioning, which means that we will take upon installation a dependency version of a library that is in a certain range of versions.
+
+While on paper this sounds like a good idea to enable getting continuous patch updates of dependencies, in practice, it doesn't work as well as one could think.
+
+Facebook used to run into these issues too in their internal builds, and so they have created an alternative package manager that they have first tested extensively internally and then open sourced: The Yarn Package Manager.
+
+So let’s try it out and learn the advantages along the way. To install Yarn, let’s do the following:
+
+npm install -g yarn
+
+Yes I know, we used npm LOL 😊 I will likely be one of the last times though.
+
+So we now have installed Yarn globally. Let's now use it as much as possible, because it will unlike npm “freeze” the dependency tree, and ensure that the code that runs in production and in other developers machine is the exact same code that runs on your machine as well.
+
+So how does Yarn Work Then?
+
+It's actually quite simple, upon project installation Yarn will freeze the dependencies by making note of what libraries were installed in a file which is called yarn.lock .
+
+So to install a file and generate a lock file, we simply have to run the following command in the same directory as your package.json is:
+
+yarn
+
+This does the same as an an npm install, meaning:
+
+it will inspect the package.json and calculate a tree of library dependencies
+
+it will download all project dependencies and write them under the node_modules folder
+
+This is so far what npm does as well, so why use Yarn instead?
+
+Two immediate Advantages of Yarn
+
+At this point, if nothing else yarn would really be bringing us two very important advantages:
+
+Yarn is much faster than npm, especially for projects with a lot of dependencies, like for example projects that are scaffolded using the Angular CLI
+
+Using Yarn you will not run anymore into that very frequent scenario of having to either run npm install multiple times until it completes (with a couple of cache cleans in the middle), or having to delete node_modules and reinstall
+
+The Biggest Advantage Of Yarn
+
+The improved speed and reliability alone would already make Yarn a better alternative. But those might not be the biggest advantage. The biggest thing about Yarn is that during the installation it will keep track about all the dependencies that it has installed.
+
+Yarn will write the exact version numbers of each library that is has downloaded and it will put those in a text file, called a lock file. You will see it right next to your package.json once the installation completes.
+
+A couple of things about the yarn.lock file
+
+This is just a plain text file, here are some important points about it:
+
+we should not edit it manually, only Yarn should modify its file in result of a command that we execute in the command line
+
+we need to commit this file to source control
+
+So what is the big advantage of having a lock file, and of the Yarn approach in general?
+
+Committing the file ensures that any other developer using the same code base will have the same exact dependencies then you. This is really convenient because problems due to library differences are much more prevalent than one could think.
+
+And what about when we commit something and the integration build fails due to differences between libraries in the continuous server machine and our local machine, how are we going to debug that?
+
+Imagine the headache that such situation could cause, because you probably don’t have access to the file system of the integration server.
+
+Yarn advantages in a Nutshell
+
+Keeping a lock file and using the same exact dependency tree everywhere avoids so many time-consuming problems. In a Nutshell, and to summarize the advantages of Yarn we can say that:
+
+Yarn gives us faster, more reliable and most of all reproducible builds, meaning that we will never have to debug issues due to having different libraries on different machines
+
+If you are looking for a guided tour to setting up Yarn, have a look at this video:
+
+About Npm Shrinkwrap
+
+One final note about npm, its also possible to freeze dependencies in npm, but the process is reported to be non-deterministic, have a look here at the Yarn docs regarding shrinkwrap:
+
+If you are using an npm-shrinkwrap.json file right now, be aware that you may end up with a different set of dependencies. Yarn does not support npm shrinkwrap files as they don’t have enough information in them to power Yarn’s more deterministic algorithm.
+
+Also, have a look at this mention on the same docs about the Yarn lock file:
+
+It’s similar to npm’s npm-shrinkwrap.json, however, it’s not lossy and it creates reproducible results.
+
+So I hope that this convinces you why we should use Yarn instead of npm. Let me know what you think of this approach, and let's continue setting up our development environment.
+
+The next steps are: installing the CLI (and configure it to use Yarn), and installing an IDE.
+
+Installing the Angular Command Line Interface
+
+Now that we have a package manager in place, let’s start using it to install everything that we need. To install the Angular CLI, which is a command line tool that we can use to scaffold Angular applications, we can run the following command:
+
+yarn global add @angular/cli
+
+At this stage, if everything went well we should have the Angular CLI available at the command line. If we run this command we should have:
+
+>ng --version
+
+This should return you the CLI version that you just installed.
+
+WARNING: Yarn is a relatively new tool. If you run into issues installing global dependencies, such as for example you can’t find the CLI executable, you can always do one more use of npm:
+
+npm install -g @angular/cli
+
+Over time, this should not be necessary though. Now that we have the CLI installed, let’s start using it.
+
+Note: This blog post is part of this ebook on Angular:
+
+Scaffolding Our First Angular Application Using the Angular CLI
+
+The CLI will create a standard structure for our project, and setup a working build. The build needs dependencies, that will be downloaded by default using the npm package manager.
+
+But its advisable to configure the CLI from the beginning to use the Yarn Package Manager instead:
+
+ng set --global packageManager=yarn
+
+Now if we use the multiple commands of the Angular CLI, we are going to be using yarn instead of npm. So things will go much faster and we will have reproducible builds for our project. Let's then scaffold our first application:
+
+ng new hello-world-app
+
+This is going to take a while, but it will create a new project structure and it will install all the needed dependencies in one go. We now have a ready to use project! We can run our application by simply doing:
+
+cd hello-world-app ng serve
+
+The ng serve command should start a development server on your locahost port 4200, so if you go to your browser and enter the following url:
+
+http://localhost:4200
+
+You should see in the browser a blank screen with the message “app works!”.
+
+We are going to review this application step-by-step in an upcoming post. But wouldn’t it be better to review the application already in our final development environment?
+
+So let’s get that in place first, and we will take it from there.
+
+Setting Up an IDE – Webstorm or Visual Studio Code
+
+There are a couple of great IDEs out there. For example, there is the Microsoft Visual Studio Code IDE, which is available here and is free:
+
+https://code.visualstudio.com
+
+There is also the Webstorm IDE, with a couple of versions that you can try out, here is the free trial version:
+
+https://www.jetbrains.com/webstorm
+
+And here is the free Early Access Program Edition, with all the latest features not released yet of the next upcoming version. These early access versions are very stable despite the name:
+
+https://confluence.jetbrains.com/display/WI/WebStorm+EAP
+
+After installing the IDE, we just have to open the folder with the Angular CLI project in it, and a new project will be created.
+
+Webstorm will automatically detect the Typescript version that you are using inside node_modules , and will use that to compile the code and show any errors.
+
+An important feature of our IDE environment
+
+This means there won’t the need to configure Typescript manually and end up accidentally having different compiler behavior between the command line and the IDE for example.
+
+This is what we want to avoid especially if just getting started with the Angular ecosystem, we want an initial experience where installations go smoothly and the IDE just works.
+
+Webstorm also has some great Angular integration. For example, we can jump from the template directly to a component class method.
+
+The installation of Webstorm should go smoothly, and with this, we have a development environment in place that will the basis for the exploring of the Angular framework that we are about to do.
+
+Conclusion and What’s Next
+
+With this section, you should have a solid development environment in place. If you didn’t then please tell me in the comments what went wrong.
+
+So let’s continue by reviewing the application that was generated: What are all those files?
+
+You must be thinking, that’s a lot of files and steps for only one Hello World application, right? So let’s address that using the generated application, because this is a important question to answer:
+
+What is the advantage of using Angular when compared to jQuery for example?
+
+Let’s find out, because already in this simple application there is one killer Angular feature in action, that is probably the biggest differentiator towards previous generation technologies.
+
+I hope you are enjoyed this post, and that it helps to get started using Angular with a solid development environment. This post is part of the ongoing Angular for Beginners series, here is the complete series:<|endoftext|>Steam Whistle’s Brewmaster departing after decade
+
+Toronto – Steam Whistle Brewery has announced its Brewmaster, Marek Mikunda, will leave the brewery after a decade at the helm, having joined in 2006.
+
+“Over the next few months, Marek will assist us in finding his successor, someone with equal pedigree having been trained in the European Pilsner brewing tradition,” said Steam Whistle. “Marek will be welcomed back periodically as a trusted advisor, always part of the Steam Whistle story and forever a Good Beer Folk.”
+
+Mikunda, now returning to his home country of Czech Republic with his family, posted, “I dedicated myself to craft brewing and making Pilsner in my new country, Canada. I believe that together we achieved the point when what we have done here cannot be reproduced anywhere else, because of the outstanding combination of you – Good Beer Folks, technology and extraordinary passion”
+
+Steam Whistle’s Communications Director, Sybil Taylor, says of its brewing heritage, “That title [founding Brewmaster] was held by Harald Sowade who designed our original recipe when he joined our brewery, then still an idea without a building back in the fall of 1999.”
+
+“Harald did several test brews before we picked the recipe which was first packaging on March 22nd, 2000. Harold retired in the fall of 2003 and handed the reins/recipe over to Matt Letki who was with us for about about 2.5 years before handing over to Marek in the spring of 2006. Each of our three Brewmasters have been trained in Europe at renowned brewing universities and we intend that our fourth brewmaster will carry on the same traditions and legacy here.
+
+Our original story incorrectly identified Marek Mikunda as Steam Whistle’s founding Brewmaster. We sincerely regret the error.<|endoftext|>CLOSE A Philadelphia baby given just months to live was kissed by Pope Francis during a parade. Months later, her family says brain scans show improvement. Video provided by Newsy Newslook
+
+Pope Francis kisses 1-year-old Gianna Masciantonio during his visit to Philadelphia in September. (Photo: Courtesy of the Masciantonio family)
+
+(NEWSER) – Baby Gianna Masciantonio developed a rare brain tumor just weeks after her birth last year when her red blood cells attacked her brain stem. After multiple chemotherapy treatments, an August brain scan revealed that the tumor was still there, and parents Joey and Kristen Masciantonio decided to do one more round of chemo before withdrawing treatment and enjoying their final days together, reports the San Francisco Chronicle. Then, in September, they got a call from an FBI friend who'd secured them passes to see the pope during his visit to Philadelphia, reports NBC News.
+
+Avid Catholics, the parents got permission from their doctor to brave the throngs and bring baby Gianna to the crowded streets. In what some call the Miracle on Market Street, a security guard brought the baby forward and the pope kissed Gianna's head, and now, two months later, scans reveal her tumor is smaller and doctors have changed the originally grim prognosis. "It was the luck of the draw," her father said. But while he believes in "divine intervention," he's also careful not to dismiss the role of the doctors treating his daughter. "The kiss was God's work, that's for sure. But, the miracle was Him giving us the platform to reach those doctors who, ultimately, played a major role in saving Gianna's life." (Check out the pope's quote later that day about miracles of love.)
+
+Read the original article on Newser
+
+More from Newser
+
+Newser is a USA TODAY content partner providing general news, commentary and coverage from around the Web. Its content is produced independently of USA TODAY.
+
+Read or Share this story: http://usat.ly/1HsiN0b<|endoftext|>So how is Cuba playing out politically?
+
+That was the first question to pollsters Ed Goeas and Celinda Lake, whose Battleground survey regularly tests voter attitudes in key states. They had come armed with a mass of data on the last election and a good sense of what’s ahead for 2016 (hint: it’s the economy, stupid).
+
+But they weren’t fully prepared on Cuba. It was the morning after President Obama’s surprise announcement on normalizing diplomatic ties, and there were no numbers to bolster their views. First they laughed that embarrassed laughter that comes when you’re caught flat-footed. Then they hesitated, each waiting for the other to speak. Finally Goeas, the Republican, plunged ahead.
+
+He thinks Obama blundered. His theory, based on the history of second term White Houses, is that once the re-elect is over, the political people head for the exits and the policy people, who had been playing second fiddle, are in charge. And in his view, they may be good at policy but have “a deaf ear when it comes to politics.”
+
+The message from the midterm election is that the American public wants Congress and the president to work together, Goeas said, and Obama’s unilateral actions—first on immigration and now on Cuba—are partisan legislative maneuvers and evidence of “a tin ear.”
+
+It’s tempting to say Lake, the Democratic pollster, was “all ears.” “Thank you for speaking first,” she said. She pointed out that the administration’s new policy was “a year in the making,” that initial soundings suggest the public is “broadly in favor,” there’s a division in the Cuban community between older émigrés and younger people, “and it’s about time,” she concluded, quickly pivoting to why she was having breakfast with reporters on Thursday.
+
+“Where is our economic message?” she asked rhetorically. “That’s what matters,” not Cuba policy. “Most people are focused on the holidays anyway,” she continued, before adding something about people liking Cuban sandwiches.
+
+Truth is, no one is sure how Cuba will play in the critical swing state of Florida in 2016. Hillary Clinton supports Obama’s policy; Jeb Bush opposes it, as does the rest of the GOP field with the exception of Senator Rand Paul, who said on talk radio that opening up Cuba is “probably a good idea.”
+
+And with that remark from Paul, former Florida Governor Bush, who just a few days earlier announced he would “actively explore” a presidential run, found himself in an intra-party fight he didn’t anticipate.
+
+“I’m sure [Bush] would prefer to have his comments and next steps on a high plane, that’s the tone he’s trying to set,” former Clinton chief of staff Mack McLarty told the Daily Beast. McLarty’s firm does business in Latin America, and he has worked with Bush, whom he likes and respects. “Like Mike Tyson says, you have a great fight plan until you come out and take the first punch.”
+
+How much Cuba and by implication Florida will shape 2016 is debatable, but Lake said there was one thing she would predict: “Tell me who is ahead on the economy the day before the election, and I’ll tell you who will be president.”
+
+Her message to Democrats: “it’s the economy, we must have a bigger message.” Despite improving job numbers and the longest streak, 57 months straight, of private-sector job creation, the American people see the economy as getting worse (31 percent) or as poor and staying the same (25 percent). Less than a third say it’s getting better (30 percent) and only 11 percent say it is good.
+
+The really damning number is the 73 percent of self-identified middle-class voters who say their kids are not going to be better off economically. Lake called the pessimism about the future of the next generation “a fundamental violation of what this country is about.”
+
+A reporter asked if Hillary Clinton could connect with these voters given her association with Goldman Sachs and “the parade of SUVs that accompany her when she goes to Iowa and New Hampshire.” Lake said she appreciated what the reporter was suggesting about Clinton’s vulnerabilities and the power of Elizabeth Warren’s populist message.
+
+But for all the hoopla around Warren, in primary matchups, polling shows Clinton winning 65 to 12 “against a person who isn’t even running,” Lake said. “I don’t see any reason why she can’t get those Warren Democrats.” Their policies will be similar—standing up for the little guy—though their style is very different.
+
+“Clinton will run more like a governor,” Lake said. “Governors don’t bash anybody. They get it done.”
+
+Warren has said repeatedly she’s not running for president, which Lake underscored. But Goeas appeared to relish the prospect of Warren in the mix as an opportunity to replay the statement first made by her that “You didn’t build that”—that any individual’s success in business relies on government services and support. “Elizabeth Warren is the originator,” he said of the comment that energized Republicans in the 2012 race.
+
+By the time voters go to the polls in 2016, Cuba policy may be a boutique issue, central to some voters in Florida but not decisive nationally. This end-of-year sounding of voter attitudes in the battleground states finds an electorate that is glum about the future and skeptical government can make a difference. For the right politician, and the right message, it’s an opportunity to bring people together. “People are extremely anxious about the next generation,” Lake said, “and it unites America.”<|endoftext|>Red hair is usually the result of a mutation in a gene called MC1R, also known as a melanocortin 1 receptor. Normally, when activated by a certain hormone, MC1R sparks a series of signals that leads to the production of brown or black pigment. Yet, in cases when both parents are carriers of the recessive MC1R gene and said receptor is mutated or antagonized, it fails to turn hair darker, resulting instead in a beautifully fiery buildup of red pigment.
+
+As previously estimated by BBC News, between one and two percent of the world's population -- or 70 to 140 million people -- are redheads. In Scotland and Ireland, around 35 percent of the population carry the recessive gene that yields crimson locks, and the redhead count is around 10 percent. As such, the word ginger often calls to mind visions of Celtic-Germanic attributes -- namely, pale, white skin.
+
+White skin and red hair may constitute the stereotypical image of a redhead, but it's by no means a comprehensive one. French-born, London-based photographer Michelle Marshall is documenting the stunningly diverse manifestations of the MC1R gene, particularly in people of color.
+
+Michelle Marshall
+
+"I am currently interested in documenting the incidents of the MC1R gene variant responsible for red hair and freckles, particularly amongst black and mixed raced individuals of all ages," Marshall wrote in an email to The Huffington Post.
+
+"I want to stir the perception that most of us have of a ‘ginger' as a white caucasian individual, potentially of Celtic descent ... As we struggle with issues of immigration, discrimination and racial prejudice, Mother Nature, meanwhile, follows its own course, embracing society’s plurality and, in the process, shaking up our perceptions about origins, ethnicity and identity."
+
+Marshall originally devised the project, which she referred to as a "visual census," to document different manifestations of freckles. Eventually, she refined the project, embarking on a mission to document as many Afro-Caribbean redheads as possible. All of Marshall's subjects thus far have been complete strangers who she has discovered through social media, word of mouth or running into each other on the streets.
+
+The close-up portraits document every freckle and stray hair, with every image, expanding the dominant, narrow understanding of what redheads can and should look like.
+
+Michelle Marshall
+
+The photographs and their subjects are undeniably stunning. However, the enchanting appeal of the images has its drawbacks. "A beautiful picture doesn't always relate what it's like to be different," Marshall said in an interview with Vice. "There's a flipside to being different: it's not always accepted. Beautiful photography serves one purpose, but in the context of daily life people may not have that reaction."
+
+Model Natasha Culzac, who covered Marshall's project in Vice and posed for the photograph above, shared her personal experience growing up with red hair and dark skin.
+
+"For me, growing up tall, mixed-raced, with thick, frizzy ginger hair, in a predominantly white, working-class seaside town was not the ticket. At 13 years old I was buying skin whitening cream from Boots to pulverize the freckles and at 14, during my Slipknot phase at the turn of the millennium, was violently straightening my newly-dyed black hair. Now, though, I couldn't care less and relish being unique."
+
+Categorizations fall short. Stereotypes disappoint. Difference is beautiful. There is a lot to learn from Marshall's striking portraits, if we could only stop staring at them.
+
+Michelle Marshall
+
+Michelle Marshall
+
+Michelle Marshall
+
+Michelle Marshall
+
+Michelle Marshall
+
+Michelle Marshall
+
+Michelle Marshall
+
+Michelle Marshall
+
+Michelle Marshall
+
+Also on HuffPost:<|endoftext|>Ask any economist or trader over drinks, or in any other setting, what they think about Chinese economic data or financial reporting and the answer will be one and the same: it's all fake.
+
+And it's not just skeptical outsiders who share this view: China has made it all too easy for anyone to be convinced, with reports such as this one "China Threatens Its Economists And Analysts To Only Write Bullish Reports, Or Else", and, of course "Chinese Province Admits It Fabricated Economic Data For Three Years." Apparently, China is also a master when it comes to deadpan humor and/or self-referential irony - or is merely galactically obtuse - because on Thursday China's Vice Premier, Zhang Gaoli, warned that economic statistics "must not be fabricated" and that those caught manipulating data should be punished and face consequences in their careers.
+
+According to Xinhua, the central government requires authentic and reliable economic data to set policy, and China should have a traceable system to punish those found responsible for faking statistics, Zhang said Wednesday during a visit to the National Bureau of Statistics, the official Xinhua News Agency reported.
+
+Zhang also encouraged local authorities and other agencies to better coordinate their work and enact statistical reforms.
+
+It gets better.
+
+Following the recent humiliation when in January it was revealed that Liaoning province had faked its fiscal revenue and other statistics from 2011 to 2014, the government was humiliated, not so much that Chinese data was fabricated data - everyone knew that was the case long ago - but that it was caught. And since the genie was officially out of the bottle, Beijing had no choice but to show a bold facade and signal that China's leaders are "attaching greater importance to data accuracy", to demonstrate to the world just how serious it is in cracking down against data manipulators.
+
+Meanwhile, Bloomberg reported last month that the central government has planned steps that will "improve" the independence of data collection and reduce the influence of local governments. In other words, Beijing is trying to scapegoat provinces and regional governments, for engaging in what it itself does.
+
+And since the data rigging will not end for the economy which always comes within 0.1% - and usually just above - of the "consensus" GDP number, we wonder if the Chinese government will be as quick to "punish" its own members once more data manipulation cases are exposed following the crackdown on "regionally" fabricated data. We doubt it.<|endoftext|>Glass in Ancient Rome
+
+In the fourth and fifth centuries AD, the glassmakers of the Roman world were in a class of their own. Glassmaking and glassworking were separate activities. Glassmakers used tank furnaces to melt several tons of raw materials in one operation, and glass workers employed many techniques to make objects ranging from simple household utensils to sophisticated luxury objects.
+
+Cage cups are among the Romans’ most remarkable creations in glass. An undecorated “blank” with a very thick wall was entrusted to a cold worker, who used cutting wheels and hand tools to remove two-thirds of the glass, leaving an openwork “cage” that enclosed the container. The %%metal%% attachments show that this cage cup was a lamp intended for suspension. The bowl contained oil and a wick, perhaps floating on a piece of cork. Imagine the patterns of light and shade %%cast%% by the flame when it shone through the cage.
+
+The Migration Period
+
+The fifth and sixth centuries are often called the “Migration Period,” because peoples from outside the Roman Empire migrated into the former Roman provinces and established small, independent kingdoms. Among most of these groups, it was customary to bury the dead accompanied by personal possessions. These objects (including glass) provided 18th- and 19th-century antiquarians with raw material for the study of early medieval culture.
+
+The study of early medieval glass is essentially the study of drinking vessels. Although most of the best examples of complete vessels have been recovered from graves, the occurrence of fragments of identical types of glass in settlements shows that the objects buried with the dead were the same as those used by the living. Some of the earliest glasses resemble those produced in late Roman times. The forerunners of claw beakers, for example, were made in Roman workshops in the third and fourth centuries.
+
+The Vikings and Their Glass
+
+The years between 800 and 1000 are the “Age of the Vikings,” referencing the collective name for many of the inhabitants of medieval Scandinavia. Eyewitnesses recorded with horror the bloodthirsty raids of Vikings in search of booty. But this was not the whole story. Sailing their long ships, the Vikings planted settlements in Iceland, Greenland, and even in Newfoundland in Canada. Meanwhile, Viking merchants traveled along the Volga River to the Black Sea, and Viking mercenaries formed the Byzantine emperor’s Varangian Guard.
+
+At home in Scandinavia, and in northwestern Germany, the Viking merchants created trading centers, where archeologists have recovered artifacts from many parts of Europe and the Middle East, including glass vessels from western Europe. Indeed, some of the best preserved glasses of this period have been discovered in Viking graves.
+
+The Later Middle Ages
+
+Finds from archeological excavations show that most of the late medieval vessels used at home were intended for serving and consuming beverages. Paintings of the Last Supper, the Wedding at Cana, and Herod’s Feast depict tables set with one or more bottles of wine and a larger number of beakers or goblets — although not enough for everyone. Glasses were shared, as were knives and other utensils.
+
+The beakers came in a variety of shapes and sizes. The smaller vessels often had barrel-shaped bodies, while the larger examples had tall, tapering sides. The ornament sometimes consisted of horizontal rows of “prunts” (small blobs of glass attached to the side of the beaker).
+
+In southern Germany, Switzerland, and parts of Italy, the best late medieval glass was either colorless or almost colorless, and was the forerunner of Venetian cristallo of the Renaissance. This colorless glass was made by carefully selecting the raw materials and by adding a small amount of manganese oxide, a mineral traditionally known as “glassmakers’ soap” because of the way it removed the colors caused by impurities.
+
+Forest Glass
+
+Most vessels produced in the later Middle Ages in northern Germany, the Low Countries, and central Europe were made of transparent green forest glass, so-called because it was produced in small glasshouses located in forests, which provided a convenient source of fuel. Its color was caused by the presence of impurities, mainly iron oxide, in the raw materials.
+
+A late variety of the prunted beaker was a vessel known as a Krautstrunk (German for “cabbage stalk”), so named because the ornament consists of large blobs projecting from the side of the vessel like the scars on a cabbage stalk after the leaves have been removed.
+
+Feeding the %%furnaces%% to make glass consumed trees on a %%scale%% that alarmed the authorities. Because of this, in the forests of the Spessart Mountains of Germany, regulations limited the quantities of window glass and glass vessels that could be produced.
+
+Glass and Holy Relics
+
+For centuries, Muslims ruled most of Spain and Portugal. There also were hundreds of Jewish communities, and people (especially on the edges of Europe) who continued to worship the old gods and goddesses. Late medieval Europe, however, was essentially Christian.
+
+From the early days of the church, saints and their relics (parts of their bodies or objects associated with them) were revered by the faithful. Saints, with divine assistance, were believed to perform miracles. Items brought into contact with relics (such as oil from lamps burning above a saint’s shrine) were also venerated, and pilgrims took them home as evidence of their devotion. By the late Middle Ages, the cult of relics attracted pilgrims from all walks of life. One of the great works of medieval literature, The Canterbury Pilgrims by Geoffrey Chaucer, describes a group of pilgrims traveling from London to Canterbury to visit the shrine of St. Thomas à Becket.The exhibition includes two glass containers for relics borrowed from the Vatican.
+
+Glass and Science
+
+In the 12th and the 13th centuries, Latin translations of books written by ancient Greek and Muslim scientists began to circulate in Europe. Science and medicine were two fields that benefitted directly from new knowledge gained through improvements in glassmaking. Many scientific experiments depended on glass apparatus that were transparent and did not contaminate their contents by corroding.
+
+No apparatus played a more important role in medieval experiments than the still, which was used for preparing acids used in alchemy (medieval science) and for distilling alcohol. In medicine, physicians used glass flasks for uroscopy: using the color of urine to diagnose disease.
+
+Another result of the increasing use of glass for experiments was the development of lenses and the emergence of optics as a branch of science. The invention of reading glasses was a direct result of experiments with lenses. Spectacles, consisting of a pair of lenses assembled for wearing in front of the eyes, were invented in Italy. In 1279, a writer in Florence commented, “I am so debilitated by age that, without the glasses known as spectacles, I would no longer be able to read and write.”
+
+Venice
+
+In the 1400s, glassmaking in Renaissance Venice exploded like a grand display of fireworks. Venetians had been making glass for centuries, and even formed a guild (an association of people practicing the same trade or craft) by 1224. Thereafter, the Venetian glass industry is well documented. Consequently, we know that the flowering of Venetian glass in the 15th century had deep local roots.
+
+The best Venetian glass made in the Renaissance has one or more of the following characteristics: colorless glass of great clarity, glass of brilliant colors that often imitated semiprecious stones, gilding and enameling, the extensive use of molds and twisted glass rods (known as canes) of two or more colors, and the assembly of elaborate objects from multiple parts. These elements were combined with new forms that appealed to a taste for exuberance, opulence, and technical perfection.<|endoftext|>Controversial Tampa Bay Rowdies owner Bill Edwards coined the term “oneyearplan” in a largely impromptu August interview to justify the sacking of popular Head Coach Thomas Rongen and club President Farrukh Quraishi. Edwards, whose business dealings have been the subject of much controversy, remarked that he had hoped to win the NASL title this season. At the time of the sackings, the Rowdies had fallen to 3rd in the overall 11-team league table. The top four finishers make the NASL postseason.
+
+The biggest potential takeaways from Edwards discussion of having a “one year plan,” was that the owner did not have the faith in the local market or the league his team is currently competing in or understand his fan base well enough to believe in long-term planning. Edwards’ thinking is difficult to reconcile with the Tampa/St Petersburg market which has demonstrated the longest-term soccer support in the state. It is a market that arguably has produced more good professional soccer players over the last two decades than the rest of the state combined and an area with sophisticated soccer-savvy fans. Tampa Bay area soccer fans may today be far less numerous than those down I-4 in Central Florida (many of whom may simply be assumed to be bandwagon hoppers who like the color purple, though Orlando does have its pocket of very knowledgeable fans) but they are more connected to the sport in large numbers, and understand its nuances better than any other group of fans in the state.
+
+Unlike Fort Lauderdale, whose 1-0 victory on Sunday over Jacksonville ended Tampa Bay’s season, the Rowdies don’t have to constantly win. The Strikers suffer from what every south Florida pro soccer team always has – fan apathy and the constant need to be successful. Fort Lauderdale has to win every year because they have a small fan base and those who do support the club often complain about anything the team ownership past and present has done. The fans in that part of the state are polarized by county, preferences for soccer style and sometimes even by ethnicity. Some of the fans who do support the Strikers fall in love with personalities and do not have the perspective when it comes to the sport of many Rowdies fans. For Fort Lauderdale, winning is a must every season, and while the Strikers have made the NASL postseason more than any other club since the league’s relaunch in 2011, the club still has a smaller hard-core fan base than any other team in the league save far-flung Edmonton. While the Strikers do boast some very knowledgeable fans, the majority of the club’s targeted fan base is dismissive of the product or not soccer-savvy enough to understand some of the subtleties around the team. But for Tampa Bay it’s not a must to win every year, so the “one year plan” must be a reflection of the eccentric behavior of an owner who does not understand this sport, or his local fan base.
+
+The majority of Rowdies fans understand the need for long-term planning, infrastructure building which was what the partnership of Rongen and Quraishi were looking to provide. These supporters unlike the Edwards realize that in large measure winning the NASL is largely a feel good exercise – without a system of promotion and relegation in American soccer or the ability to qualify for the continental championship (CONCACAF Champions League) via the league, winning a title is not a life or death matter. Many Rowdies supporters that I interact with want to see a club with a strong value system and local footprint not dissimilar from the way Orlando City has progressed (albeit probably in a less arrogant manner). But under Edwards’ the idea of a strong club which has a vision for developing local talent and working with different areas of the soccer community has been uprooted by bombastic and unrealistic comments from Edwards. Many fans have found the owner’s public comments and seeming lack of real knowledge of the sport to be both worrying and amusing.
+
+In 2012, the Rowdies won the NASL title in epic fashion after a penalty shootout against Minnesota. That game remains the most recent postseason match the club has played in. Under former owner Andrew Nestor the Rowdies finished no lower than 3rd in the combined NASL table from 2011 to 2013. Nestor was unable to do much financially to build the club which was operating on a shoe-string, but as a lifelong soccer fan, he understood the sport and empowered soccer people such as GM Perry Van der Beck, a Rowdies playing legend to make most sporting decisions. But under Edwards who has meddled heavily in the sports side despite knowing little about the game, the team has finished 7th and 5th – yet fan discomfort with this current owner who has invested heavily in the club is more about his own eccentric behavior than actual results.
+
+Ralph’s Mob, the Rowdies supporters group is one of the largest and most vocal in the NASL. From this base of fans and the strong youth soccer community in the Tampa Bay area, the club should be able to continue to grow its footprint. Winning a championship in the club’s first season, 1975 may have been critical at a time when few locals knew of this strange foreign game which was a “kick in the grass.” But in 2015 savvy fans want to see progress towards a long-term vision on and off the pitch, and the Rowdies this season failed to deliver on that. The club has history and great fans but its value system which is more important to those fans than short term results is now in serious question.
+
+Thursday: Part II – The soccer side of things.<|endoftext|>The Curious Case of Far Cry – Part I
+
+By Josh Snyder
+
+Editor’s note – this is part one in a series on the Far Cry franchise. To read part two, click here.
+
+Video game franchises are an odd thing – consumers often demand innovation and change, but our spending habits suggest that we prefer sequels and familiar worlds. Finding this balance, where a developer learns from past mistakes and changes aspects of their game while trying to keep that core experience intact, can lead to some amazing experiences, and some not-so-good ones. Dead Space 2 improved the combat and character development, but kept the eerie, tense atmosphere from the original. And then there’s Metroid: Other M, which completely lost the thread while trying to be something new, and in the process lost the heart and soul of Metroid.
+
+As a way to avoid this, some developers have started to create new franchise entries that are spiritual successors instead of direct sequels. BioShock: Infinite is a perfect example – it maintains many of the same core mechanics and style of the original BioShock, but it is not a direct sequel in terms of story. This approach works for some franchises, and when examining these games, it’s fascinating to see what aspects developers keep, what they get rid of, and what new gameplay mechanics emerge in their place.
+
+Which brings us to one of the most controversial, intriguing and popular franchises of the last generation – Far Cry. What started out as a showpiece for developer Crytek has morphed into one of the staples of the FPS genre. This popularity peaked with the latest entry, Far Cry 3. On its own, it is a fun first-person shooter (FPS) set in an expansive open world, even if it has its flaws. However, when judged as a follow-up to its predecessor Far Cry 2, flaws in the formula begin to emerge, and the game suddenly feels tone-deaf and out of place. Which begs the question – what happened to Far Cry 3? What sorts of changes led to the final product, which seems drastically different from any previous game in the franchise?
+
+With a new entry in the series right around the corner, understanding what went right with Far Cry 2, and what went wrong with Far Cry 3 could help when experiencing Far Cry 4. Far Cry is an important franchise, and though it has its flaws, it is one that demands to be taken seriously – it was one of the first franchises to be a true genre-hybrid (open-world, FPS), and therefore its impact cannot be understated.
+
+What Defines Far Cry?
+
+Trying to define the core Far Cry experience can be a bit tricky, as the franchise has had two developers over its lifespan. The original Far Cry was developed by Crytek and published by Ubisoft. Shortly after the original took off in popularity, Ubisoft took complete control of the franchise, re-releasing the original and adding some strange, sci-fi elements to the game. Due to limitations on the home consoles at the time, the open-world aspect that PC gamers loved was dropped, resulting in a game decidedly unlike the original Far Cry. But with the release of Far Cry 2, it was clear the Ubisoft was using these console-ports to keep the franchise in the public mind, while they worked on the second proper entry.
+
+Ubisoft has toyed with open-world level design in some of their recent franchises, with varying degrees of success. In their typical vision of the open-world, the player manipulates the world for their own ends, such as being able to hide in plain site in Assassins Creed, or hacking the surroundings to block pursuers and escape, such as Watch_Dogs. The world is meant to be used by the player at will, with very little consequence. It’s a selfish approach that works in a medium in which the player is rarely punished for crossing the line and using the world to meet their ends.
+
+The Far Cry franchise is a bit unique in this way. The player is still encouraged to use the elements of the world to complete their objective, however, the world always has an impact on the player. In the original Far Cry, the world acts as sort of a prison – the player cannot leave this place until completing the quest. For all the freedom the game allows, the player is still trapped, caged in a world that is just as quick to lash out at them as the player is to it. This creates a dependent-relationship between the player and the open-world which isn’t seen too often – the player needs the world to complete their objective, but the world is not meant to be a toy the player can use endlessly with no care.
+
+The open-world-player relationship is key to the Far Cry experience, but it isn’t the only pillar of the franchise. The story and characters have always been closely linked, to the point where they can be viewed as a single element. Captured characters needing rescue, or characters needing tracked down and eliminated often compose the majority of the story, and that’s fine – this simplistic approach allows Ubisoft to weave in complex themes that carry over between the story and the open-world, tying both elements together. The final piece, and the one Ubisoft has the most flexibility with, is gameplay – the element that allows the player to navigate and utilize the open-world, and to work toward freeing or killing the target character, whichever the story demands.
+
+Since it was their first entry in the series, it stands to reason that Far Cry 2 would serve as the basis for which future Far Cry games are based on, at least ones developed by Ubisoft. To begin to understand this franchise, we need to analyze Far Cry 2, and see how this formula was implemented.
+
+Into the Heart of Darkness
+
+It’s not uncommon for developers to base the story of their game off of a famous piece of literature, and it’s not even uncommon for that piece of literature to be Heart of Darkness, by Joseph Conrad. Ubisoft does not hide the references to Heart of Darkness, and therefore it stands to reason that the themes Ubisoft wants the player to pick up on are ones of isolation, fear and paranoia, and to put them in a world in which the player is not wanted, a world that will destroy the player’s mind and body.
+
+Far Cry 2 successfully achieves these themes and feelings, and in understanding how it does so, we can better appreciate what Ubisoft has on their hands with the Far Cry franchise.
+
+The Open-World
+
+The single most important element of Far Cry 2 is the world in which the game is set. Taking place in a failed Central-African state, the player navigates a myriad of terrains, such as swamp, mountains, savannas and jungles. But the aesthetics of the land are not the centerpiece – the turmoil and brutality the world fosters are the main attractions.
+
+To make sure the player understands this, the game begins with the player character, who is chosen from a list of ex-military guns-for-hire types, being driven from the airfield to their hotel. This Half-Life-inspired opening allows the player to sit back and enjoy the ride, take in the sights, while the cab driver waxes poetic about the current state of affairs. The player cannot directly control this scene, but can look around, and what they see sets the tone for the next 50 hours of gameplay. The roads the cab takes are hardly roads at all, with debris from washed-out bridges scattered across the land. The cab takes a noticeable dive when crossing what was once a smooth, well-kept road, and the cab driver casually remarks on how no more planes will be entering or leaving the country for a long time – better get used to this, this is your home now. Occasionally, there will be an open-vista the player can take in, but there are just enough run-down and abandoned shacks dotting the landscape to remind the player that this land is home to death, decay and destruction, and the locals who remain, who watch as you pass them with disdain in their eyes, all carry assault rifles and large knives. The player gets the sense that those weapons are not used for hunting.
+
+After being stopped at a checkpoint and briefly harassed, the cab driver gets the player to the hotel when the final kick to the gut happens – the player character doubles over in pain, the screen a blurred mess, his heart throbbing, pounding, as the cab driver turns and remarks on how ill he looks.
+
+Less than 30 minutes in this country, and it has already given the player its first gift – malaria.
+
+After a brief tutorial, the player gets dropped into the world, free to explore or take on any number of tasks. But navigating the world is tricky – tall, imposing mountains funnel players into enemy-controlled territory, and the player must try to sneak past, or fight their way through 20 armed soldiers. Planning a route to the next objective is advised, but even this is time-consuming and complex – the map must always be viewed in real-time, meaning the game never pauses to allow the player ample time to view the map. In addition, only two views of the map are presented – the entire map can be viewed all at once (this view lacks crucial details, such as the location of enemy outposts or safe houses) while the second view zooms in considerably, showing those important landmarks (this view only shows the section of the map the player is standing in).The entire map is made of a 3×3 grid, so the player must learn to memorize what is in the adjacent squares at all times. Again, the world is technically open, but trying to get to the bottom-right square from the bottom-center square isn’t always as easy as heading east in a straight line – just as one may think they are about to reach their destination, the road turns north, and a giant wall blocks access to the goal, which means the player must now successfully bypass any number of enemy outposts, or once again, fight through them all.
+
+To the modern gamer, many of these obstacles would just be avoided by fast travelling to the desired location. But again, Far Cry 2 forces the player into foregoing convenience. Technically, there is a fast travel system, but it’s limited – the player must make it to one of five bus stations – (one in each corner of the map, and one in the center), meaning that the fast travel system only works for a little over half of the map, while the other half must be accessed the good old fashion way. But even if the player already resides in one of the squares with a bus station, getting to its exact location is never guaranteed to be simple. Countless enemy patrols keep an eye on the roads which lead to the bus stations, and at the slightest hint of trouble, those patrols, with their mounted machine guns or grenade launchers, hunt the player down mercilessly. It’s clear that Ubisoft wants the player to experience every square meter of the world, while constantly reminding them that danger lurks around every corner.
+
+To help ease the burden of travel, players can hop into a car and drive through the savanna, doing their best to outrun the countless enemies that are no doubt in pursuit. But again, this world is not some futuristic sci-fi wonderland – these vehicles are old to begin with, and are untrustworthy at best. They will break down, forcing the player to repair them while dodging bullets and hopefully not getting picked-off by a rocket launcher. And if the player defends themselves, they better hope they have a new gun, as guns degrade on the player over time, and jam consistently if not replaced. These mechanics contribute to a world that wants to constantly remind the player that they are not welcomed, that the world is hostile, in disrepair and possibly past the point of saving, if that ever was the goal.
+
+Safe houses dot the environment and can be upgraded to provide the player with ammo, grenades, health and a new car. Safe houses, at their base level, allow the player to save the game by resting, which means that there will always be some passage of time. Far Cry 2 has a day/night cycle, and being caught out in the wild at night is never a good idea. Many times these safe houses are a welcomed sight, if only to advance the clock to six in the morning, so the player can actually see where they are being shot from. And once they are upgraded, they become one of the few reliable sources of supplies in the world.
+
+Without even touching the story or the characters, Far Cry 2 has told the player that this world is dangerous, and even the most simplistic of actions will be a struggle. The themes of fear, paranoia and struggle are woven into the very fabric of the world – the perfect setting for a game that tries to push the player’s limits.
+
+The Story/Characters
+
+After recovering from the first malaria outbreak, and escaping from an attack on the hotel the player called home, the game pauses, and a simple message appears on the screen: find and kill the Jackal. That’s the entire plot of Far Cry 2 – nothing more, nothing less.
+
+The Jackal is an arms dealer, one who has been supplying both sides of the war. Eliminating him will not guarantee an end to the conflict, but the thought early on is that it will certainly make it less bloody. But the point of Far Cry 2 is to show the player firsthand how vicious and cruel this world is, even if there were no guns or explosives. Ubisoft’s choice to have such a simple plot allows for the characters and events to be the ones to drive the themes of colonialism and never-ending war, freeing Ubisoft up from having to worry about throwing plot twists and turns at the player simply for the sake of keeping them entertained. We have our goal, and it’s all we need.
+
+After the completion of a few story missions, it seems that Ubisoft doesn’t care about establishing characters or giving them motivation in this conflict. The player bounces from one nameless war mongerer to the next, happily taking diamonds, the currency of the game, and heads out to complete a basic mission. Go to point A, steal something, take it to point B, blow everything up, and call it a day. Complicating matters is that, for every story mission, there is an alternate way of completing it, and these alternate paths are handled by a group of people called “Buddies” – fellow mercs who work alongside you to track the Jackal down. These characters have faces and names, but they matter as much as the warlords; not at all.
+
+But what seems to be lazy writing at first slowly emerges as a conscious choice. Buddies helping the player out on a mission can succumb to their wounds, and the only change is that the buddy who was listed second on the list is now the player’s primary buddy. Warlords are assassinated and replaced, and the only thing that changes is the amount of diamonds the player collects at the start of each mission. It isn’t until the player pays attention to what these simple, linear missions are actually having them do that the whole point of the game is made clear.
+
+Bomb a clinic. Assassinate a politician begging for peace. Destroy sources of fresh water. Bomb and destroy stockpiles of medicine. Just bomb and destroy everything. Infrastructure, crops, people – destroy it all.
+
+The Jackal is not the real enemy here. Killing him will do nothing. This country will tear itself apart, and in the haste of finding just one man to take out, the player ensures this ultimate demise, every step of the way. The main story missions may seem like uninspired, linear fetch quests, but the implication of these is that this world is unfair, that the player is not there to rescue it. Taking out one faction’s food supply, bombing the airfield of the other’s, it will change nothing. Have a buddy die in combat, and another will take their place. Mercs are a dime-a-dozen, including the player. Far Cry 2 is a far cry (excuse the pun) from the Halos and Elder Scrolls of the world, in which the player is this grand hero, and only they can save the world.
+
+This brutality meshes perfectly with the harsh open-world – they both play off of each other and bring the player to a place few games dare tread. But it’s in the final piece of the puzzle, the gameplay, where Ubisoft ties it all together perfectly.
+
+The Gameplay
+
+One of the problems with the FPS genre is that, typically, the player controls one super soldier, one individual who can turn the tides of war all by themselves. Far Cry 2 doesn’t set out to solve this problem – after all, the main force behind many of the missions that cripple the factions or cause general chaos is the player character, but never at any point will the player feel invincible or stronger than their surroundings.
+
+To start, the player gets malaria. Medicine is needed to stave off death, and the game is kind enough to remind you when you need to take the medicine – the screen turns fuzzy, and a button prompt appears in the bottom-left corner. Taking medicine or course takes time – opening up the pill bottle, pouring one pill and swallowing it – all of that is animated. Which means the player better hope a malaria attack doesn’t occur during combat, or else the player will be vulnerable just long enough for an enemy to run up and get a point-blank shot off with the shotgun. Malaria attacks occur about once everything 30 minutes – just frequently enough to make the player question if they should wait before taking out an enemy outpost, or if they have enough time to risk it.
+
+Taking medicine is not the only action that happens in real-time in Far Cry 2 – many other gameplay elements take the player out of combat, ones that in most games are handled in a menu or instantaneously. As previously mentioned, reading the map is done in real-time, and the player character holds it out in front of them like a tourist, in other words, in a way that takes up most of the screen. When the player runs with the map out it provides some relief, but the fact that it’s there at all is enough to agitate gamers who are used to the map being accessible at their leisure while the rest of the game world pauses and waits. Vehicles that take damage can be repaired, which means getting out of the car, popping the hood, and using a wrench to fix the engine. It’s not necessarily realistic, but again it takes time, time that you are vulnerable to attack. The enemies in Far Cry 2 do not run straight at the player in one huge wave – many of them hide in the bush, and will wait for the player to turn their back before firing. And with no radar, the only way the player knows they are safe to repair their vehicle is if they take the time to make sure every enemy has been disposed of.
+
+If the player neglects this, and finds themselves on the bad end of a confrontation, then they will have to experience the most cruel aspect of the real-time gameplay – healing. The health meter is split into five chunks, and once one is depleted, the only way to refill it is to consume a health syringe. That is, until the player finds themselves with just a tad of health left in the final section. At that point, the player must hold down the left-bumper button and watch as the player character stabilizes their health by either re-setting a dislocated joint, pulling a bullet out of wound with a pair of pliers, or bandaging a nasty cut. This won’t refill the player’s health – just the first two sections, but it then allows them to use a health syringe.
+
+If the entire healing action can be completed, then the player must hope that their guns are in good enough condition to fire. If not, they will jam, and the player will have to mash the left-bumper button to un-jam the weapon. Guns, depending on whether or not they have been upgraded, will degrade quickly. Even if upgrades have been purchased, weapons will still jam. Of course, the only time the player will learn that a gun has deteriorated to that point will be during combat. Yet another way in which the game reminds the player that they are weak.
+
+Buying weapons with diamonds means going to one of a few gun stores dotted around the world. At these gun stores, the player can also restock on ammo and acquire brand new guns that won’t jam. The problem is that these items are expensive, and there are only a few ways to get diamonds – through the main story, through assassination side-missions and by briefcases located out in the wild.
+
+There are over 200 briefcases to find, and they offer anywhere between one and three diamonds. This may not seem like a lot, but it can add up quickly, and is necessary for acquiring many of the late-game upgrades. The game provides the player with a diamond tracker, which will blink if the player is close to a diamond. This means that, during the quiet moments, players will blindly run through the jungle, eyes focused on a green blinking light in the bottom-right corner, hoping to stumble onto another small treasure so they can buy a durability upgrade for their assault rifle.
+
+Nothing in this game is simple, and that’s the point – with a harsh overworld and brutal story, the gameplay has to match. Ubisoft tweaked and balanced the gameplay specifically to fit in with the themes the other two areas of the game explore. Far Cry 2 would feel wrong, out of step, if in this hellish world the player was a Duke Nukem-type, mowing down enemies without a care in the world.
+
+Emerging out of the Dark
+
+Despite all of this, Far Cry 2 has its share of flaws. In some ways the game feels rushed, a typical problem with Ubisoft games. And in an attempt to convey to the player that war never ends, enemies respawn at outposts the second the location is outside of the player’s draw distance, which is a polite way of saying that enemies respawn way too often. But the point is, because Ubisoft fine-tuned the three core pillars of Far Cry 2 to work off of and in-sync with each other, these flaws are easily overlooked. Far Cry 2 demonstrates the sheer potential of this franchise.
+
+Which is why Far Cry is such a strange franchise – not only does Far Cry 3 seemingly abandon the successful elements of Far Cry 2, but the three core pillars are in no way working off the other. At the end of the day, the answers to what went wrong with such a highly touted game might be found here, in central Africa, amidst a burning pile of false hope, lies, winners and losers. In Far Cry 2, everything burns.
+
+Be sure to check out Part II, in which author Josh Snyder breaks-down how these core elements are translated and implemented in Far Cry 3.<|endoftext|>

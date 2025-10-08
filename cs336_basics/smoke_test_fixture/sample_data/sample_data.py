@@ -1,7 +1,9 @@
 import random
 import os
 
-input_path = "cs336_basics/smoke_test_fixture/sample_data/TinyStoriesV2-GPT4-train.txt"
+# input_path = "cs336_basics/smoke_test_fixture/sample_data/TinyStoriesV2-GPT4-train.txt"
+input_path = "cs336_basics/smoke_test_fixture/sample_data/owt_valid.txt"
+
 sampel_num = 10
 
 input_path_basename = os.path.basename(input_path)
