@@ -16,5 +16,8 @@ WORKDIR /app
 # Copy project files (pyproject, code, etc.)
 COPY . /app
 
+# Install Python dependencies
+RUN uv sync --frozen
+
 # Run the script with google-cloud-storage temporarily added
 ENTRYPOINT ["uv", "run", "--with", "google-cloud-storage", "python", "cs336_basics/bpe_encoding.py"]
