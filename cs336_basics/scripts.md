@@ -55,4 +55,12 @@ or continue streaming the logs with the command
 
 
   TRAINDATA_PATH=/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/owedataset/owt_valid.txt OUTPUTS_PATH=/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/outputs VOCAB_SIZE=1500 PRETOKEN_PROCS=4 uv run cs336_basics/train_bpe.py
+
+
+CORPUS_PATH="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/smoke_test_fixture/sample_data/sample_TinyStoriesV2-GPT4-train_k10.txt" \
+VOCAB_PATH="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/smoke_test_fixture/vocab_table/tiny_story/TinyStoriesV2-GPT4-train_serialization_vocab_20251003_134143.json" \
+MERGE_PATH="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/smoke_test_fixture/vocab_table/tiny_story/TinyStoriesV2-GPT4-train_serialization_merge_20251003_134143.json" \
+ARTIFACT_PATH="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/outputs/encoding" \
+LOG_LEVEL=INFO \
+uv run python cs336_basics/bpe_encoding.py
   

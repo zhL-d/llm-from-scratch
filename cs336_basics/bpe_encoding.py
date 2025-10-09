@@ -8,27 +8,28 @@ from pathlib import Path
 from google.cloud import storage
 
 # ---- logging setup ----
-log_level = os.getenv("LOG_LEVEL", "INFO").upper
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 logging.basicConfig(
     level=getattr(logging, log_level, logging.INFO),
     format="%(asctime)s %(levelname)s %(name)s: %(message)s",
 )
-logger = logging.getLogger("tokenizer")
+logger = logging.getLogger(__name__)
 
-def is_gcs(path: str) -> bool:
-    return path.startswith("gs://")
+def is_gcs(path: str | os.PathLike) -> bool:
+    s = os.fspath(path)
+    return s.startswith("gs://")
 
-def read_text(corpus_path: str) -> str:
-    if is_gcs(corpus_path):
+def read_text(path: str | os.PathLike) -> str:
+    if is_gcs(path):
         client = storage.Client()
-        bucket_name, blob_name = corpus_path[5:].split("/", 1)
+        bucket_name, blob_name = path[5:].split("/", 1)
         bucket = client.bucket(bucket_name)
         blob = bucket.blob(blob_name)
         return blob.download_as_text(encoding="utf-8")
     else:
-        return Path(corpus_path).read_text(encoding="utf-8")
+        return Path(path).read_text(encoding="utf-8")
 
-def write_artifact(path: str, arr: np.ndarray):
+def write_artifact(path: str | os.PathLike, arr: np.ndarray):
     buf = io.BytesIO()
     np.save(buf, arr)
     buf.seek(0)
