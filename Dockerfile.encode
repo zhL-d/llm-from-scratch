@@ -2,6 +2,10 @@ FROM python:3.11-slim
 
 ENV PYTHONUNBUFFERED=1
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install uv
 ADD https://astral.sh/uv/install.sh /tmp/uv-install.sh
 RUN sh /tmp/uv-install.sh && rm /tmp/uv-install.sh

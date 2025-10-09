@@ -63,4 +63,6 @@ MERGE_PATH="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/sm
 ARTIFACT_PATH="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/outputs/encoding" \
 LOG_LEVEL=INFO \
 uv run python cs336_basics/bpe_encoding.py
-  
+
+
+gcloud builds submit --tag eu.gcr.io/digital-proton-473814-m9/bpe-training:encoder-${GIT_SHA} .
