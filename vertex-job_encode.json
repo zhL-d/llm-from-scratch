@@ -1,0 +1,20 @@
+{
+  "workerPoolSpecs": [
+    {
+      "machineSpec": {
+        "machineType": "n2-highmem-2"
+      },
+      "replicaCount": 1,
+      "containerSpec": {
+        "imageUri": "eu.gcr.io/digital-proton-473814-m9/bpe-training:latest",
+        "env": [
+          {"name": "CORPUS_PATH", "value": "gs://bpe-training-mfp/data/corpus.en"},
+          {"name": "VOCAB_PATH", "value": "gs://bpe-training-mfp/output"},
+          {"name": "MERGE_PATH", "value": "500"},
+          {"name": "ARTIFACT_PATH", "value": "4"},
+          {"name": "LOG_LEVEL", "value": "INFO"}
+        ]
+      }
+    }
+  ]
+}
