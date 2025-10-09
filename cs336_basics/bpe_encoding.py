@@ -60,15 +60,18 @@ def normalize_vocab_merge_path(vocab_path: str, merge_path: str) -> tuple[str, s
     else:
         return vocab_path, merge_path
 
+def build_artifact_path(base_path: str, corpus_path: str) -> str | Path:
+    corpus_basename = Path(corpus_path).stem
+    filename = f"token_ids_uint16_{corpus_basename}.npy"
+    if is_gcs(base_path):
+        return base_path.rstrip("/") + "/" + filename
+    return Path(base_path) / filename
+
 def main():
     corpus_path = os.getenv("CORPUS_PATH")
     vocab_path = os.getenv("VOCAB_PATH")
     merge_path = os.getenv("MERGE_PATH")
     artifact_path = os.getenv("ARTIFACT_PATH")
-
-    corpus_basename = Path(corpus_path).stem
-
-    artifact_final_path = Path(artifact_path) / f"token_ids_uint16_{corpus_basename}.npy"
 
     if corpus_path is None:
         print("Error: the env variable CORPUS_PATH is not set")
@@ -85,6 +88,8 @@ def main():
     if artifact_path is None:
         print("Error: the env variable ARTIFACT_PATH is not set")
         sys.exit(1)
+
+    artifact_final_path = build_artifact_path(artifact_path, corpus_path)
     
     logging.info("Job start | vocab_path=%s | merge_path=%s | corpus_path=%s | artifact_path=%s", vocab_path, merge_path, corpus_path, artifact_path)
 
@@ -108,4 +113,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

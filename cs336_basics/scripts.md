@@ -66,3 +66,5 @@ uv run python cs336_basics/bpe_encoding.py
 
 
 gcloud builds submit --tag eu.gcr.io/digital-proton-473814-m9/bpe-training:encoder-${GIT_SHA} .
+
+gcloud ai custom-jobs create --region=europe-west3 --display-name=bpe-encode --config=vertex-job_encode.json

@@ -6,13 +6,28 @@
       },
       "replicaCount": 1,
       "containerSpec": {
-        "imageUri": "eu.gcr.io/digital-proton-473814-m9/bpe-training:latest",
+        "imageUri": "eu.gcr.io/digital-proton-473814-m9/bpe-training:encoder-7496655",
         "env": [
-          {"name": "CORPUS_PATH", "value": "gs://bpe-training-mfp/data/corpus.en"},
-          {"name": "VOCAB_PATH", "value": "gs://bpe-training-mfp/output"},
-          {"name": "MERGE_PATH", "value": "500"},
-          {"name": "ARTIFACT_PATH", "value": "4"},
-          {"name": "LOG_LEVEL", "value": "INFO"}
+          {
+            "name": "CORPUS_PATH",
+            "value": "gs://bpe-training-mfp/data/sample_TinyStoriesV2-GPT4-train_k10.txt"
+          },
+          {
+            "name": "VOCAB_PATH",
+            "value": "gs://bpe-training-mfp/output/TinyStoriesV2-GPT4-train_serialization_vocab_20251003_134143.json"
+          },
+          {
+            "name": "MERGE_PATH",
+            "value": "gs://bpe-training-mfp/output/TinyStoriesV2-GPT4-train_serialization_merge_20251003_134143.json"
+          },
+          {
+            "name": "ARTIFACT_PATH",
+            "value": "gs://bpe-training-mfp/output_encode"
+          },
+          {
+            "name": "LOG_LEVEL",
+            "value": "INFO"
+          }
         ]
       }
     }
