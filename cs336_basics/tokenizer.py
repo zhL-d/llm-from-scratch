@@ -43,10 +43,10 @@ class Tokenizer:
 
         logger.debug("Starting construct tokenizer from files")
 
-        with open(vocab_filepath) as vf:
+        with open(vocab_filepath, encoding="utf-8", errors="surrogatepass") as vf:
             vocab_raw = json.load(vf)
             vocab_serialized = {int(token_id): token.encode("utf-8", errors="surrogateescape") for token_id, token in vocab_raw.items()}
-        with open(merges_filepath) as mf:
+        with open(merges_filepath, encoding="utf-8", errors="surrogatepass") as mf:
             merges_raw = json.load(mf)
             merges_serialized = [(merge[0].encode("utf-8", errors="surrogateescape"), merge[1].encode("utf-8", errors="surrogateescape")) for merge in merges_raw]
         

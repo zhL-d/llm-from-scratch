@@ -809,10 +809,10 @@ class BPETokenizerTrainer:
         self.serialization_merge_path = self.output_path / f"{self.traindata_path.stem}_serialization_merge_{self.timestamp}.json"
 
 
-        with open(self.serialization_vocab_path, 'w', encoding="utf-8") as f:
+        with open(self.serialization_vocab_path, 'w', encoding="utf-8", errors="surrogatepass") as f:
             json.dump(vocab_serialized, f, indent=2, ensure_ascii=False)
         
-        with open(self.serialization_merge_path, 'w', encoding="utf-8") as f:
+        with open(self.serialization_merge_path, 'w', encoding="utf-8", errors="surrogatepass") as f:
             json.dump(merge_serialized, f, indent=2, ensure_ascii=False)
     
     # def train_bpe(self, input_path: str, vocab_size: int, gpt2_regex: bool, enable_parallel: bool) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
