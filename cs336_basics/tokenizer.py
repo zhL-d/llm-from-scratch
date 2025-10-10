@@ -45,10 +45,10 @@ class Tokenizer:
 
         with open(vocab_filepath) as vf:
             vocab_raw = json.load(vf)
-            vocab_serialized = {int(token_id): token.encode("utf-8") for token_id, token in vocab_raw.items()}
+            vocab_serialized = {int(token_id): token.encode("utf-8", errors="surrogateescape") for token_id, token in vocab_raw.items()}
         with open(merges_filepath) as mf:
             merges_raw = json.load(mf)
-            merges_serialized = [(merge[0].encode("utf-8"), merge[1].encode("utf-8")) for merge in merges_raw]
+            merges_serialized = [(merge[0].encode("utf-8", errors="surrogateescape"), merge[1].encode("utf-8", errors="surrogateescape")) for merge in merges_raw]
         
         logger.debug(f"Constructed from files vocab, merge: vocab={vocab_serialized}, merges={merges_serialized}")
         logger.info("Construct tokenizer from files complete")

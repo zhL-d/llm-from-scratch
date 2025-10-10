@@ -795,12 +795,12 @@ class BPETokenizerTrainer:
         Returns:
         """
         vocab_serialized = {
-            str(token_id): vocab_bytes.decode("utf-8", "replace")
+            str(token_id): vocab_bytes.decode("utf-8", "surrogateescape")
             for token_id, vocab_bytes in self.vocab.items()
         }
 
         merge_serialized = [
-            [first_bytes.decode("utf-8", "replace"), second_bytes.decode("utf-8", "replace")]
+            [first_bytes.decode("utf-8", "surrogateescape"), second_bytes.decode("utf-8", "surrogateescape")]
             for first_bytes, second_bytes in self.merge
         ]
 

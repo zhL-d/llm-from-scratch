@@ -14,7 +14,7 @@
           },
           {
             "name": "VOCAB_PATH",
-            "value": "gs://bpe-training-mfp/output/TinyStoriesV2-GPT4-train_serialization_vocab_20251003_134143.json"
+            "value": "gs://bpe-training-mfp/output/TinyStoriesV2-GPT4-train_serialization_vocab_20251003_134143_specialtoken.json"
           },
           {
             "name": "MERGE_PATH",
