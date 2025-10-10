@@ -49,3 +49,26 @@ or continue streaming the logs with the command
 
 
   gcloud ai custom-jobs create   --region=europe-west3   --display-name=bpe-training-job   --config=vertex-job.json
+
+
+  TRAINDATA_PATH=/Users/lucas/Documents/GitHub/stf-assignment1-basics/tests/fixtures/corpus.en OUTPUTS_PATH=/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/outputs VOCAB_SIZE=500 PRETOKEN_PROCS=4 uv run cs336_basics/train_bpe.py
+
+
+  TRAINDATA_PATH=/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/owedataset/owt_valid.txt OUTPUTS_PATH=/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/outputs VOCAB_SIZE=1500 PRETOKEN_PROCS=4 uv run cs336_basics/train_bpe.py
+
+
+CORPUS_PATH="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/smoke_test_fixture/sample_data/sample_TinyStoriesV2-GPT4-train_k10.txt" \
+VOCAB_PATH="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/smoke_test_fixture/vocab_table/tiny_story/TinyStoriesV2-GPT4-train_serialization_vocab_20251003_134143.json" \
+MERGE_PATH="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/smoke_test_fixture/vocab_table/tiny_story/TinyStoriesV2-GPT4-train_serialization_merge_20251003_134143.json" \
+ARTIFACT_PATH="/Users/lucas/Documents/GitHub/stf-assignment1-basics/cs336_basics/outputs/encoding" \
+LOG_LEVEL=INFO \
+uv run python cs336_basics/bpe_encoding.py
+
+
+gcloud builds submit --tag eu.gcr.io/digital-proton-473814-m9/bpe-training:encoder-${GIT_SHA} .
+
+gcloud ai custom-jobs create --region=europe-west3 --display-name=bpe-encode --config=vertex-job_encode.json
+
+export GIT_SHA=$(git rev-parse --short HEAD)
+
+gcloud builds submit --tag eu.gcr.io/digital-proton-473814-m9/bpe-training:trainer-${GIT_SHA} .
