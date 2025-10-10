@@ -15,9 +15,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 def is_gcs(path: str | os.PathLike) -> bool:
     s = os.fspath(path)
     return s.startswith("gs://")
+
 
 def read_text(path: str | os.PathLike) -> str:
     if is_gcs(path):
@@ -25,9 +27,11 @@ def read_text(path: str | os.PathLike) -> str:
         bucket_name, blob_name = path[5:].split("/", 1)
         bucket = client.bucket(bucket_name)
         blob = bucket.blob(blob_name)
-        return blob.download_as_text(encoding="utf-8")
+        data_bytes = blob.download_as_bytes()
+        return data_bytes.decode("utf-8", "surrogatepass")
     else:
-        return Path(path).read_text(encoding="utf-8")
+        return Path(path).read_text(encoding="utf-8", errors="surrogatepass")
+
 
 def write_artifact(path: str | os.PathLike, arr: np.ndarray):
     buf = io.BytesIO()
@@ -43,6 +47,7 @@ def write_artifact(path: str | os.PathLike, arr: np.ndarray):
     else:
         Path(path).write_bytes(buf.getvalue())
 
+
 def normalize_vocab_merge_path(vocab_path: str, merge_path: str) -> tuple[str, str]:
     if is_gcs(vocab_path) and is_gcs(merge_path):
         vocab_json_text = read_text(vocab_path)
@@ -53,12 +58,13 @@ def normalize_vocab_merge_path(vocab_path: str, merge_path: str) -> tuple[str, s
         tmp_vocab_path = tmp_path / "vocab.json"
         tmp_merge_path = tmp_path / "merge.json"
 
-        tmp_vocab_path.write_text(vocab_json_text, encoding="utf-8")
-        tmp_merge_path.write_text(merge_json_text, encoding="utf-8")
+        tmp_vocab_path.write_text(vocab_json_text, encoding="utf-8", errors="surrogatepass")
+        tmp_merge_path.write_text(merge_json_text, encoding="utf-8", errors="surrogatepass")
 
         return str(tmp_vocab_path), str(tmp_merge_path)
     else:
         return vocab_path, merge_path
+
 
 def build_artifact_path(base_path: str, corpus_path: str) -> str | Path:
     corpus_basename = Path(corpus_path).stem
@@ -66,6 +72,7 @@ def build_artifact_path(base_path: str, corpus_path: str) -> str | Path:
     if is_gcs(base_path):
         return base_path.rstrip("/") + "/" + filename
     return Path(base_path) / filename
+
 
 def main():
     corpus_path = os.getenv("CORPUS_PATH")
@@ -90,8 +97,14 @@ def main():
         sys.exit(1)
 
     artifact_final_path = build_artifact_path(artifact_path, corpus_path)
-    
-    logging.info("Job start | vocab_path=%s | merge_path=%s | corpus_path=%s | artifact_path=%s", vocab_path, merge_path, corpus_path, artifact_path)
+
+    logging.info(
+        "Job start | vocab_path=%s | merge_path=%s | corpus_path=%s | artifact_path=%s",
+        vocab_path,
+        merge_path,
+        corpus_path,
+        artifact_path,
+    )
 
     vocab_path, merge_path = normalize_vocab_merge_path(vocab_path, merge_path)
 
