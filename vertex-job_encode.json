@@ -2,7 +2,7 @@
   "workerPoolSpecs": [
     {
       "machineSpec": {
-        "machineType": "n2-highmem-2"
+        "machineType": "n2-highmem-8"
       },
       "replicaCount": 1,
       "containerSpec": {
@@ -10,7 +10,7 @@
         "env": [
           {
             "name": "CORPUS_PATH",
-            "value": "gs://bpe-training-mfp/data/sample_TinyStoriesV2-GPT4-train_k10.txt"
+            "value": "gs://bpe-training-mfp/data/TinyStoriesV2-GPT4-train.txt"
           },
           {
             "name": "VOCAB_PATH",
