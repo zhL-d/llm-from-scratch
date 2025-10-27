@@ -74,3 +74,7 @@ export GIT_SHA=$(git rev-parse --short HEAD)
 gcloud builds submit --tag eu.gcr.io/digital-proton-473814-m9/bpe-training:trainer-${GIT_SHA} .
 
 uv run pytest -k test_linear
+
+uv run pytest --ignore=cs336_basics/owntest -k test_linear
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_linear
