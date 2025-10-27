@@ -13,10 +13,10 @@ class Linear(nn.Module):
             dtype(torch.dtype | None): Data type of the parameters
         """
         super().__init__()
-        self.W = nn.Parameter(torch.randn(in_features, out_features, dtype=dtype, device=device))
+        self.W = nn.Parameter(torch.randn(out_features, in_features, dtype=dtype, device=device))
         std_variance = math.sqrt(2/(in_features + out_features))
         nn.init.trunc_normal_(self.W, mean=0, std=std_variance, a=-3*std_variance, b=3*std_variance)
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Apply the linear transformation to the input.
         """
-        return x @ self.W
+        return x @ self.W.T
