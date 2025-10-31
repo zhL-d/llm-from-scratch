@@ -12,7 +12,7 @@ class RMSNorm(nn.Module):
             dtype(torch.dtype | None = None): Data type of the parameters
         """
         super().__init__()
-        self.g = nn.Parameter(torch.randn(d_model, dtype=dtype, device=device))
+        self.g = nn.Parameter(torch.ones(d_model, dtype=dtype, device=device))
         self.eps = eps
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Process an input tensor of shape
