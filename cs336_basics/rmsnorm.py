@@ -25,15 +25,9 @@ class RMSNorm(nn.Module):
         in_dtype = x.dtype
         x = x.to(torch.float32)
 
-        x_flat = x.reshape(-1, x.shape[2])
-        rms_divisor_flat = torch.vmap(self.rms)(x_flat)
-        rms_divisor = rms_divisor_flat.reshape(x.shape[0], x.shape[1], -1)
+        rms_divisor = torch.sqrt((x ** 2).mean(-1, keepdim=True) + self.eps)
 
         result_after_rms = x / rms_divisor
-        result =  result_after_rms * self.g
+        result = result_after_rms * self.g
 
         return result.to(in_dtype)
-
-    def rms(self, v: torch.Tensor) -> torch.Tensor:
-        tmp = (v ** 2).mean() + self.eps
-        return torch.sqrt(tmp)
