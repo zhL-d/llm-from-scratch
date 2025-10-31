@@ -27,7 +27,7 @@ class RMSNorm(nn.Module):
 
         x_flat = x.reshape(-1, x.shape[2])
         rms_divisor_flat = torch.vmap(self.rms)(x_flat)
-        rms_divisor = rms_divisor_flat.reshape(x.shape[0], x.shape[1], x.shape[2])
+        rms_divisor = rms_divisor_flat.reshape(x.shape[0], x.shape[1], -1)
 
         result_after_rms = x / rms_divisor
         result =  result_after_rms * self.g
