@@ -14,6 +14,7 @@ from cs336_basics.tokenizer import Tokenizer
 from cs336_basics.linear_module import Linear
 from cs336_basics.embedding import Embedding
 from cs336_basics.rmsnorm_einx import RMSNorm
+from cs336_basics.positionwise_feedforward import PWFFN
 
 
 
@@ -95,7 +96,12 @@ def run_swiglu(
     # swiglu.w1.weight.data = w1_weight
     # swiglu.w2.weight.data = w2_weight
     # swiglu.w3.weight.data = w3_weight
-    raise NotImplementedError
+
+    model = PWFFN(d_model, d_ff)
+    model.load_state_dict({"W1": w1_weight, "W2": w2_weight, "W3": w3_weight})
+    return model.forward(in_features)
+
+    # raise NotImplementedError
 
 
 def run_scaled_dot_product_attention(

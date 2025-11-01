@@ -82,3 +82,5 @@ UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_linear
 UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_linear
 
 UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_rmsnorm
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_swiglu
