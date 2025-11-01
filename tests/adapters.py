@@ -14,7 +14,7 @@ from cs336_basics.tokenizer import Tokenizer
 from cs336_basics.linear_module import Linear
 from cs336_basics.embedding import Embedding
 from cs336_basics.rmsnorm_einx import RMSNorm
-from cs336_basics.positionwise_feedforward import PWFFN
+from cs336_basics.positionwise_feedforward_einx import PWFFN
 
 
 
