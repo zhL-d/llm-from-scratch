@@ -15,7 +15,11 @@ class RoPe(nn.Module):
         """
         super().__init__()
 
-        angle_i, angle_k = torch.meshgrid(torch.arange(max_seq_len, dtype=torch.float32), torch.arange(d_k // 2, dtype=torch.float32), indexing="ij")
+        angle_i, angle_k = torch.meshgrid(
+            torch.arange(max_seq_len, dtype=torch.float32), 
+            torch.arange(1, d_k // 2 + 1, dtype=torch.float32), 
+            indexing="ij"
+        )
         angle = angle_i / theta ** ((2*angle_k - 2) / d_k)
 
         sin = torch.sin(angle)
