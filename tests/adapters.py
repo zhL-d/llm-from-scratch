@@ -15,6 +15,7 @@ from cs336_basics.linear_module import Linear
 from cs336_basics.embedding import Embedding
 from cs336_basics.rmsnorm_einx import RMSNorm
 from cs336_basics.positionwise_feedforward_einx import PWFFN
+from cs336_basics.rope import RoPe
 
 
 
@@ -218,7 +219,10 @@ def run_rope(
     Returns:
         Float[Tensor, " ... sequence_length d_k"]: Tensor with RoPEd input.
     """
-    raise NotImplementedError
+    model = RoPe(theta, d_k, max_seq_len)
+    result = model.forward(in_query_or_key, token_positions)
+    return result
+    # raise NotImplementedError
 
 
 def run_transformer_block(
