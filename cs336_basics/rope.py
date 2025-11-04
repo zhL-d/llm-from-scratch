@@ -15,7 +15,7 @@ class RoPe(nn.Module):
         """
         super().__init__()
 
-        angle_i, angle_k = torch.meshgrid(torch.arange(max_seq_len), torch.arange(d_k/2), "ij")
+        angle_i, angle_k = torch.meshgrid(torch.arange(max_seq_len, dtype=torch.float32), torch.arange(d_k // 2, dtype=torch.float32), indexing="ij")
         angle = angle_i / theta ** ((2*angle_k - 2) / d_k)
 
         sin = torch.sin(angle)
@@ -24,7 +24,7 @@ class RoPe(nn.Module):
         self.register_buffer("sin", sin, persistent=False)
         self.register_buffer("cos", cos, persistent=False)
 
-        self.R = torch.zeros(max_seq_len, d_k/2, 2, 2)
+        self.R = torch.zeros(max_seq_len, d_k // 2, 2, 2)
 
         self.R[:, :, 0, 0] = self.cos
         self.R[:, :, 0, 1] = -self.sin
@@ -33,12 +33,15 @@ class RoPe(nn.Module):
         
     def forward(self, x: Float[Tensor, "... seq_len d_k"], token_positions: Int[Tensor, "... seq_len"]) -> Float[Tensor, "... seq_len d_k"]:
         batch, seq_len, d_k = x.shape
-        block = d_k/2
+        block = d_k // 2
 
         x_blocked = x.reshape(batch, seq_len, block, -1)
+        x_blocked_reshaped = x_blocked.unsqueeze(-1)
+
+
         r_selected_batched = self.R[token_positions]
 
-        x_roped = x_blocked @ r_selected_batched
+        x_roped = r_selected_batched @ x_blocked_reshaped
 
         result = x_roped.reshape(batch, seq_len, -1)
 
