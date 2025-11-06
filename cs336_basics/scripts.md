@@ -89,3 +89,6 @@ UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_rope
 
 UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_softmax_matches_pytorch
 
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_scaled_dot_product_attention
+
+
