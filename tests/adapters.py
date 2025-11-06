@@ -16,7 +16,7 @@ from cs336_basics.embedding import Embedding
 from cs336_basics.rmsnorm_einx import RMSNorm
 from cs336_basics.positionwise_feedforward_einx import PWFFN
 from cs336_basics.rope_einx import RoPe
-import cs336_basics.softmax as sm
+import cs336_basics.softmax_einx as sm
 
 
 
