@@ -16,6 +16,7 @@ from cs336_basics.embedding import Embedding
 from cs336_basics.rmsnorm_einx import RMSNorm
 from cs336_basics.positionwise_feedforward_einx import PWFFN
 from cs336_basics.rope_einx import RoPe
+import cs336_basics.softmax as sm
 
 
 
@@ -458,7 +459,8 @@ def run_softmax(in_features: Float[Tensor, " ..."], dim: int) -> Float[Tensor, "
         Float[Tensor, "..."]: Tensor of with the same shape as `in_features` with the output of
         softmax normalizing the specified `dim`.
     """
-    raise NotImplementedError
+    return sm.Softmax(in_features, dim)
+    # raise NotImplementedError
 
 
 def run_cross_entropy(inputs: Float[Tensor, " batch_size vocab_size"], targets: Int[Tensor, " batch_size"]) -> Float[Tensor, ""]:

@@ -86,3 +86,6 @@ UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_rmsnorm
 UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_swiglu
 
 UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_rope
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_softmax_matches_pytorch
+
