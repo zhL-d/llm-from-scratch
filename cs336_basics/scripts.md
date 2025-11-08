@@ -91,4 +91,8 @@ UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_softmax_matches
 
 UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_scaled_dot_product_attention
 
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_4d_scaled_dot_product_attention
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_multihead_self_attention
+
 

@@ -18,6 +18,7 @@ from cs336_basics.positionwise_feedforward_einx import PWFFN
 from cs336_basics.rope_einx import RoPe
 import cs336_basics.softmax_einx as sm
 from cs336_basics.scaled_dot_product_attention import SDPAttention
+from cs336_basics.multihead_self_attention import MultiHeadSelfAttention
 
 
 
@@ -162,7 +163,19 @@ def run_multihead_self_attention(
         Float[Tensor, " ... sequence_length d_out"]: Tensor with the output of running your optimized, batched multi-headed attention
         implementation with the given QKV projection weights and input features.
     """
-    raise NotImplementedError
+    model = MultiHeadSelfAttention(d_model, num_heads)
+    model.state_dict(
+        {
+            "Q": q_proj_weight,
+            "K": k_proj_weight,
+            "V": v_proj_weight,
+            "O": o_proj_weight
+        }
+    )
+    
+    result = model.forward(in_features)
+    return result
+    # raise NotImplementedError
 
 
 def run_multihead_self_attention_with_rope(
