@@ -164,7 +164,7 @@ def run_multihead_self_attention(
         implementation with the given QKV projection weights and input features.
     """
     model = MultiHeadSelfAttention(d_model, num_heads)
-    model.state_dict(
+    model.load_state_dict(
         {
             "Q": q_proj_weight,
             "K": k_proj_weight,
