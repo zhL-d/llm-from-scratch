@@ -12,6 +12,8 @@ class MultiHeadSelfAttentionRope(nn.Module):
             Args:
                 d_model (int): Dimensionality of the Transformer block inputs
                 num_heads (int): Number of heads to use in multi-head self-attention
+                max_seq_len (int): Maximum sequence length to pre-cache
+                theta (float): RoPE parameter
         """
         super().__init__()
 

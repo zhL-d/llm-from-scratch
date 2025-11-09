@@ -20,6 +20,7 @@ import cs336_basics.softmax_einx as sm
 from cs336_basics.scaled_dot_product_attention import SDPAttention
 from cs336_basics.multihead_self_attention import MultiHeadSelfAttention
 from cs336_basics.multihead_self_attention_rope import MultiHeadSelfAttentionRope
+from cs336_basics.transformer_block import TransformerBlock
 
 
 
@@ -325,7 +326,23 @@ def run_transformer_block(
         Float[Tensor, "batch sequence_length d_model"] Tensor with the output of
         running the Transformer block on the input features while using RoPE.
     """
-    raise NotImplementedError
+    transformer_block = TransformerBlock(d_model, num_heads, d_ff, max_seq_len, theta)
+    transformer_block.load_state_dict(
+        {
+            "multiheadselfattentionrops_layer.Q": weights['attn.q_proj.weight'],
+            "multiheadselfattentionrops_layer.K": weights['attn.k_proj.weight'],
+            "multiheadselfattentionrops_layer.V": weights['attn.v_proj.weight'],
+            "multiheadselfattentionrops_layer.O": weights['attn.output_proj.weight'],
+            "rmsnorm_first_layer.g": weights['ln1.weight'],
+            "positionwiseffn_layer.W1": weights['ffn.w1.weight'],
+            "positionwiseffn_layer.W2": weights['ffn.w2.weight'],
+            "positionwiseffn_layer.W3": weights['ffn.w3.weight'],
+            "rmsnorm_second_layer.g": weights['ln2.weight'],
+        }
+    )
+    result = transformer_block.forward(in_features)
+    return result
+    # raise NotImplementedError
 
 
 def run_transformer_lm(
