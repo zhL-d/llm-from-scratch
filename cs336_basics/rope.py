@@ -39,6 +39,7 @@ class RoPe(nn.Module):
         batch, seq_len, d_k = x.shape
         block = d_k // 2
 
+        # TODO: batch ...
         x_blocked = x.reshape(batch, seq_len, block, -1)
         x_blocked_reshaped = x_blocked.unsqueeze(-1)
 
