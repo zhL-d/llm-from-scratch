@@ -95,4 +95,6 @@ UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_4d_scaled_dot_p
 
 UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_multihead_self_attention
 
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_transformer_block 
+
 

@@ -25,7 +25,11 @@ class TransformerBlock(nn.Module):
         self.positionwiseffn_layer = PWFFN(d_model, d_ff)
     def forward(self, x: Float[Tensor, " batch sequence_length d_model"]) -> Float[Tensor, " batch sequence_length d_model"]:
         x_norm = self.rmsnorm_first_layer.forward(x)
-        embedding_attention = self.multiheadselfattentionrops_layer.forward(x_norm)
+        # embedding_attention = self.multiheadselfattentionrops_layer.forward(x_norm)
+        x_seq_len = x.size(-2)
+        token_positions = torch.arange(x_seq_len).unsqueeze(0).expand(*x.shape[:-2], x_seq_len)
+        embedding_attention = self.multiheadselfattentionrops_layer.forward(x_norm, token_positions)
+
         result_firstsublayer = x + embedding_attention
 
         result_firstsublayer_norm = self.rmsnorm_second_layer.forward(result_firstsublayer)
