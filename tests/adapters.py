@@ -427,16 +427,14 @@ def run_transformer_lm(
     """
     transformer = TransformerLM(vocab_size, context_length, num_layers, d_model, num_heads, d_ff, rope_theta)
 
-    transformer.load_state_dict(
-        {
-            "embedding_layer.W": weights['token_embeddings.weight'],
-            "linear_layer.W": weights['lm_head.weight'],
-            "rmsnorm_layer.g": weights['ln_final.weight'],
-        }
-    )
+    state_dict = {
+        "embedding_layer.W": weights['token_embeddings.weight'],
+        "linear_layer.W": weights['lm_head.weight'],
+        "rmsnorm_layer.g": weights['ln_final.weight'],
+    }
 
     for block_layer_index in range(num_layers):
-        transformer.load_state_dict(
+        state_dict.update(
             {
                 f"transformerblock_layer.{block_layer_index}.multiheadselfattentionrops_layer.Q": weights[f'layers.{block_layer_index}.attn.q_proj.weight'],
                 f"transformerblock_layer.{block_layer_index}.multiheadselfattentionrops_layer.K": weights[f'layers.{block_layer_index}.attn.k_proj.weight'],
@@ -450,10 +448,38 @@ def run_transformer_lm(
 
             }
         )
+    
+    transformer.load_state_dict(state_dict)
 
     result = transformer.forward(in_indices)
 
     return result
+
+    # transformer.load_state_dict(
+    #     {
+    #         "embedding_layer.W": weights['token_embeddings.weight'],
+    #         "linear_layer.W": weights['lm_head.weight'],
+    #         "rmsnorm_layer.g": weights['ln_final.weight'],
+    #     }
+    # )
+
+    # for block_layer_index in range(num_layers):
+    #     transformer.load_state_dict(
+    #         {
+    #             f"transformerblock_layer.{block_layer_index}.multiheadselfattentionrops_layer.Q": weights[f'layers.{block_layer_index}.attn.q_proj.weight'],
+    #             f"transformerblock_layer.{block_layer_index}.multiheadselfattentionrops_layer.K": weights[f'layers.{block_layer_index}.attn.k_proj.weight'],
+    #             f"transformerblock_layer.{block_layer_index}.multiheadselfattentionrops_layer.V": weights[f'layers.{block_layer_index}.attn.v_proj.weight'],
+    #             f"transformerblock_layer.{block_layer_index}.multiheadselfattentionrops_layer.O": weights[f'layers.{block_layer_index}.attn.output_proj.weight'],
+    #             f"transformerblock_layer.{block_layer_index}.rmsnorm_first_layer.g": weights[f'layers.{block_layer_index}.ln1.weight'],
+    #             f"transformerblock_layer.{block_layer_index}.positionwiseffn_layer.W1": weights[f'layers.{block_layer_index}.ffn.w1.weight'],
+    #             f"transformerblock_layer.{block_layer_index}.positionwiseffn_layer.W2": weights[f'layers.{block_layer_index}.ffn.w2.weight'],
+    #             f"transformerblock_layer.{block_layer_index}.positionwiseffn_layer.W3": weights[f'layers.{block_layer_index}.ffn.w3.weight'],
+    #             f"transformerblock_layer.{block_layer_index}.rmsnorm_second_layer.g": weights[f'layers.{block_layer_index}.ln2.weight'],
+
+    #         }
+    #     )
+
+
     # raise NotImplementedError
 
 

@@ -40,8 +40,8 @@ class TransformerLM(nn.Module):
         """
         input_embedding = self.embedding_layer.forward(in_indices)
 
-        for index_block in range(self.transformerblock_layer):
-            output_embedding = self.transformerblock_layer[index_block].forward(input_embedding)
+        for block in self.transformerblock_layer:
+            output_embedding = block.forward(input_embedding)
             input_embedding = output_embedding
         
         output_embedding = self.rmsnorm_layer.forward(output_embedding)
