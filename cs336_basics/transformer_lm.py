@@ -1,4 +1,3 @@
-import torch
 import torch.nn as nn
 from jaxtyping import Float, Int
 from torch import Tensor
@@ -23,7 +22,10 @@ class TransformerLM(nn.Module):
         super().__init__()
 
         self.embedding_layer = Embedding(vocab_size, d_model)
-        self.transformerblock_layer = [TransformerBlock(d_model, num_heads, d_ff, context_length, rope_theta) for _ in range(num_layers)]
+        self.transformerblock_layer = nn.ModuleList(
+            [TransformerBlock(d_model, num_heads, d_ff, context_length, rope_theta) for _ in range(num_layers)]
+        )
+        # self.transformerblock_layer = [TransformerBlock(d_model, num_heads, d_ff, context_length, rope_theta) for _ in range(num_layers)]
         self.rmsnorm_layer = RMSNorm(d_model)
         self.linear_layer = Linear(d_model, vocab_size)
     def forward(self, in_indices: Int[Tensor, " batch_size sequence_length"]) -> Float[Tensor, " batch_size sequence_length vocab_size"]:

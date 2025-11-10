@@ -21,6 +21,7 @@ from cs336_basics.scaled_dot_product_attention import SDPAttention
 from cs336_basics.multihead_self_attention import MultiHeadSelfAttention
 from cs336_basics.multihead_self_attention_rope import MultiHeadSelfAttentionRope
 from cs336_basics.transformer_block import TransformerBlock
+from cs336_basics.transformer_lm import TransformerLM
 
 
 
@@ -424,7 +425,36 @@ def run_transformer_lm(
         Float[Tensor, "batch_size sequence_length vocab_size"]: Tensor with the predicted unnormalized
         next-word distribution for each token.
     """
-    raise NotImplementedError
+    transformer = TransformerLM(vocab_size, context_length, num_layers, d_model, num_heads, d_ff, rope_theta)
+
+    transformer.load_state_dict(
+        {
+            "embedding_layer.W": weights['token_embeddings.weight'],
+            "linear_layer.W": weights['lm_head.weight'],
+            "rmsnorm_layer.g": weights['ln_final.weight'],
+        }
+    )
+
+    for block_layer_index in range(num_layers):
+        transformer.load_state_dict(
+            {
+                f"transformerblock_layer.{block_layer_index}.multiheadselfattentionrops_layer.Q": weights[f'layers.{block_layer_index}.attn.q_proj.weight'],
+                f"transformerblock_layer.{block_layer_index}.multiheadselfattentionrops_layer.K": weights[f'layers.{block_layer_index}.attn.k_proj.weight'],
+                f"transformerblock_layer.{block_layer_index}.multiheadselfattentionrops_layer.V": weights[f'layers.{block_layer_index}.attn.v_proj.weight'],
+                f"transformerblock_layer.{block_layer_index}.multiheadselfattentionrops_layer.O": weights[f'layers.{block_layer_index}.attn.output_proj.weight'],
+                f"transformerblock_layer.{block_layer_index}.rmsnorm_first_layer.g": weights[f'layers.{block_layer_index}.ln1.weight'],
+                f"transformerblock_layer.{block_layer_index}.positionwiseffn_layer.W1": weights[f'layers.{block_layer_index}.ffn.w1.weight'],
+                f"transformerblock_layer.{block_layer_index}.positionwiseffn_layer.W2": weights[f'layers.{block_layer_index}.ffn.w2.weight'],
+                f"transformerblock_layer.{block_layer_index}.positionwiseffn_layer.W3": weights[f'layers.{block_layer_index}.ffn.w3.weight'],
+                f"transformerblock_layer.{block_layer_index}.rmsnorm_second_layer.g": weights[f'layers.{block_layer_index}.ln2.weight'],
+
+            }
+        )
+
+    result = transformer.forward(in_indices)
+
+    return result
+    # raise NotImplementedError
 
 
 def run_rmsnorm(
