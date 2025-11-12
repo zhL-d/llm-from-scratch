@@ -72,3 +72,32 @@ gcloud ai custom-jobs create --region=europe-west3 --display-name=bpe-encode --c
 export GIT_SHA=$(git rev-parse --short HEAD)
 
 gcloud builds submit --tag eu.gcr.io/digital-proton-473814-m9/bpe-training:trainer-${GIT_SHA} .
+
+uv run pytest -k test_linear
+
+uv run pytest --ignore=cs336_basics/owntest -k test_linear
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_linear
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_linear
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_rmsnorm
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_swiglu
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_rope
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_softmax_matches_pytorch
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_scaled_dot_product_attention
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_4d_scaled_dot_product_attention
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_multihead_self_attention
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_transformer_block
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_transformer_lm 
+
+
+
