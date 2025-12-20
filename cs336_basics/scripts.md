@@ -106,3 +106,5 @@ UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_adamw
 UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_get_lr_cosine_schedule
 
 UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_gradient_clipping
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_get_batch
