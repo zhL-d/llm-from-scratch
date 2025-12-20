@@ -97,7 +97,12 @@ UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_multihead_self_
 
 UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_transformer_block
 
-UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_transformer_lm 
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_transformer_lm
 
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_cross_entropy
 
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_adamw
 
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_get_lr_cosine_schedule
+
+UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_gradient_clipping
