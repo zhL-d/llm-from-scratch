@@ -11,9 +11,8 @@ def DataLoading(x: npt.NDArray, batch_size: int, context_length: int, device: st
     for b in range(batch_size):
         i = random.randrange(0, len(x) - context_length)
 
-        input_seq_sample = torch.from_numpy(x[i : i+context_length]).to(device=input_seqs.device).to(dtype=input_seqs.dtype)
-        target_next_token_sample = torch.from_numpy(x[i+1 : i+1+context_length]).to(device=targets_next_token.device).to(dtype=targets_next_token.dtype)
-
+        input_seq_sample = torch.from_numpy(x[i : i+context_length]).to(device=input_seqs.device, dtype=input_seqs.dtype)
+        target_next_token_sample = torch.from_numpy(x[i+1 : i+1+context_length]).to(device=targets_next_token.device, dtype=targets_next_token.dtype)
         input_seqs[b] = input_seq_sample
         targets_next_token[b] = target_next_token_sample
     
