@@ -36,31 +36,30 @@ def training_loop():
     weight_decay = 0.01
 
     tokenizer = Tokenizer.from_files(vocab_path, merge_path, ["<|endoftext|>"])
-    training_corpus = data_path.read_text(encoding="utf-8")
+    training_corpus = data_path.read_text(encoding="utf-8", errors="surrogatepass")
     token_ids = tokenizer.encode(training_corpus)
 
     token_ids_ndarray = np.array(token_ids)
+
+    transformerlm = TransformerLM(vocab_size, context_length, num_layers, d_model, num_heads, d_ff, rope_theta)
+
 
     for t in range(steps):
         data_batch_tuple = DataLoading(token_ids_ndarray, batch_size, context_length, device)
         training_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[0]
         validation_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[1]
     
-        transformerlm = TransformerLM(vocab_size, context_length, num_layers, d_model, num_heads, d_ff, rope_theta)
         logit: Float[Tensor, " batch_size context_length vocab_size"] = transformerlm.forward(training_data)
 
         loss = CrossEntropy(logit, validation_data)
-
-        lr = LearningRateSchedule(t, alpha_max, alpha_min, t_w, t_c)
-        optimizer = AdamW(transformerlm.parameters(), lr, betas, eps, weight_decay)       
-        optimizer.zero_grad()
     
         loss.backward()
 
-        # lr = LearningRateSchedule(t, alpha_max, alpha_min, t_w, t_c)
-
-        # optimizer = AdamW(transformerlm.parameters(), lr, betas, eps, weight_decay)
+        lr = LearningRateSchedule(t, alpha_max, alpha_min, t_w, t_c)
+        optimizer = AdamW(transformerlm.parameters(), lr, betas, eps, weight_decay)
         optimizer.step()
+
+        optimizer.zero_grad()
 
     
 
