@@ -19,6 +19,7 @@ class TrainConfig:
     merge_path: str = "cs336_basics/prod/output_TinyStoriesV2-GPT4-train_serialization_merge_20251010_112414.json"
     special_tokens: list[str] = ["<|endoftext|>"]
     data_path: Path = Path("cs336_basics/owedataset/owt_valid_sample.txt")
+    tokenids_path: Path = Path("cs336_basics/owedataset/token_ids.npy")
     batch_size: int = 4
     context_length: int = 1024
     device: str = "cpu"
@@ -45,6 +46,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--merge_path", type=str, default=TrainConfig.merge_path)
     p.add_argument("--special_tokens", type=list[str], default=TrainConfig.special_tokens)
     p.add_argument("--data_path", type=Path, default=TrainConfig.data_path)
+    p.add_argument("--tokenids_path", type=Path, default=TrainConfig.tokenids_path)
     p.add_argument("--batch_size", type=int, default=TrainConfig.batch_size)
     p.add_argument("--context_length", type=int, default=TrainConfig.context_length)
     p.add_argument("--device", type=str, default=TrainConfig.device)
@@ -69,6 +71,7 @@ def load_cfg(args) -> TrainConfig:
         merge_path = args.merge_path,
         special_tokens = args.special_tokens,
         data_path = args.data_path,
+        tokenids_path = args.tokenids_path,
         batch_size = args.batch_size,
         context_length = args.context_length,
         device = args.device,
@@ -91,6 +94,15 @@ def load_cfg(args) -> TrainConfig:
     )
 
     return cfg
+
+def tokenize_and_save(cfg: TrainConfig):
+    tokenizer = Tokenizer.from_files(cfg.vocab_path, cfg.merge_path, cfg.special_tokens)
+    training_corpus = cfg.data_path.read_text(encoding="utf-8", errors="surrogatepass")
+    token_ids = tokenizer.encode(training_corpus)
+
+    token_ids_ndarray = np.array(token_ids)
+    
+    np.save(cfg.tokenids_path, token_ids_ndarray)
 
 
 def training_loop():
@@ -149,11 +161,14 @@ def training_loop():
     args = build_parser().parse_args()
     cfg = load_cfg(args)
 
-    tokenizer = Tokenizer.from_files(cfg.vocab_path, cfg.merge_path, cfg.special_tokens)
-    training_corpus = cfg.data_path.read_text(encoding="utf-8", errors="surrogatepass")
-    token_ids = tokenizer.encode(training_corpus)
+    # tokenizer = Tokenizer.from_files(cfg.vocab_path, cfg.merge_path, cfg.special_tokens)
+    # training_corpus = cfg.data_path.read_text(encoding="utf-8", errors="surrogatepass")
+    # token_ids = tokenizer.encode(training_corpus)
 
-    token_ids_ndarray = np.array(token_ids)
+    # token_ids_ndarray = np.array(token_ids)
+
+    tokenize_and_save(cfg)
+    token_ids_ndarray = np.load(cfg.tokenids_path, mmap_mode='r')
 
     transformerlm = TransformerLM(cfg.vocab_size, cfg.context_length, cfg.num_layers, cfg.d_model, cfg.num_heads, cfg.d_ff, cfg.rope_theta)
 
