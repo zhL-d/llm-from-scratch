@@ -3,8 +3,8 @@ import numpy as np
 from torch import Tensor
 from jaxtyping import Int, Float
 from dataclasses import dataclass
-import argparse 
-
+import argparse
+import wandb
 
 from cs336_basics.tokenizer import Tokenizer
 from cs336_basics.data_loading import DataLoading
@@ -165,6 +165,17 @@ def training_loop():
     args = build_parser().parse_args()
     cfg = load_cfg(args)
 
+    run = wandb.init(
+    entity="sft_llm",
+    project="wb-hello-world",
+    config={
+        # "base_learning_rate": 0.02, 
+        "architecture": "transformer",
+        "dataset": cfg.data_path,
+        "epochs": cfg.steps,
+    },
+)
+
     # tokenizer = Tokenizer.from_files(cfg.vocab_path, cfg.merge_path, cfg.special_tokens)
     # training_corpus = cfg.data_path.read_text(encoding="utf-8", errors="surrogatepass")
     # token_ids = tokenizer.encode(training_corpus)
@@ -192,9 +203,20 @@ def training_loop():
         optimizer = AdamW(transformerlm.parameters(), lr, cfg.betas, cfg.eps, cfg.weight_decay)
         optimizer.step()
 
+        # Log metrics to wandb.
+        run.log(
+            {
+                "loss": loss,
+                "learning_rate": lr
+            }
+        )
+
         optimizer.zero_grad()
 
         save_checkpoint(transformerlm, AdamW, t, cfg.checkpoint_path)
+
+    # Finish the run and upload any remaining data.
+    run.finish()
 
     
 
