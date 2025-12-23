@@ -12,6 +12,7 @@ from cs336_basics.transformer_lm import TransformerLM
 from cs336_basics.cross_entropy import CrossEntropy
 from cs336_basics.learning_rate_schedule import LearningRateSchedule
 from cs336_basics.adamw import AdamW
+from cs336_basics.checkpointing import save_checkpoint
 
 @dataclass
 class TrainConfig:
@@ -20,6 +21,7 @@ class TrainConfig:
     special_tokens: list[str] = ["<|endoftext|>"]
     data_path: Path = Path("cs336_basics/owedataset/owt_valid_sample.txt")
     tokenids_path: Path = Path("cs336_basics/owedataset/token_ids.npy")
+    checkpoint_path: Path = Path("cs336_basics/checkpoint/checkpoint.pt")
     batch_size: int = 4
     context_length: int = 1024
     device: str = "cpu"
@@ -47,6 +49,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--special_tokens", type=list[str], default=TrainConfig.special_tokens)
     p.add_argument("--data_path", type=Path, default=TrainConfig.data_path)
     p.add_argument("--tokenids_path", type=Path, default=TrainConfig.tokenids_path)
+    p.add_argument("--checkpoint_path", type=Path, default=TrainConfig.checkpoint_path)
     p.add_argument("--batch_size", type=int, default=TrainConfig.batch_size)
     p.add_argument("--context_length", type=int, default=TrainConfig.context_length)
     p.add_argument("--device", type=str, default=TrainConfig.device)
@@ -72,6 +75,7 @@ def load_cfg(args) -> TrainConfig:
         special_tokens = args.special_tokens,
         data_path = args.data_path,
         tokenids_path = args.tokenids_path,
+        checkpoint_path = args.checkpoint_path,
         batch_size = args.batch_size,
         context_length = args.context_length,
         device = args.device,
@@ -189,6 +193,8 @@ def training_loop():
         optimizer.step()
 
         optimizer.zero_grad()
+
+        save_checkpoint(transformerlm, AdamW, t, cfg.checkpoint_path)
 
     
 
