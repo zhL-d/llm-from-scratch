@@ -13,6 +13,7 @@ from cs336_basics.cross_entropy import CrossEntropy
 from cs336_basics.learning_rate_schedule import LearningRateSchedule
 from cs336_basics.adamw import AdamW
 from cs336_basics.checkpointing import save_checkpoint
+from cs336_basics.gradient_clipping import GradientClipping
 
 @dataclass
 class TrainConfig:
@@ -185,7 +186,11 @@ def training_loop():
     tokenize_and_save(cfg)
     token_ids_ndarray = np.load(cfg.tokenids_path, mmap_mode='r')
 
-    transformerlm = TransformerLM(cfg.vocab_size, cfg.context_length, cfg.num_layers, cfg.d_model, cfg.num_heads, cfg.d_ff, cfg.rope_theta)
+    transformerlm = TransformerLM(cfg.vocab_size, cfg.context_length, cfg.num_layers,
+                                  cfg.d_model, cfg.num_heads, cfg.d_ff,
+                                  cfg.rope_theta).to(cfg.device)
+
+    optimizer = AdamW(transformerlm.parameters(), cfg.alpha_max, cfg.betas, cfg.eps, cfg.weight_decay)
 
 
     for t in range(cfg.steps):
@@ -197,10 +202,14 @@ def training_loop():
 
         loss = CrossEntropy(logit, validation_data)
     
+        optimizer.zero_grad()
         loss.backward()
+        GradientClipping(transformerlm.parameters(), max_l2_norm=1.0)
 
         lr = LearningRateSchedule(t, cfg.alpha_max, cfg.alpha_min, cfg.t_w, cfg.t_c)
-        optimizer = AdamW(transformerlm.parameters(), lr, cfg.betas, cfg.eps, cfg.weight_decay)
+        for group in optimizer.param_groups:
+            group["lr"] = lr
+
         optimizer.step()
 
         # Log metrics to wandb.
@@ -211,9 +220,7 @@ def training_loop():
             }
         )
 
-        optimizer.zero_grad()
-
-        save_checkpoint(transformerlm, AdamW, t, cfg.checkpoint_path)
+        save_checkpoint(transformerlm, optimizer, t, cfg.checkpoint_path)
 
     # Finish the run and upload any remaining data.
     run.finish()
