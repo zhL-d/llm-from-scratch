@@ -25,6 +25,8 @@ class MultiHeadSelfAttentionRope(nn.Module):
         self.num_heads = num_heads
 
         self.rope_layer = RoPe(theta=theta, d_k=d_model // num_heads, max_seq_len=max_seq_len)
+        self.attention_layer = SDPAttention()
+
 
     def forward(self, x: Float[Tensor, " ... sequence_length d_in"], token_positions: Int[Tensor, " ... sequence_length"] | None = None) -> Float[Tensor, " ... sequence_length d_out"]:
         batch_shape = x.shape[:-2]
@@ -50,8 +52,8 @@ class MultiHeadSelfAttentionRope(nn.Module):
         causal_mask = ~torch.triu(torch.ones(x.shape[-2], x.shape[-2], dtype=bool,
                                              device=x.device), diagonal=1)
 
-        attention_layer = SDPAttention(q_x_heads, k_x_heads, v_x_heads, causal_mask)
-        embedding_cmhsa = attention_layer.forward()
+        # attention_layer = SDPAttention(q_x_heads, k_x_heads, v_x_heads, causal_mask)
+        embedding_cmhsa = self.attention_layer.forward(q_x_heads, k_x_heads, v_x_heads, causal_mask)
         embedding_cmhsa_trans = embedding_cmhsa.transpose(-3, -2)
         embedding_cmhsa_combined = embedding_cmhsa_trans.contiguous().reshape(*batch_shape, seq_len, -1)
         result = embedding_cmhsa_combined @ self.O.T
