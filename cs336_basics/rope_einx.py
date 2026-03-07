@@ -1,3 +1,4 @@
+from numpy import dtype
 import torch
 import torch.nn as nn
 from jaxtyping import Float, Int
@@ -18,8 +19,8 @@ class RoPe(nn.Module):
 
         block_num = d_k // 2
 
-        angle_i = torch.arange(max_seq_len)
-        angle_k = torch.arange(1, block_num + 1)
+        angle_i = torch.arange(max_seq_len, dtype=torch.float32)
+        angle_k = torch.arange(1, block_num + 1, dtype=torch.float32)
         angle = einx.multiply("max_seq_len 1, 1 block_num -> max_seq_len block_num", angle_i[:, None], torch.reciprocal(theta ** ((2*angle_k[None, :] - 2) / d_k)))
 
         sin = torch.sin(angle)

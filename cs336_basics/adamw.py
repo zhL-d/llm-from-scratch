@@ -27,9 +27,16 @@ class AdamW(torch.optim.Optimizer):
                     continue
 
                 state = self.state[p]
-                m = state.get("m", 0)
-                v = state.get("v", 0)
-                t = state.get("t", 1)
+
+                if len(state) == 0:
+                    state["t"] = 1
+                    state["m"] = torch.zeros_like(p.data)
+                    state["v"] = torch.zeros_like(p.data)
+
+                m = state["m"]
+                v = state["v"]
+                t = state["t"]
+
 
                 grad = p.grad.data
 

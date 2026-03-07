@@ -38,14 +38,17 @@ class MultiHeadSelfAttentionRope(nn.Module):
         k_x_heads = k_x.reshape(*batch_shape, seq_len, self.num_heads, -1)
         v_x_heads = v_x.reshape(*batch_shape, seq_len, self.num_heads, -1)
 
-        q_x_heads = q_x_heads.transpose(-3, 2)
-        k_x_heads = k_x_heads.transpose(-3, 2)
-        v_x_heads = v_x_heads.transpose(-3, 2)
+        q_x_heads = q_x_heads.transpose(-3, -2)
+        k_x_heads = k_x_heads.transpose(-3, -2)
+        v_x_heads = v_x_heads.transpose(-3, -2)
 
-        q_x_heads = self.rope_layer.forward(q_x_heads, token_positions)
-        k_x_heads = self.rope_layer.forward(k_x_heads, token_positions)
+        rope_positions = token_positions.unsqueeze(-2)  # (batch, 1, seq_len)
 
-        causal_mask = ~torch.triu(torch.ones(x.shape[-2], x.shape[-2], dtype=bool), diagonal=1)
+        q_x_heads = self.rope_layer.forward(q_x_heads, rope_positions)
+        k_x_heads = self.rope_layer.forward(k_x_heads, rope_positions)
+
+        causal_mask = ~torch.triu(torch.ones(x.shape[-2], x.shape[-2], dtype=bool,
+                                             device=x.device), diagonal=1)
 
         attention_layer = SDPAttention(q_x_heads, k_x_heads, v_x_heads, causal_mask)
         embedding_cmhsa = attention_layer.forward()
