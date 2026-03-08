@@ -7,19 +7,6 @@ from dataclasses import dataclass
 
 from cs336_basics.transformer_lm import TransformerLM
 
-@dataclass
-class TrainConfig:
-    vocab_size: int = 50257
-    context_length: int = 1024
-    d_model: int =  1600
-    num_layers: int = 48
-    num_heads: int = 25
-    d_ff: int = 6400
-    rope_theta: float = 10000.0
-
-cfg = TrainConfig()
-llm = TransformerLM(cfg.vocab_size, cfg.context_length, cfg.num_layers, cfg.d_model, cfg.num_heads, cfg.d_ff, cfg.rope_theta)
-
 def Decoding(model: TransformerLM, prompt_ids: npt.NDArray, max_tokens: int, temperature: float, topp_threshold: float, eos_id: int, context_length: int) -> Int[Tensor, "B Seq"]:
     device = next(model.parameters()).device
     
@@ -51,7 +38,7 @@ def Decoding(model: TransformerLM, prompt_ids: npt.NDArray, max_tokens: int, tem
     return x
 
 
-def TopP(probs: float[Tensor, "B V"], p: float) -> float[Tensor, "B V"]:
+def TopP(probs: Float[Tensor, "B V"], p: float) -> float[Tensor, "B V"]:
     B, V = probs.shape
 
     sorted_probs, sorted_idx = torch.sort(probs, dim=-1, descending=True)
@@ -64,9 +51,9 @@ def TopP(probs: float[Tensor, "B V"], p: float) -> float[Tensor, "B V"]:
     keep_sorted = pos <= cutoff_pos.unsqueeze(-1)   # [B V]
 
     keep_vocab = torch.zeros_like(keep_sorted)
-    keep_sorted.scatter_(dim=-1, index=sorted_idx, src=keep_sorted)
+    keep_vocab.scatter_(dim=-1, index=sorted_idx, src=keep_sorted)
 
-    kept = probs * keep_sorted.to(probs.dtype) # [B, V]
+    kept = probs * keep_vocab.to(probs.dtype) # [B, V]
     denom = kept.sum(dim=-1, keepdim=True) # [B, 1]
     return kept / denom
 

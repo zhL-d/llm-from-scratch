@@ -2,7 +2,8 @@ import torch
 from jaxtyping import Float, Int
 from torch import Tensor
 
-def CrossEntropy(o: Float[Tensor, "batch_size vocab_size"], targets: Int[Tensor, " batch_size"]) -> Float[Tensor, ""]:
+def CrossEntropy(o: Float[Tensor, "batch_size context_length vocab_size"], targets:
+                 Int[Tensor, " batch_size context_length"]) -> Float[Tensor, ""]:
     target_expanded = targets.unsqueeze(-1)
 
     o_norm = o - o.max(dim=-1, keepdim=True).values
