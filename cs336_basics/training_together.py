@@ -183,12 +183,15 @@ def training_loop():
 
     # token_ids_ndarray = np.array(token_ids)
 
-    tokenize_and_save(cfg)
+    if not cfg.tokenids_path.exists():
+        tokenize_and_save(cfg)
+
     token_ids_ndarray = np.load(cfg.tokenids_path, mmap_mode='r')
 
     transformerlm = TransformerLM(cfg.vocab_size, cfg.context_length, cfg.num_layers,
                                   cfg.d_model, cfg.num_heads, cfg.d_ff,
                                   cfg.rope_theta).to(cfg.device)
+    transformerlm.train()
 
     optimizer = AdamW(transformerlm.parameters(), cfg.alpha_max, cfg.betas, cfg.eps, cfg.weight_decay)
 
