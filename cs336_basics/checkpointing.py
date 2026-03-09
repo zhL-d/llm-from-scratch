@@ -38,7 +38,7 @@ def load_checkpoint(src: str | os.PathLike | typing.BinaryIO | typing.IO[bytes],
     Returns:
         int: the previously-serialized number of iterations.
     """
-    states = torch.load(src)
+    states = torch.load(src, map_location="cpu")
 
     model.load_state_dict(states["model"])
     optimizer.load_state_dict(states["optimizer"])
