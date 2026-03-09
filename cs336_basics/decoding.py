@@ -38,7 +38,7 @@ def Decoding(model: TransformerLM, prompt_ids: npt.NDArray, max_tokens: int, tem
     return x
 
 
-def TopP(probs: Float[Tensor, "B V"], p: float) -> float[Tensor, "B V"]:
+def TopP(probs: Float[Tensor, "B V"], p: float) -> Float[Tensor, "B V"]:
     B, V = probs.shape
 
     sorted_probs, sorted_idx = torch.sort(probs, dim=-1, descending=True)
