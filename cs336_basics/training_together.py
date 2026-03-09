@@ -223,7 +223,7 @@ def training_loop():
             }
         )
 
-        if t % 1000 or t == (cfg.steps - 1):
+        if t % 1000 == 0 or t == (cfg.steps - 1):
             save_checkpoint(transformerlm, optimizer, t, cfg.checkpoint_path)
 
     # Finish the run and upload any remaining data.
