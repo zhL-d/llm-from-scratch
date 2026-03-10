@@ -7,6 +7,7 @@ import argparse
 import wandb
 from datetime import datetime
 import json
+import time
 
 from cs336_basics.tokenizer import Tokenizer
 from cs336_basics.data_loading import DataLoading
@@ -23,7 +24,9 @@ class TrainConfig:
     merge_path: str = "cs336_basics/prod/output_TinyStoriesV2-GPT4-train_serialization_merge_20251010_112414.json"
     special_tokens: list[str] = ["<|endoftext|>"]
     data_path: Path = Path("cs336_basics/owedataset/owt_valid_sample.txt")
+    data_vali_path: Path = Path("cs336_basics/owedataset/owt_valid_sample.txt")
     tokenids_path: Path = Path("cs336_basics/owedataset/token_ids.npy")
+    tokenids_vali_path: Path = Path("cs336_basics/owedataset/token_vali_ids.npy")
     # checkpoint_path: Path = Path("cs336_basics/checkpoint/checkpoint.pt")
     checkpoint_path: Path = Path("cs336_basics/checkpoint")
     batch_size: int = 4
@@ -127,7 +130,7 @@ def training_loop():
     cfg = load_cfg(args)
 
     run_dir = make_run_dir(cfg.checkpoint_path)
-    save_config(cfg, run_dir)
+    save_config(cfg, run_dir / "config.json")
 
     run = wandb.init(
     entity="sft_llm",
@@ -158,6 +161,8 @@ def training_loop():
 
 
     for t in range(cfg.steps):
+        start_time = time.time()           
+
         data_batch_tuple = DataLoading(token_ids_ndarray, cfg.batch_size, cfg.context_length, cfg.device)
         training_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[0]
         validation_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[1]
@@ -180,7 +185,9 @@ def training_loop():
         run.log(
             {
                 "loss": loss,
-                "learning_rate": lr
+                "learning_rate": lr,
+                "step": t,
+                "wallclock time": time.time() - start_time,
             }
         )
 
