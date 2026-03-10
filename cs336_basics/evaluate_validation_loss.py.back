@@ -8,6 +8,7 @@ import wandb
 from datetime import datetime
 import json
 import time
+import torch
 
 from cs336_basics.tokenizer import Tokenizer
 from cs336_basics.data_loading import DataLoading
@@ -48,7 +49,7 @@ def tokenize_and_save(cfg: TrainConfig):
 RUN_DIR = ""
 
 def validate_loop():
-
+    start_time = time.time()
 
     cfg = load_cfg(RUN_DIR)
 
@@ -80,36 +81,41 @@ def validate_loop():
     transformerlm.eval()
 
     for t in range(cfg.steps):
-        start_time = time.time()
+        with torch.no_grad():
 
-        data_batch_tuple = DataLoading(token_ids_ndarray, cfg.batch_size, cfg.context_length, cfg.device)
-        validation_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[0]
-        target_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[1]
-    
-        logit: Float[Tensor, " batch_size context_length vocab_size"] = transformerlm.forward(validation_data)
+            # start_time = time.time()
 
-        loss = CrossEntropy(logit, target_data)
-    
-        # optimizer.zero_grad()
-        # loss.backward()
-        # GradientClipping(transformerlm.parameters(), max_l2_norm=1.0)
+            data_batch_tuple = DataLoading(token_ids_ndarray, cfg.batch_size, cfg.context_length, cfg.device)
+            validation_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[0]
+            target_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[1]
 
-        # lr = LearningRateSchedule(t, cfg.alpha_max, cfg.alpha_min, cfg.t_w, cfg.t_c)
-        # for group in optimizer.param_groups:
-        #     group["lr"] = lr
+            logit: Float[Tensor, " batch_size context_length vocab_size"] = transformerlm.forward(validation_data)
 
-        # optimizer.step()
+            loss = CrossEntropy(logit, target_data)
+
+            # optimizer.zero_grad()
+            # loss.backward()
+            # GradientClipping(transformerlm.parameters(), max_l2_norm=1.0)
+
+            # lr = LearningRateSchedule(t, cfg.alpha_max, cfg.alpha_min, cfg.t_w, cfg.t_c)
+            # for group in optimizer.param_groups:
+            #     group["lr"] = lr
+
+            # optimizer.step()
 
 
-        # Log metrics to wandb.
-        run.log(
-            {
-                "loss": loss,
-                "step": t,
-                "wallclock time": time.time() - start_time,
-            }
-        )
+            # Log metrics to wandb.
+            run.log(
+                {
+                    "loss": loss,
+                    "step": t,
+                    # "wallclock time": time.time() - start_time,
+                }
+            )
 
+    run.log({
+        "wallclock time": time.time() - start_time,
+    })
     # Finish the run and upload any remaining data.
     artifact = wandb.Artifact("transformer_checkpoint_config", type="model")
     artifact.add_dir(str(RUN_DIR))

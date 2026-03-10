@@ -8,6 +8,7 @@ import wandb
 from datetime import datetime
 import json
 import time
+import torch
 
 from cs336_basics.tokenizer import Tokenizer
 from cs336_basics.data_loading import DataLoading
@@ -23,22 +24,23 @@ class TrainConfig:
     vocab_path: str = "cs336_basics/prod/output_TinyStoriesV2-GPT4-train_serialization_vocab_20251010_112414.json"
     merge_path: str = "cs336_basics/prod/output_TinyStoriesV2-GPT4-train_serialization_merge_20251010_112414.json"
     special_tokens: list[str] = ["<|endoftext|>"]
-    data_path: Path = Path("cs336_basics/owedataset/owt_valid_sample.txt")
-    data_vali_path: Path = Path("cs336_basics/owedataset/owt_valid_sample.txt")
-    tokenids_path: Path = Path("cs336_basics/owedataset/token_ids.npy")
-    tokenids_vali_path: Path = Path("cs336_basics/owedataset/token_vali_ids.npy")
+    data_path: Path = Path("cs336_basics/mydataset/TinyStoriesV2-GPT4-train.txt")
+    data_vali_path: Path = Path("cs336_basics/mydataset/TinyStoriesV2-GPT4-valid.txt")
+    tokenids_path: Path = Path("cs336_basics/mydataset/token_ids.npy")
+    tokenids_vali_path: Path = Path("cs336_basics/mydataset/token_vali_ids.npy")
     # checkpoint_path: Path = Path("cs336_basics/checkpoint/checkpoint.pt")
     checkpoint_path: Path = Path("cs336_basics/checkpoint")
     batch_size: int = 4
-    context_length: int = 1024
+    context_length: int = 256
     device: str = "cpu"
-    vocab_size: int = 50257
-    d_model: int =  1600
-    num_layers: int = 48
-    num_heads: int = 25
-    d_ff: int = 6400
+    vocab_size: int = 10000
+    d_model: int =  512
+    num_layers: int = 4
+    num_heads: int = 16
+    d_ff: int = 1344
     rope_theta: float = 10000.0
     steps: int = 100
+    vali_steps: int = 50
     # lr schedule
     alpha_max: float = 1
     alpha_min: float = 1 * 0.1
@@ -53,9 +55,11 @@ def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser()
     p.add_argument("--vocab_path", type=str, default=TrainConfig.vocab_path)
     p.add_argument("--merge_path", type=str, default=TrainConfig.merge_path)
-    p.add_argument("--special_tokens", type=list[str], default=TrainConfig.special_tokens)
+    p.add_argument("--special_tokens", type=str, default=TrainConfig.special_tokens)
     p.add_argument("--data_path", type=Path, default=TrainConfig.data_path)
+    p.add_argument("--data_vali_path", type=Path, default=TrainConfig.data_vali_path)
     p.add_argument("--tokenids_path", type=Path, default=TrainConfig.tokenids_path)
+    p.add_argument("--tokenids_vali_path", type=Path, default=TrainConfig.tokenids_vali_path)
     p.add_argument("--checkpoint_path", type=Path, default=TrainConfig.checkpoint_path)
     p.add_argument("--batch_size", type=int, default=TrainConfig.batch_size)
     p.add_argument("--context_length", type=int, default=TrainConfig.context_length)
@@ -67,13 +71,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--d_ff", type=int, default=TrainConfig.d_ff)
     p.add_argument("--rope_theta", type=float, default=TrainConfig.rope_theta)
     p.add_argument("--steps", type=int, default=TrainConfig.steps)
+    p.add_argument("--vali_steps", type=int, default=TrainConfig.vali_steps)
     p.add_argument("--alpha_max", type=float, default=TrainConfig.alpha_max)
     p.add_argument("--alpha_min", type=float, default=TrainConfig.alpha_min)
     p.add_argument("--t_w", type=int, default=TrainConfig.t_w)
     p.add_argument("--t_c", type=int, default=TrainConfig.t_c)
-    p.add_argument("--betas", type=tuple[float, float], default=TrainConfig.betas)
+    p.add_argument("--betas", type=float, nargs=2, default=list(TrainConfig.betas))
     p.add_argument("--eps", type=float, default=TrainConfig.eps)
     p.add_argument("--weight_decay", type=float, default=TrainConfig.weight_decay)
+
+    return p
 
 def load_cfg(args) -> TrainConfig:
     cfg = TrainConfig(
@@ -81,7 +88,9 @@ def load_cfg(args) -> TrainConfig:
         merge_path = args.merge_path,
         special_tokens = args.special_tokens,
         data_path = args.data_path,
+        data_vali_path = args.data_vali_path,
         tokenids_path = args.tokenids_path,
+        tokenids_vali_path = args.tokenids_vali_path,
         checkpoint_path = args.checkpoint_path,
         batch_size = args.batch_size,
         context_length = args.context_length,
@@ -93,27 +102,38 @@ def load_cfg(args) -> TrainConfig:
         d_ff = args.d_ff,
         rope_theta = args.rope_theta,
         steps = args.steps,
+        vali_steps = args.vali_steps,
         # lr schedule
         alpha_max = args.alpha_max,
         alpha_min = args.alpha_min,
         t_w = args.t_w,
         t_c = args.t_c,
         # optimizer
-        betas = args.betas,
+        betas = tuple(args.betas),
         eps = args.eps,
         weight_decay = args.weight_decay
     )
 
     return cfg
 
+
 def tokenize_and_save(cfg: TrainConfig):
     tokenizer = Tokenizer.from_files(cfg.vocab_path, cfg.merge_path, cfg.special_tokens)
-    training_corpus = cfg.data_path.read_text(encoding="utf-8", errors="surrogatepass")
-    token_ids = tokenizer.encode(training_corpus)
-
-    token_ids_ndarray = np.array(token_ids)
     
-    np.save(cfg.tokenids_path, token_ids_ndarray)
+    if not cfg.tokenids_path.exists():
+
+        training_corpus = cfg.data_path.read_text(encoding="utf-8", errors="surrogatepass")
+        token_ids = tokenizer.encode(training_corpus)
+
+        token_ids_ndarray = np.array(token_ids)
+
+        np.save(cfg.tokenids_path, token_ids_ndarray)
+    if not cfg.tokenids_vali_path.exists():
+        vali_corpus = cfg.data_vali_path.read_text(encoding="utf-8", errors="surrogatepass")
+        vali_token_ids = tokenizer.encode(vali_corpus)
+        vali_token_ids_ndarray = np.array(vali_token_ids)
+
+        np.save(cfg.tokenids_vali_path, vali_token_ids_ndarray)
 
 def make_run_dir(base_path: Path) -> Path:
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -125,6 +145,7 @@ def save_config(cfg: TrainConfig, path: Path):
     path.write_text(json.dumps(asdict(cfg), indent=2, default=str), encoding="utf-8")
 
 def training_loop():
+    start_time = time.time() 
 
     args = build_parser().parse_args()
     cfg = load_cfg(args)
@@ -138,19 +159,14 @@ def training_loop():
     config=asdict(cfg),
     dir=str(run_dir)
 )
-    
     lastckpt = run_dir / "last_checkpoint.pt"
 
-    # tokenizer = Tokenizer.from_files(cfg.vocab_path, cfg.merge_path, cfg.special_tokens)
-    # training_corpus = cfg.data_path.read_text(encoding="utf-8", errors="surrogatepass")
-    # token_ids = tokenizer.encode(training_corpus)
-
-    # token_ids_ndarray = np.array(token_ids)
-
-    if not cfg.tokenids_path.exists():
+    if not cfg.tokenids_path.exists() or not cfg.tokenids_vali_path.exists():
         tokenize_and_save(cfg)
+    
 
     token_ids_ndarray = np.load(cfg.tokenids_path, mmap_mode='r')
+    vali_token_ids_ndarray = np.load(cfg.tokenids_vali_path, mmap_mode='r')
 
     transformerlm = TransformerLM(cfg.vocab_size, cfg.context_length, cfg.num_layers,
                                   cfg.d_model, cfg.num_heads, cfg.d_ff,
@@ -161,15 +177,14 @@ def training_loop():
 
 
     for t in range(cfg.steps):
-        start_time = time.time()           
-
+                  
         data_batch_tuple = DataLoading(token_ids_ndarray, cfg.batch_size, cfg.context_length, cfg.device)
         training_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[0]
-        validation_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[1]
+        target_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[1]
     
         logit: Float[Tensor, " batch_size context_length vocab_size"] = transformerlm.forward(training_data)
 
-        loss = CrossEntropy(logit, validation_data)
+        loss = CrossEntropy(logit, target_data)
     
         optimizer.zero_grad()
         loss.backward()
@@ -184,12 +199,51 @@ def training_loop():
         # Log metrics to wandb.
         run.log(
             {
-                "loss": loss,
+                "loss": loss.item(),
                 "learning_rate": lr,
                 "step": t,
                 "wallclock time": time.time() - start_time,
             }
         )
+
+        if t % 500 == 0:
+            transformerlm.eval()
+
+            vali_losses = []
+
+            with torch.no_grad():
+                for t_vali in range(cfg.vali_steps):
+                    vali_data_batch_tuple = DataLoading(vali_token_ids_ndarray, cfg.batch_size, cfg.context_length, cfg.device)
+                    vali_validation_data: Int[Tensor, " batch_size context_length"] = vali_data_batch_tuple[0]
+                    vali_target_data: Int[Tensor, " batch_size context_length"] = vali_data_batch_tuple[1]
+
+                    vali_logit: Float[Tensor, " batch_size context_length vocab_size"] = transformerlm.forward(vali_validation_data)
+
+                    vali_loss = CrossEntropy(vali_logit, vali_target_data)
+
+                    vali_losses.append(vali_loss)
+
+                    # optimizer.zero_grad()
+                    # loss.backward()
+                    # GradientClipping(transformerlm.parameters(), max_l2_norm=1.0)
+
+                    # lr = LearningRateSchedule(t, cfg.alpha_max, cfg.alpha_min, cfg.t_w, cfg.t_c)
+                    # for group in optimizer.param_groups:
+                    #     group["lr"] = lr
+
+                    # optimizer.step()
+
+
+                # Log metrics to wandb.
+                
+                run.log(
+                        {
+                            "val_loss": sum(vl.item() for vl in vali_losses) / cfg.vali_steps,
+                            "step": t,
+                            "wallclock time": time.time() - start_time,
+                        }
+                    )
+            transformerlm.train()
 
         if t % 1000 == 0 or t == (cfg.steps - 1):
             save_checkpoint(transformerlm, optimizer, t, lastckpt)
