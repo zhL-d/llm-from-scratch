@@ -2,7 +2,7 @@ from pathlib import Path
 import numpy as np
 from torch import Tensor
 from jaxtyping import Int, Float
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 import argparse
 import wandb
 from datetime import datetime
@@ -23,14 +23,15 @@ from cs336_basics.gradient_clipping import GradientClipping
 class TrainConfig:
     vocab_path: str = "cs336_basics/prod/output_TinyStoriesV2-GPT4-train_serialization_vocab_20251010_112414.json"
     merge_path: str = "cs336_basics/prod/output_TinyStoriesV2-GPT4-train_serialization_merge_20251010_112414.json"
-    special_tokens: list[str] = ["<|endoftext|>"]
+    # special_tokens: list[str] = ["<|endoftext|>"]
+    special_tokens: list[str] = field(default_factory=lambda:["<|endoftext|>"])
     data_path: Path = Path("cs336_basics/mydataset/TinyStoriesV2-GPT4-train.txt")
     data_vali_path: Path = Path("cs336_basics/mydataset/TinyStoriesV2-GPT4-valid.txt")
     tokenids_path: Path = Path("cs336_basics/mydataset/token_ids.npy")
     tokenids_vali_path: Path = Path("cs336_basics/mydataset/token_vali_ids.npy")
     # checkpoint_path: Path = Path("cs336_basics/checkpoint/checkpoint.pt")
     checkpoint_path: Path = Path("cs336_basics/checkpoint")
-    batch_size: int = 4
+    batch_size: int = 32
     context_length: int = 256
     device: str = "cpu"
     vocab_size: int = 10000
@@ -39,13 +40,13 @@ class TrainConfig:
     num_heads: int = 16
     d_ff: int = 1344
     rope_theta: float = 10000.0
-    steps: int = 100
+    steps: int = 40000
     vali_steps: int = 50
     # lr schedule
-    alpha_max: float = 1
-    alpha_min: float = 1 * 0.1
+    alpha_max: float = 3e-4
+    alpha_min: float = 3e-4 * 0.1
     t_w: int = 7
-    t_c: int = 21
+    t_c: int = 40000
     # optimizer
     betas: tuple[float, float] = (0.9, 0.999)
     eps: float = 1e-8
@@ -55,7 +56,7 @@ def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser()
     p.add_argument("--vocab_path", type=str, default=TrainConfig.vocab_path)
     p.add_argument("--merge_path", type=str, default=TrainConfig.merge_path)
-    p.add_argument("--special_tokens", type=str, default=TrainConfig.special_tokens)
+    p.add_argument("--special_tokens", type=str, default=["<|endoftext|>"])
     p.add_argument("--data_path", type=Path, default=TrainConfig.data_path)
     p.add_argument("--data_vali_path", type=Path, default=TrainConfig.data_vali_path)
     p.add_argument("--tokenids_path", type=Path, default=TrainConfig.tokenids_path)
