@@ -2,9 +2,11 @@ from pathlib import Path
 import numpy as np
 from torch import Tensor
 from jaxtyping import Int, Float
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 import argparse
 import wandb
+from datetime import datetime
+import json
 
 from cs336_basics.tokenizer import Tokenizer
 from cs336_basics.data_loading import DataLoading
@@ -22,7 +24,8 @@ class TrainConfig:
     special_tokens: list[str] = ["<|endoftext|>"]
     data_path: Path = Path("cs336_basics/owedataset/owt_valid_sample.txt")
     tokenids_path: Path = Path("cs336_basics/owedataset/token_ids.npy")
-    checkpoint_path: Path = Path("cs336_basics/checkpoint/checkpoint.pt")
+    # checkpoint_path: Path = Path("cs336_basics/checkpoint/checkpoint.pt")
+    checkpoint_path: Path = Path("cs336_basics/checkpoint")
     batch_size: int = 4
     context_length: int = 1024
     device: str = "cpu"
@@ -109,73 +112,31 @@ def tokenize_and_save(cfg: TrainConfig):
     
     np.save(cfg.tokenids_path, token_ids_ndarray)
 
+def make_run_dir(base_path: Path) -> Path:
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    run_dir = base_path / ts
+    run_dir.mkdir(parents=True, exist_ok=False)
+    return run_dir
+
+def save_config(cfg: TrainConfig, path: Path):
+    path.write_text(json.dumps(asdict(cfg), indent=2, default=str), encoding="utf-8")
 
 def training_loop():
-    # vocab_path = "cs336_basics/prod/output_TinyStoriesV2-GPT4-train_serialization_vocab_20251010_112414.json"
-    # merge_path = "cs336_basics/prod/output_TinyStoriesV2-GPT4-train_serialization_merge_20251010_112414.json"
-    # special_tokens = ["<|endoftext|>"]
-    # data_path = Path("cs336_basics/owedataset/owt_valid_sample.txt")
-    # batch_size = 4
-    # context_length = 1024
-    # device = "cpu"
-    # vocab_size = 50257
-    # d_model =  1600
-    # num_layers = 48
-    # num_heads = 25
-    # d_ff = 6400
-    # rope_theta = 10000.0
-    # steps = 100
-    # # lr schedule
-    # alpha_max = 1
-    # alpha_min = 1 * 0.1
-    # t_w = 7
-    # t_c = 21
-    # # optimizer
-    # betas = (0.9, 0.999)
-    # eps = 1e-8
-    # weight_decay = 0.01
-
-    # args = build_parser().parse_args()
- 
-    # cfg = TrainConfig(
-    #     vocab_path = args.vocab_path,
-    #     merge_path = args.merge_path,
-    #     special_tokens = args.special_tokens,
-    #     data_path = args.data_path,
-    #     batch_size = args.batch_size,
-    #     context_length = args.context_length,
-    #     device = args.device,
-    #     vocab_size = args.vocab_size,
-    #     d_model =  args.d_model,
-    #     num_layers = args.num_layers,
-    #     num_heads = args.num_heads,
-    #     d_ff = args.d_ff,
-    #     rope_theta = args.rope_theta,
-    #     steps = args.steps,
-    #     # lr schedule
-    #     alpha_max = args.alpha_max,
-    #     alpha_min = args.alpha_min,
-    #     t_w = args.t_w,
-    #     t_c = args.t_c,
-    #     # optimizer
-    #     betas = args.betas,
-    #     eps = args.eps,
-    #     weight_decay = args.weight_decay
-    # )
 
     args = build_parser().parse_args()
     cfg = load_cfg(args)
 
+    run_dir = make_run_dir(cfg.checkpoint_path)
+    save_config(cfg, run_dir)
+
     run = wandb.init(
     entity="sft_llm",
     project="wb-hello-world",
-    config={
-        # "base_learning_rate": 0.02, 
-        "architecture": "transformer",
-        "dataset": cfg.data_path,
-        "epochs": cfg.steps,
-    },
+    config=asdict(cfg),
+    dir=str(run_dir)
 )
+    
+    lastckpt = run_dir / "last_checkpoint.pt"
 
     # tokenizer = Tokenizer.from_files(cfg.vocab_path, cfg.merge_path, cfg.special_tokens)
     # training_corpus = cfg.data_path.read_text(encoding="utf-8", errors="surrogatepass")
@@ -224,9 +185,12 @@ def training_loop():
         )
 
         if t % 1000 == 0 or t == (cfg.steps - 1):
-            save_checkpoint(transformerlm, optimizer, t, cfg.checkpoint_path)
+            save_checkpoint(transformerlm, optimizer, t, lastckpt)
 
     # Finish the run and upload any remaining data.
+    artifact = wandb.Artifact("transformer_checkpoint_config", type="model")
+    artifact.add_dir(str(run_dir))
+    run.log_artifact(artifact)
     run.finish()
 
     
