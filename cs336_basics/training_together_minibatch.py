@@ -155,7 +155,7 @@ def training_loop():
     save_config(cfg, run_dir / "config.json")
 
     run = wandb.init(
-    entity="zhL",
+    entity="sft_llm",
     project="sftransformer",
     config=asdict(cfg),
     dir=str(run_dir)
@@ -258,6 +258,9 @@ def training_loop():
     artifact.add_dir(str(run_dir))
     run.log_artifact(artifact)
     run.finish()
+
+if __name__ == "__main__":
+    training_loop()
 
     
 
