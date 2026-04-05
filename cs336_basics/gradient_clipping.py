@@ -17,9 +17,11 @@ def GradientClipping(para_list: Iterable[nn.Parameter], max_l2_norm: float, eps:
     l2_norm = torch.sqrt(sum(para.grad.pow(2).sum() for para in params if para.grad is not None))
 
     if l2_norm < max_l2_norm:
-        return
+        return l2_norm.item()
     for para in params:
         if para.grad is None:
             continue
         para.grad = (max_l2_norm / (l2_norm + eps)) * para.grad
+    
+    return l2_norm.item()
 

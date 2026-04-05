@@ -33,20 +33,20 @@ class TrainConfig:
     checkpoint_path: Path = Path("cs336_basics/checkpoint")
     batch_size: int = 32
     context_length: int = 256
-    device: str = "cpu"
+    device: str = "mps"
     vocab_size: int = 10000
     d_model: int =  512
     num_layers: int = 4
     num_heads: int = 16
     d_ff: int = 1344
     rope_theta: float = 10000.0
-    steps: int = 40000
+    steps: int = 5000
     vali_steps: int = 50
     # lr schedule
     alpha_max: float = 3e-4
     alpha_min: float = 3e-4 * 0.1
-    t_w: int = 7
-    t_c: int = 40000
+    t_w: int = 100
+    t_c: int = 5000
     # optimizer
     betas: tuple[float, float] = (0.9, 0.999)
     eps: float = 1e-8
@@ -156,7 +156,7 @@ def training_loop():
 
     run = wandb.init(
     entity="sft_llm",
-    project="wb-hello-world",
+    project="sftransformer",
     config=asdict(cfg),
     dir=str(run_dir)
 )
@@ -189,7 +189,7 @@ def training_loop():
     
         optimizer.zero_grad()
         loss.backward()
-        GradientClipping(transformerlm.parameters(), max_l2_norm=1.0)
+        grad_norm = GradientClipping(transformerlm.parameters(), max_l2_norm=1.0)
 
         lr = LearningRateSchedule(t, cfg.alpha_max, cfg.alpha_min, cfg.t_w, cfg.t_c)
         for group in optimizer.param_groups:
@@ -202,6 +202,7 @@ def training_loop():
             {
                 "loss": loss.item(),
                 "learning_rate": lr,
+                "grad_norm": grad_norm,
                 "step": t,
                 "wallclock time": time.time() - start_time,
             }
