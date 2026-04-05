@@ -256,9 +256,6 @@ def training_loop():
     run.log_artifact(artifact)
     run.finish()
 
-    
+if __name__ == "__main__":
+    training_loop()
 
-
-
-
-    
