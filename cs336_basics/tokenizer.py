@@ -137,7 +137,7 @@ class Tokenizer:
                             # May include multi tokens
                             tokenized_pretoken = self.tokenize(pretoken)
 
-                            logger.debug(f"Tokenizing: Pretoken[{idx}]={pretoken} -> Tokenized Pretoken={tokenized_pretoken}")
+                            # logger.debug(f"Tokenizing: Pretoken[{idx}]={pretoken} -> Tokenized Pretoken={tokenized_pretoken}")
 
                             for token_idx, token in enumerate(tokenized_pretoken):
                                 try:
@@ -147,7 +147,7 @@ class Tokenizer:
                                         f"Token {token} not found in vocabulary table."
                                     )
 
-                                logger.debug(f"Mapping token id: Token[{token_idx}]={token} -> Token_id={token_id}")
+                                # logger.debug(f"Mapping token id: Token[{token_idx}]={token} -> Token_id={token_id}")
 
                                 yield token_id                      
             else:
@@ -159,7 +159,7 @@ class Tokenizer:
                     # May include multi tokens
                     tokenized_pretoken = self.tokenize(pretoken)
 
-                    logger.debug(f"Tokenizing: Pretoken[{idx}]={pretoken} -> Tokenized Pretoken={tokenized_pretoken}")
+                    # logger.debug(f"Tokenizing: Pretoken[{idx}]={pretoken} -> Tokenized Pretoken={tokenized_pretoken}")
 
                     for token_idx, token in enumerate(tokenized_pretoken):
                         try:
@@ -169,7 +169,7 @@ class Tokenizer:
                                 f"Token {token} not found in vocabulary table."
                             )
 
-                        logger.debug(f"Mapping token id: Token[{token_idx}]={token} -> Token_id={token_id}")
+                        # logger.debug(f"Mapping token id: Token[{token_idx}]={token} -> Token_id={token_id}")
 
                         yield token_id
 
@@ -240,7 +240,7 @@ class Tokenizer:
         else:
             pass
 
-        logger.debug(f"Pretokenization result: {pretokens}")
+        # logger.debug(f"Pretokenization result: {pretokens}")
         logger.info("Pretokenization complete")
 
         return pretokens
@@ -259,7 +259,7 @@ class Tokenizer:
 
         for merge_idx, merge in enumerate(self.merges):
 
-            logger.debug(f"Start merge[{merge_idx}]: merge item={merge}, pretoken={pretoken}")
+            # logger.debug(f"Start merge[{merge_idx}]: merge item={merge}, pretoken={pretoken}")
 
             i = 0
             while i < len(pretoken)-1:

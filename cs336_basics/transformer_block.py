@@ -27,7 +27,7 @@ class TransformerBlock(nn.Module):
         x_norm = self.rmsnorm_first_layer.forward(x)
         # embedding_attention = self.multiheadselfattentionrops_layer.forward(x_norm)
         x_seq_len = x.size(-2)
-        token_positions = torch.arange(x_seq_len).unsqueeze(0).expand(*x.shape[:-2], x_seq_len)
+        token_positions = torch.arange(x_seq_len, device=x.device).unsqueeze(0).expand(*x.shape[:-2], x_seq_len)
         embedding_attention = self.multiheadselfattentionrops_layer.forward(x_norm, token_positions)
 
         result_firstsublayer = x + embedding_attention

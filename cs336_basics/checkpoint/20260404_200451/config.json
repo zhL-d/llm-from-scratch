@@ -1,0 +1,33 @@
+{
+  "vocab_path": "cs336_basics/prod/output_TinyStoriesV2-GPT4-train_serialization_vocab_20251010_112414.json",
+  "merge_path": "cs336_basics/prod/output_TinyStoriesV2-GPT4-train_serialization_merge_20251010_112414.json",
+  "special_tokens": [
+    "<|endoftext|>"
+  ],
+  "data_path": "cs336_basics/mydataset/TinyStoriesV2-GPT4-train.txt",
+  "data_vali_path": "cs336_basics/mydataset/TinyStoriesV2-GPT4-valid.txt",
+  "tokenids_path": "cs336_basics/mydataset/token_ids.npy",
+  "tokenids_vali_path": "cs336_basics/mydataset/token_vali_ids.npy",
+  "checkpoint_path": "cs336_basics/checkpoint",
+  "batch_size": 32,
+  "context_length": 256,
+  "device": "mps",
+  "vocab_size": 10000,
+  "d_model": 512,
+  "num_layers": 4,
+  "num_heads": 16,
+  "d_ff": 1344,
+  "rope_theta": 10000.0,
+  "steps": 300,
+  "vali_steps": 50,
+  "alpha_max": 0.001,
+  "alpha_min": 0.0001,
+  "t_w": 7,
+  "t_c": 300,
+  "betas": [
+    0.9,
+    0.999
+  ],
+  "eps": 1e-08,
+  "weight_decay": 0.01
+}

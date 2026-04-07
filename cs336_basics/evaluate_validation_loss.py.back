@@ -1,0 +1,130 @@
+from pathlib import Path
+import numpy as np
+from torch import Tensor
+from jaxtyping import Int, Float
+from dataclasses import asdict, dataclass
+import argparse
+import wandb
+from datetime import datetime
+import json
+import time
+import torch
+
+from cs336_basics.tokenizer import Tokenizer
+from cs336_basics.data_loading import DataLoading
+from cs336_basics.transformer_lm import TransformerLM
+from cs336_basics.cross_entropy import CrossEntropy
+from cs336_basics.learning_rate_schedule import LearningRateSchedule
+from cs336_basics.adamw import AdamW
+from cs336_basics.checkpointing import load_checkpoint
+from cs336_basics.gradient_clipping import GradientClipping
+from cs336_basics.training_together import TrainConfig
+
+
+def load_cfg(run_dir: Path) -> TrainConfig:
+    cfg_path = run_dir / "config.json"
+    cfg_dict = json.loads(cfg_path.read_text(encoding="utf-8"))
+    cfg = TrainConfig(**cfg_dict)
+
+    return cfg
+
+def tokenize_and_save(cfg: TrainConfig):
+    tokenizer = Tokenizer.from_files(cfg.vocab_path, cfg.merge_path, cfg.special_tokens)
+    validate_corpus = cfg.data_vali_path.read_text(encoding="utf-8", errors="surrogatepass")
+    token_ids = tokenizer.encode(validate_corpus)
+
+    token_ids_ndarray = np.array(token_ids)
+    
+    np.save(cfg.tokenids_vali_path, token_ids_ndarray)
+
+# def make_run_dir(base_path: Path) -> Path:
+#     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+#     run_dir = base_path / ts
+#     run_dir.mkdir(parents=True, exist_ok=False)
+#     return run_dir
+
+# def save_config(cfg: TrainConfig, path: Path):
+#     path.write_text(json.dumps(asdict(cfg), indent=2, default=str), encoding="utf-8")
+
+RUN_DIR = ""
+
+def validate_loop():
+    start_time = time.time()
+
+    cfg = load_cfg(RUN_DIR)
+
+    checkpint_path = RUN_DIR / "last_checkpoint.pt"
+    
+
+    run = wandb.init(
+    entity="sft_llm",
+    project="wb-hello-world",
+    config=asdict(cfg),
+    dir=str(RUN_DIR)
+)
+    
+
+
+    if not cfg.tokenids_vali_path.exists():
+        tokenize_and_save(cfg)
+
+    token_ids_ndarray = np.load(cfg.tokenids_path, mmap_mode='r')
+
+    transformerlm = TransformerLM(cfg.vocab_size, cfg.context_length, cfg.num_layers,
+                                  cfg.d_model, cfg.num_heads, cfg.d_ff,
+                                  cfg.rope_theta).to(cfg.device)
+      
+    optimizer = AdamW(transformerlm.parameters(), cfg.alpha_max, cfg.betas, cfg.eps, cfg.weight_decay)
+
+    iter_step = load_checkpoint(checkpint_path, transformerlm, optimizer)
+
+    transformerlm.eval()
+
+    for t in range(cfg.steps):
+        with torch.no_grad():
+
+            # start_time = time.time()
+
+            data_batch_tuple = DataLoading(token_ids_ndarray, cfg.batch_size, cfg.context_length, cfg.device)
+            validation_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[0]
+            target_data: Int[Tensor, " batch_size context_length"] = data_batch_tuple[1]
+
+            logit: Float[Tensor, " batch_size context_length vocab_size"] = transformerlm.forward(validation_data)
+
+            loss = CrossEntropy(logit, target_data)
+
+            # optimizer.zero_grad()
+            # loss.backward()
+            # GradientClipping(transformerlm.parameters(), max_l2_norm=1.0)
+
+            # lr = LearningRateSchedule(t, cfg.alpha_max, cfg.alpha_min, cfg.t_w, cfg.t_c)
+            # for group in optimizer.param_groups:
+            #     group["lr"] = lr
+
+            # optimizer.step()
+
+
+            # Log metrics to wandb.
+            run.log(
+                {
+                    "loss": loss,
+                    "step": t,
+                    # "wallclock time": time.time() - start_time,
+                }
+            )
+
+    run.log({
+        "wallclock time": time.time() - start_time,
+    })
+    # Finish the run and upload any remaining data.
+    artifact = wandb.Artifact("transformer_checkpoint_config", type="model")
+    artifact.add_dir(str(RUN_DIR))
+    run.log_artifact(artifact)
+    run.finish()
+
+    
+
+
+
+
+    

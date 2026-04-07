@@ -18,7 +18,7 @@ from cs336_basics.positionwise_feedforward_einx import PWFFN
 from cs336_basics.rope_einx import RoPe
 import cs336_basics.softmax_einx as sm
 from cs336_basics.scaled_dot_product_attention import SDPAttention
-from cs336_basics.multihead_self_attention import MultiHeadSelfAttention
+from cs336_basics.backup.multihead_self_attention import MultiHeadSelfAttention
 from cs336_basics.multihead_self_attention_rope import MultiHeadSelfAttentionRope
 from cs336_basics.transformer_block import TransformerBlock
 from cs336_basics.transformer_lm import TransformerLM
@@ -136,8 +136,8 @@ def run_scaled_dot_product_attention(
     Returns:
         Float[Tensor, " ... queries d_v"]: Output of SDPA
     """
-    model  = SDPAttention(Q, K, V, mask)
-    result = model.forward()
+    model  = SDPAttention()
+    result = model.forward(Q, K, V, mask)
     return result
     # raise NotImplementedError
 
