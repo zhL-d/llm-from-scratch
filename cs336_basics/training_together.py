@@ -44,7 +44,7 @@ class TrainConfig:
     vali_steps: int = 50
     # lr schedule
     alpha_max: float = 3e-4
-    alpha_min: float = 3e-4 * 0.1
+    alpha_min: float = alpha_max * 0.1
     t_w: int = 100
     t_c: int = 5000
     # optimizer
@@ -106,7 +106,7 @@ def load_cfg(args) -> TrainConfig:
         vali_steps = args.vali_steps,
         # lr schedule
         alpha_max = args.alpha_max,
-        alpha_min = args.alpha_min,
+        alpha_min = args.alpha_max * 0.1,
         t_w = args.t_w,
         t_c = args.t_c,
         # optimizer

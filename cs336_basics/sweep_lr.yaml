@@ -1,0 +1,16 @@
+program: cs336_basics/training_together.py
+method: grid
+metric:
+  name: val_loss
+  goal: minimize
+parameters:
+  alpha_max:
+    values: [0.0001, 0.0003, 0.001, 0.003]
+  steps:
+    value: 5000
+  t_c:
+    value: 5000
+  t_w:
+    value: 100
+  device:
+    value: mps
