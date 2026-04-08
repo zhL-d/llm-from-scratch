@@ -1,3 +1,4 @@
+import math
 import torch
 import torch.nn as nn
 import einx
@@ -10,10 +11,12 @@ class PWFFN(nn.Module):
 
         # d_ff = 8/3 * d_model
 
-        self.W1 = nn.Parameter(torch.randn(d_ff, d_model, dtype=dtype, device=device))
-        self.W3 = nn.Parameter(torch.randn(d_ff, d_model, dtype=dtype, device=device))
-
-        self.W2 = nn.Parameter(torch.randn(d_model, d_ff, dtype=dtype, device=device))
+        std = math.sqrt(2 / (d_ff + d_model))
+        self.W1 = nn.Parameter(torch.empty(d_ff, d_model, dtype=dtype, device=device))
+        self.W3 = nn.Parameter(torch.empty(d_ff, d_model, dtype=dtype, device=device))
+        self.W2 = nn.Parameter(torch.empty(d_model, d_ff, dtype=dtype, device=device))
+        for w in [self.W1, self.W2, self.W3]:
+            nn.init.trunc_normal_(w, mean=0, std=std, a=-3*std, b=3*std)
     def forward(self, x: Float[Tensor, " ... d_model"]) -> Float[Tensor, "... d_model"]:
         w1_item = einx.dot("... [d_model], [d_model] d_ff -> ... d_ff", x, self.W1.T)
         w1_gate_item = PWFFN.silu(w1_item)

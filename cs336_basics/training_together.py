@@ -43,10 +43,10 @@ class TrainConfig:
     steps: int = 5000
     vali_steps: int = 50
     # lr schedule
-    alpha_max: float = 3e-4
+    alpha_max: float = 3e-3
     alpha_min: float = alpha_max * 0.1
     t_w: int = 100
-    t_c: int = 5000
+    t_c: int = 4999
     # optimizer
     betas: tuple[float, float] = (0.9, 0.999)
     eps: float = 1e-8
@@ -208,7 +208,7 @@ def training_loop():
             }
         )
 
-        if t % 500 == 0:
+        if t % 500 == 0 or t == cfg.steps - 1:
             transformerlm.eval()
 
             vali_losses = []
