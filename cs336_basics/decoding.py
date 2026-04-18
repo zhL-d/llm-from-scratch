@@ -1,17 +1,22 @@
 import torch
 from torch import Tensor
-import numpy.typing as npt
 from jaxtyping import Float, Int
 import einx
 from dataclasses import dataclass
 
 from cs336_basics.transformer_lm import TransformerLM
 
-def Decoding(model: TransformerLM, prompt_ids: npt.NDArray, max_tokens: int, temperature: float, topp_threshold: float, eos_id: int, context_length: int) -> Int[Tensor, "B Seq"]:
+def Decoding(model: TransformerLM, prompt_ids: list[int], max_tokens: int, temperature: float, topp_threshold: float, eos_id: int, context_length: int) -> Int[Tensor, "B Seq"]:
+    """
+    Returns:
+        prompt + generated text
+    """
     device = next(model.parameters()).device
     
-    prompt_ids_tensor: Int[Tensor, "batch_size seq_length"] = torch.from_numpy(prompt_ids)
-    x = prompt_ids_tensor.to(device)   # [B, Seq]
+    # prompt_ids_tensor: Int[Tensor, "batch_size seq_length"] = torch.from_numpy(prompt_ids)
+    # x = prompt_ids_tensor.to(device)   # [B, Seq]
+
+    x = torch.tensor(prompt_ids, dtype=torch.long).unsqueeze(0).to(device)
 
     finished = torch.zeros(x.size(0), dtype=torch.bool, device=device)
 
