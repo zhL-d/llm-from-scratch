@@ -25,7 +25,7 @@ def Generate():
     states = torch.load(cpt_path, map_location="cpu")
     model.load_state_dict(states["model"])
 
-    prompt = "one"
+    prompt = "Once upon a time"
     tokenizer = Tokenizer.from_files(
         vocab_filepath=config["vocab_path"],
         merges_filepath=config["merge_path"],

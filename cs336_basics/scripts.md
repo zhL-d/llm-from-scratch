@@ -110,3 +110,5 @@ UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_gradient_clippi
 UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_get_batch
 
 UV_NO_SYNC=1 uv run pytest --ignore=cs336_basics/owntest -k test_checkpointing
+
+UV_NO_SYNC=1 uv run python cs336_basics/generate.py
