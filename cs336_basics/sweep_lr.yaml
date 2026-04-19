@@ -5,11 +5,11 @@ metric:
   goal: minimize
 parameters:
   alpha_max:
-    values: [0.0001, 0.0003, 0.001, 0.003]
+    values: [0.001, 0.003, 0.005, 0.01]
   steps:
     value: 5000
   t_c:
-    value: 5000
+    value: 4999
   t_w:
     value: 100
   device:

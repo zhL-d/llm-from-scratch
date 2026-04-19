@@ -1,3 +1,4 @@
+import math
 import torch
 import torch.nn as nn
 from jaxtyping import Float, Int
@@ -17,10 +18,13 @@ class MultiHeadSelfAttentionRope(nn.Module):
         """
         super().__init__()
 
-        self.Q = nn.Parameter(torch.randn(d_model, d_model))
-        self.K = nn.Parameter(torch.randn(d_model, d_model))
-        self.V = nn.Parameter(torch.randn(d_model, d_model))
-        self.O = nn.Parameter(torch.randn(d_model, d_model))
+        std = math.sqrt(2 / (d_model + d_model))
+        self.Q = nn.Parameter(torch.empty(d_model, d_model))
+        self.K = nn.Parameter(torch.empty(d_model, d_model))
+        self.V = nn.Parameter(torch.empty(d_model, d_model))
+        self.O = nn.Parameter(torch.empty(d_model, d_model))
+        for w in [self.Q, self.K, self.V, self.O]:
+            nn.init.trunc_normal_(w, mean=0, std=std, a=-3*std, b=3*std)
 
         self.num_heads = num_heads
 
