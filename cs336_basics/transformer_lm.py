@@ -26,7 +26,7 @@ class TransformerLM(nn.Module):
             [TransformerBlock(d_model, num_heads, d_ff, context_length, rope_theta) for _ in range(num_layers)]
         )
         # self.transformerblock_layer = [TransformerBlock(d_model, num_heads, d_ff, context_length, rope_theta) for _ in range(num_layers)]
-        self.rmsnorm_layer = RMSNorm(d_model)
+        # self.rmsnorm_layer = RMSNorm(d_model)
         self.linear_layer = Linear(d_model, vocab_size)
     def forward(self, in_indices: Int[Tensor, " batch_size sequence_length"]) -> Float[Tensor, " batch_size sequence_length vocab_size"]:
         """Implement the Transformer language model
@@ -44,7 +44,7 @@ class TransformerLM(nn.Module):
             output_embedding = block.forward(input_embedding)
             input_embedding = output_embedding
         
-        output_embedding = self.rmsnorm_layer.forward(output_embedding)
+        # output_embedding = self.rmsnorm_layer.forward(output_embedding)
         
         result = self.linear_layer.forward(output_embedding)
 
