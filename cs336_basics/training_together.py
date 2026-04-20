@@ -156,7 +156,7 @@ def training_loop():
 
     run = wandb.init(
     entity="sft_llm",
-    project="sftransformer",
+    project="stf-assignment1-basics-cs336_basics",
     config=asdict(cfg),
     dir=str(run_dir)
 )
