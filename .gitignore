@@ -3,8 +3,9 @@
 *.pth
 *.ckpt
 *.npy
-cs336_basics/checkpoint/*/last_checkpoint.pt
-cs336_basics/mydataset/*.npy
+cs336_basics/checkpoint/*/
+cs336_basics/checkpoint_gold/
+cs336_basics/mydataset/
 wandb/
 
 # Logs
