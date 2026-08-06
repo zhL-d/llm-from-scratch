@@ -1,0 +1,268 @@
+         1694594 function calls (1694497 primitive calls) in 0.657 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    0.657    0.657 /private/tmp/bpe-round1-46e620a/tests/adapters.py:566(run_train_bpe)
+        1    0.005    0.005    0.656    0.656 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:1142(train_bpe)
+      243    0.110    0.000    0.307    0.001 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:55(dump_pair_count)
+      243    0.049    0.000    0.235    0.001 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:1103(merge_new)
+      243    0.000    0.000    0.186    0.001 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/json/__init__.py:183(dumps)
+      243    0.000    0.000    0.186    0.001 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/json/encoder.py:183(encode)
+      243    0.185    0.001    0.185    0.001 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/json/encoder.py:205(iterencode)
+    15404    0.127    0.000    0.139    0.000 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:1083(_add_new_contribution)
+      243    0.000    0.000    0.064    0.000 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:1123(_pick_best_mergetoken)
+  245/244    0.041    0.000    0.063    0.000 {built-in method builtins.max}
+        1    0.021    0.021    0.034    0.034 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:492(pretokenize_and_count)
+    15404    0.018    0.000    0.026    0.000 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:1061(_delete_old_contribution)
+   836665    0.023    0.000    0.023    0.000 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:1127(<lambda>)
+    15404    0.015    0.000    0.020    0.000 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:1024(_build_new_pretoken)
+      243    0.000    0.000    0.011    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:2208(info)
+      243    0.000    0.000    0.011    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1529(info)
+      243    0.000    0.000    0.011    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1660(_log)
+        1    0.007    0.007    0.010    0.010 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:1006(build_paircount_and_cache)
+   134512    0.009    0.000    0.009    0.000 {method 'get' of 'dict' objects}
+   105982    0.009    0.000    0.009    0.000 {method 'add' of 'set' objects}
+      243    0.000    0.000    0.008    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1686(handle)
+      243    0.000    0.000    0.008    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1746(callHandlers)
+      243    0.000    0.000    0.008    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1011(handle)
+      243    0.000    0.000    0.008    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1266(emit)
+      243    0.000    0.000    0.008    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1148(emit)
+    91517    0.007    0.000    0.007    0.000 {method 'discard' of 'set' objects}
+   237925    0.007    0.000    0.007    0.000 {built-in method builtins.len}
+      243    0.007    0.000    0.007    0.000 {method 'write' of '_io.TextIOWrapper' objects}
+   160785    0.006    0.000    0.006    0.000 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:515(<genexpr>)
+    27758    0.002    0.000    0.002    0.000 {method 'group' of '_regex.Match' objects}
+    27759    0.002    0.000    0.002    0.000 {method 'encode' of 'str' objects}
+      243    0.000    0.000    0.002    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1645(makeRecord)
+      243    0.001    0.000    0.001    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:298(__init__)
+      243    0.000    0.000    0.001    0.000 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:747(update_vocab)
+      245    0.001    0.000    0.001    0.000 {built-in method builtins.sorted}
+        2    0.000    0.000    0.001    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/regex.py:449(_compile)
+      243    0.000    0.000    0.001    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1611(findCaller)
+        1    0.000    0.000    0.001    0.001 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/regex.py:340(finditer)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:988(format)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:690(format)
+      972    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:200(_is_internal_frame)
+      4/2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:417(_parse_pattern)
+     12/7    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:427(parse_sequence)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1137(flush)
+      243    0.000    0.000    0.000    0.000 <frozen posixpath>:117(splitext)
+      243    0.000    0.000    0.000    0.000 {method 'copy' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:795(remove_special_tokens)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/regex.py:314(split)
+      243    0.000    0.000    0.000    0.000 <frozen posixpath>:169(basename)
+      140    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:1561(__and__)
+      972    0.000    0.000    0.000    0.000 <frozen posixpath>:52(normcase)
+      243    0.000    0.000    0.000    0.000 <frozen genericpath>:133(_splitext)
+      486    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:968(acquire)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:803(parse_paren)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:674(formatMessage)
+     2267    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1116(parse_flags_subpattern)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:668(usesTime)
+      486    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:975(release)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:462(format)
+      729    0.000    0.000    0.000    0.000 {method 'rfind' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1102(parse_subpattern)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1417(parse_set)
+      440    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:1543(_get_value)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:170(<lambda>)
+      2/1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2039(optimise)
+     1461    0.000    0.000    0.000    0.000 {built-in method posix.fspath}
+      148    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:720(__call__)
+       10    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1187(parse_escape)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:447(usesTime)
+     12/7    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3406(optimise)
+        1    0.000    0.000    0.000    0.000 {method 'read' of '_io.TextIOWrapper' objects}
+      2/1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2133(_flatten_branches)
+      487    0.000    0.000    0.000    0.000 {method 'acquire' of '_thread.RLock' objects}
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:335(_compile_firstset)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:455(_format)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1485(current_thread)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1483(parse_set_imp_union)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:129(getLevelName)
+       28    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2484(__init__)
+      148    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:1128(__new__)
+      738    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+     46/3    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1897(compile)
+      490    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
+       18    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:384(make_case_flags)
+      9/6    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3418(pack_characters)
+      486    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:831(filter)
+      244    0.000    0.000    0.000    0.000 <frozen posixpath>:41(_get_sep)
+        1    0.000    0.000    0.000    0.000 <frozen codecs>:319(decode)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1374(parse_property)
+      243    0.000    0.000    0.000    0.000 {built-in method time.time}
+      243    0.000    0.000    0.000    0.000 {built-in method _asyncio.current_task}
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:345(_check_firstset)
+        1    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:1583(__invert__)
+        7    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1506(parse_set_member)
+        1    0.000    0.000    0.000    0.000 {method 'split' of '_regex.Pattern' objects}
+      2/1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2113(_compile)
+      501    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+      2/1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2089(pack_characters)
+        7    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1547(parse_set_item)
+      486    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+      487    0.000    0.000    0.000    0.000 {method 'release' of '_thread.RLock' objects}
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:383(getMessage)
+      243    0.000    0.000    0.000    0.000 {method 'flush' of '_io.TextIOWrapper' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method _io.open}
+        5    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3485(_compile)
+      243    0.000    0.000    0.000    0.000 {built-in method sys._getframe}
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:1413(_missing_)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1790(isEnabledFor)
+      243    0.000    0.000    0.000    0.000 {method 'find' of 'str' objects}
+      256    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/json/encoder.py:105(__init__)
+       18    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3500(_flush_characters)
+       13    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1850(with_flags)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1637(lookup_property)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:4316(_get_required_string)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1182(name)
+       28    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:1403(_iter_member_by_def_)
+      243    0.000    0.000    0.000    0.000 {built-in method posix.getpid}
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1912(get_required_string)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2146(_split_common_prefix)
+      2/1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2419(max_width)
+      4/3    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3829(_compile)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:189(name)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/cs336_basics/train_bpe.py:470(init_vocab)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2313(_reduce_to_set)
+      5/4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3809(optimise)
+       50    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:4147(match)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:447(__fspath__)
+     12/7    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2420(<genexpr>)
+        8    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:511(apply_quantifier)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:437(__str__)
+      243    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:37(current_process)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1626(standardise_name)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2106(get_firstset)
+        5    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3589(max_width)
+        8    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2876(_compile)
+        5    0.000    0.000    0.000    0.000 {built-in method builtins.sum}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:551(drive)
+       28    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:1393(_iter_member_by_value_)
+        2    0.000    0.000    0.000    0.000 {built-in method regex._regex.compile}
+        5    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3469(get_firstset)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:407(_load_parts)
+       15    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3590(<genexpr>)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:946(parse_lookaround)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:394(make_character)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:410(make_property)
+       23    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1840(make_sequence)
+     12/7    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3402(fix_groups)
+        3    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:376(_flatten_code)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:719(__truediv__)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:1550(__or__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:711(joinpath)
+       95    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/locale.py:667(getpreferredencoding)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:380(with_segments)
+       84    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1847(__init__)
+       87    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:4004(get)
+        8    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2847(optimise)
+      2/1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2035(fix_groups)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3894(__init__)
+        8    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2869(get_firstset)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/regex.py:377(escape)
+    26/16    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1903(__hash__)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3622(rebuild)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2513(_compile)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:4215(__init__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:387(_parse_path)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1605(numeric_to_rational)
+       26    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3395(__init__)
+       52    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:1157(__init__)
+       16    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2838(__init__)
+       11    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2367(_flush_set_members)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1395(parse_property_name)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/locale.py:600(setlocale)
+    26/16    0.000    0.000    0.000    0.000 {built-in method builtins.hash}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.all}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:358(__init__)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1085(parse_flags)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3608(__init__)
+        5    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3654(_handle_case_folding)
+        6    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2164(<genexpr>)
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+        1    0.000    0.000    0.000    0.000 <frozen posixpath>:71(join)
+       28    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:117(_iter_bits_lsb)
+        6    0.000    0.000    0.000    0.000 {built-in method _locale.setlocale}
+        8    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2852(pack_characters)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:234(_acquireLock)
+       14    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3236(_compile)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3230(get_firstset)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3922(_compile)
+        8    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:559(parse_quantifier)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2507(get_firstset)
+       26    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:1410(<lambda>)
+       28    0.000    0.000    0.000    0.000 {built-in method builtins.chr}
+        8    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2844(fix_groups)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3058(optimise)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3213(__init__)
+       27    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
+        8    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2907(max_width)
+       12    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2158(<genexpr>)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3684(max_width)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:1164(__new__)
+        1    0.000    0.000    0.000    0.000 {method '__exit__' of '_io._IOBase' objects}
+       29    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2504(optimise)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:4070(get_while)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:4186(expect)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1390(_handle_fromlist)
+       30    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1870(fix_groups)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/regex.py:471(complain_unused_args)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3049(__init__)
+        5    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1906(__eq__)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3992(__init__)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3087(_compile)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3626(get_firstset)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2031(__init__)
+       17    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3227(optimise)
+        6    0.000    0.000    0.000    0.000 {built-in method sys.intern}
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2540(max_width)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:243(_releaseLock)
+        8    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2074(_add_precheck)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:429(_format_parsed_parts)
+        5    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1069(parse_flag_set)
+       10    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1876(pack_characters)
+        2    0.000    0.000    0.000    0.000 {built-in method _locale.getencoding}
+        1    0.000    0.000    0.000    0.000 <frozen posixpath>:138(splitroot)
+        3    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3936(max_width)
+        1    0.000    0.000    0.000    0.000 {method 'finditer' of '_regex.Pattern' objects}
+        8    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1631(<genexpr>)
+        3    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x10453a058}
+       11    0.000    0.000    0.000    0.000 {method 'isspace' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 <frozen codecs>:309(__init__)
+        8    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1900(is_empty)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3203(_compile)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:4190(at_end)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3055(fix_groups)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:4277(_check_group_features)
+        4    0.000    0.000    0.000    0.000 {method 'upper' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3200(__init__)
+        4    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3709(__del__)
+        2    0.000    0.000    0.000    0.000 {method 'setdefault' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 {method 'clear' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:2902(__eq__)
+        2    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/regex.py:642(<genexpr>)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3065(pack_characters)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1369(disable)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/logging/__init__.py:1776(getEffectiveLevel)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1885(can_be_affix)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:569(_tail)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3111(max_width)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:560(root)
+        1    0.000    0.000    0.000    0.000 <frozen codecs>:260(__init__)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:1894(has_simple_start)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3919(has_simple_start)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round1-46e620a/.venv/lib/python3.12/site-packages/regex/_regex_core.py:3939(get_required_string)
+
+
