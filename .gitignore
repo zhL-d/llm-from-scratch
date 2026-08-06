@@ -1,3 +1,15 @@
+# ML artifacts — never commit these
+*.pt
+*.pth
+*.ckpt
+*.npy
+cs336_basics/checkpoint/*/last_checkpoint.pt
+cs336_basics/mydataset/*.npy
+wandb/
+
+# Logs
+*.log
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

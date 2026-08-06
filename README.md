@@ -1,50 +1,37 @@
-# CS336 Spring 2025 Assignment 1: Basics
+# GPT-Style Language Model from Scratch
 
-For a full description of the assignment, see the assignment handout at
-[cs336_spring2025_assignment1_basics.pdf](./cs336_spring2025_assignment1_basics.pdf)
+A GPT-style Transformer language model built from raw PyTorch tensor
+operations, no `nn.Transformer`, no Hugging Face. Includes:
 
-If you see any issues with the assignment handout or code, please feel free to
-raise a GitHub issue or open a pull request with a fix.
+- A from-scratch **BPE tokenizer**
+- The full Transformer architecture: **Embedding**, **RMSNorm**,
+  **RoPE**-based multi-head self-attention, **SwiGLU**-based
+  position-wise feed-forward, **Linear**, **Softmax**
+- A training pipeline: data loader, cross-entropy loss, gradient
+  clipping, LR scheduling, **AdamW**
+- Autoregressive inference (temperature and top-p sampling)
+- FLOPs/memory resource accounting across model scales
+
+## Highlights
+
+- Trained on TinyStories through a learning-rate sweep; followed up with architecture ablations
+  (removing normalization, pre-norm vs. post-norm) to confirm their
+  impact, tracked with Weights & Biases.
+- Profiled and optimized the BPE tokenizer trainer (cProfile, scalene)
+  for a **~3x** training-time speedup.
+- Automated deployment (GitHub Actions CI/CD) of the tokenizer's
+  training/encoding pipeline (Docker) to both **GCP** (Vertex AI, GCS)
+  and **Azure** (ACA Jobs, ACR, Bicep IaC).
+
+## Write-ups
+
+- [Transformer Architecture from Scratch](docs/blog/transformer-from-scratch.md)
+- [BPE Tokenizer: 4 Optimization Rounds](docs/blog/tokenizer-performance.md)
+- [Training Experiments: LR Search and Two Ablations](docs/blog/training-experiments.md)
+- [Resource Accounting: Parameters, Memory, and FLOPs](docs/blog/resource-accounting.md)
+- [Training the BPE Tokenizer in the Cloud](docs/blog/tokenizer-cloud-training.md)
+
 
 ## Setup
 
-### Environment
-We manage our environments with `uv` to ensure reproducibility, portability, and ease of use.
-Install `uv` [here](https://github.com/astral-sh/uv) (recommended), or run `pip install uv`/`brew install uv`.
-We recommend reading a bit about managing projects in `uv` [here](https://docs.astral.sh/uv/guides/projects/#managing-dependencies) (you will not regret it!).
-
-You can now run any code in the repo using
-```sh
-uv run <python_file_path>
-```
-and the environment will be automatically solved and activated when necessary.
-
-### Run unit tests
-
-
-```sh
-uv run pytest
-```
-
-Initially, all tests should fail with `NotImplementedError`s.
-To connect your implementation to the tests, complete the
-functions in [./tests/adapters.py](./tests/adapters.py).
-
-### Download data
-Download the TinyStories data and a subsample of OpenWebText
-
-``` sh
-mkdir -p data
-cd data
-
-wget https://huggingface.co/datasets/roneneldan/TinyStories/resolve/main/TinyStoriesV2-GPT4-train.txt
-wget https://huggingface.co/datasets/roneneldan/TinyStories/resolve/main/TinyStoriesV2-GPT4-valid.txt
-
-wget https://huggingface.co/datasets/stanford-cs336/owt-sample/resolve/main/owt_train.txt.gz
-gunzip owt_train.txt.gz
-wget https://huggingface.co/datasets/stanford-cs336/owt-sample/resolve/main/owt_valid.txt.gz
-gunzip owt_valid.txt.gz
-
-cd ..
-```
 
