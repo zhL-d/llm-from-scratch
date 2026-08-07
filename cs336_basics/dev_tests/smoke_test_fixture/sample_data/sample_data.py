@@ -1,14 +1,14 @@
 import random
 import os
 
-# input_path = "cs336_basics/smoke_test_fixture/sample_data/TinyStoriesV2-GPT4-train.txt"
-input_path = "cs336_basics/smoke_test_fixture/sample_data/owt_valid.txt"
+# input_path = "cs336_basics/dev_tests/smoke_test_fixture/sample_data/TinyStoriesV2-GPT4-train.txt"
+input_path = "cs336_basics/dev_tests/smoke_test_fixture/sample_data/owt_valid.txt"
 
 sampel_num = 10
 
 input_path_basename = os.path.basename(input_path)
 name_without_ext, _ = os.path.splitext(input_path_basename)
-output_path = f"cs336_basics/smoke_test_fixture/sample_data/sample_{name_without_ext}_k{sampel_num}.txt"
+output_path = f"cs336_basics/dev_tests/smoke_test_fixture/sample_data/sample_{name_without_ext}_k{sampel_num}.txt"
 
 with open(input_path, encoding="utf-8") as f:
     corpus = f.read()

@@ -66,15 +66,15 @@ def smoketest_vocab_with_newline():
 
 @pytest.fixture
 def smoketest_vocab_merge_path():
-    vocab_table_path = "cs336_basics/smoke_test_fixture/vocab_table/vocab.json"
-    merge_list_path = "cs336_basics/smoke_test_fixture/vocab_table/merge.json" 
+    vocab_table_path = "cs336_basics/dev_tests/smoke_test_fixture/vocab_table/vocab.json"
+    merge_list_path = "cs336_basics/dev_tests/smoke_test_fixture/vocab_table/merge.json" 
 
     return vocab_table_path, merge_list_path
 
 # @pytest.fixture
 # def gpt2_vocab_merge_path():
-#     vocab_table_path = "cs336_basics/smoke_test_fixture/vocab_table/gpt2/gpt2_vocab.json"
-#     merge_list_path = "cs336_basics/smoke_test_fixture/vocab_table/gpt2/gpt2_merges.txt" 
+#     vocab_table_path = "cs336_basics/dev_tests/smoke_test_fixture/vocab_table/gpt2/gpt2_vocab.json"
+#     merge_list_path = "cs336_basics/dev_tests/smoke_test_fixture/vocab_table/gpt2/gpt2_merges.txt" 
 
 #     return vocab_table_path, merge_list_path
 
@@ -93,7 +93,7 @@ def smoketest_corpus_with_specialtokens():
 
 @pytest.fixture
 def smoketest_corpus_path():
-    corpus_path = "cs336_basics/smoke_test_fixture/data/smoke_test_corpus.txt"
+    corpus_path = "cs336_basics/dev_tests/smoke_test_fixture/data/smoke_test_corpus.txt"
 
     return corpus_path
 
