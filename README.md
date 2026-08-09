@@ -41,10 +41,7 @@ operations, no nn.Transformer, no Hugging Face. Full development details are doc
   training/encoding pipeline (Docker) to both **GCP** (Vertex AI, GCS)
   and **Azure** (ACA Jobs, ACR, Bicep IaC). See blog
   [Training the BPE Tokenizer in the Cloud](docs/blog/tokenizer-cloud-training.md)
-- FLOPs/memory resource accounting
-  ([`transformer_accounting.ipynb`](cs336_basics/notebooks/transformer_accounting.ipynb),
-  [`adamwAccounting.ipynb`](cs336_basics/notebooks/adamwAccounting.ipynb))
-  across model scales, see blog [Resource Accounting: Parameters, Memory, and FLOPs](docs/blog/resource-accounting.md)
+- FLOPs/memory resource accounting across model scales, see jupyter notebook([`transformer_accounting.ipynb`](cs336_basics/notebooks/transformer_accounting.ipynb), [`adamwAccounting.ipynb`](cs336_basics/notebooks/adamwAccounting.ipynb))
 
 ## Write-ups
 
