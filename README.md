@@ -47,7 +47,6 @@ operations, no nn.Transformer, no Hugging Face. Full development details are doc
 
 - [Transformer Architecture from Scratch](docs/blog/transformer-from-scratch.md)
 - [BPE Tokenizer: 4 Optimization Rounds](docs/blog/tokenizer-performance.md)
-- [Resource Accounting: Parameters, Memory, and FLOPs](docs/blog/resource-accounting.md)
 - [Training the BPE Tokenizer in the Cloud](docs/blog/tokenizer-cloud-training.md)
 - [Training Experiments: The Importance of Parameter Initialization](https://wandb.ai/sft_llm/stf-assignment1-basics-cs336_basics/reports/Tune-the-learning-rate-Report--VmlldzoxNjU1ODcwNg)
 - [Training Experiments: Ablation 1: Remove RMSNorm](https://wandb.ai/sft_llm/stf-assignment1-basics-cs336_basics/reports/Ablation-1-Remove-RMSNorm--VmlldzoxNzY1NzQzMA)
