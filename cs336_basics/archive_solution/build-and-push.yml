@@ -1,4 +1,4 @@
-name: Build & Push (BPE)
+.name: Build & Push (BPE)
 
 on:
   workflow_dispatch:
