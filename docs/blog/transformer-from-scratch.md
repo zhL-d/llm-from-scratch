@@ -216,23 +216,16 @@ fixed, not trained.
 and running a real `d x d` matmul against it wastes memory and compute
 on every one of those zero entries.
 
-**The simplification**: because $R^i$ is block-diagonal, matrix-vector
-multiplication distributes over the blocks, multiplying the full $R^i$
-against $q^i$ is mathematically identical to multiplying each `2x2`
-block $R^i_k$ against only its matching pair, independently:
+**The simplification**: because $R^i$ is block-diagonal (the matrix
+defined above), matrix-vector multiplication distributes over the
+blocks, row-block `k` of $R^i q^{(i)}$ only ever involves block `k` of
+$q^{(i)}$, every other entry multiplying it in that row is `0`:
 
-$$
-R^i q^{(i)} =
-\begin{pmatrix} R^i_1 & 0 & \cdots & 0 \\
-0 & R^i_2 & \cdots & 0 \\
-\vdots & \vdots & \ddots & \vdots \\
-0 & 0 & \cdots & R^i_{d/2} \end{pmatrix}
-\begin{pmatrix} q^{(i)}_{1:2} \\ q^{(i)}_{3:4} \\ \vdots \\ q^{(i)}_{d-1:d} \end{pmatrix}
-=
-\begin{pmatrix} R^i_1\, q^{(i)}_{1:2} \\ R^i_2\, q^{(i)}_{3:4} \\ \vdots \\ R^i_{d/2}\, q^{(i)}_{d-1:d} \end{pmatrix}
-$$
+$$\left(R^i q^{(i)}\right)_k = R^i_k \, q^{(i)}_{2k-1:2k}, \qquad k = 1, \dots, d/2$$
 
-Working block-by-block, $R^i_k$ against its pair
+So multiplying the full $R^i$ against $q^{(i)}$ is mathematically
+identical to multiplying each `2x2` block $R^i_k$ against only its
+matching pair, independently. Working block-by-block, $R^i_k$ against its pair
 `(x_even, x_odd)` directly gives the closed form:
 
 $$

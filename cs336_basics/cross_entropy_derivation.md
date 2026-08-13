@@ -55,11 +55,10 @@ $$
 We obtain:
 
 $$
--\log\left(
-\frac{\exp(o_i[x_{i+1}])}{\sum_{a=1}^{V} \exp(o_i[a])}
-\right)
-=
-\log\left(\sum_{a=1}^{V} \exp(o_i[a])\right)
-- o_i[x_{i+1}]
+-\log\left(\frac{\exp(o_i[x_{i+1}])}{\sum_{a=1}^{V} \exp(o_i[a])}\right)
+$$
+
+$$
+= \log\left(\sum_{a=1}^{V} \exp(o_i[a])\right) - o_i[x_{i+1}]
 $$
 
