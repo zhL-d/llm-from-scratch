@@ -16,8 +16,7 @@ $$
 $$
 
 $$
-= \log\left(\sum_{a=1}^{vocab\_size} \exp(o_{i,a})\right)
-- o_{i,x_{i+1}}
+= \log\left(\sum_{a=1}^{vocab\_size} \exp(o_{i,a})\right) - o_{i,x_{i+1}}
 $$
 
 ---
