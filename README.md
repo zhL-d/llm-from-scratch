@@ -11,11 +11,11 @@ how it was built.
 
 - Key components of the model include:
 
-  - A from-scratch **BPE tokenizer**
+  - A from-scratch **BPE Tokenizer**
   ([`train_bpe.py`](cs336_basics/train_bpe.py),
   [`bpetokenizer_trainer.py`](cs336_basics/bpetokenizer_trainer.py),
   [`tokenizer.py`](cs336_basics/tokenizer.py))
-  - The full **Transformer architecture**: Embedding
+  - The full **Transformer Architecture**: Embedding
   ([`embedding.py`](cs336_basics/embedding.py)), RMSNorm
   ([`rmsnorm_einx.py`](cs336_basics/rmsnorm_einx.py)), RoPE-based
   Multi-Head Self-Attention
