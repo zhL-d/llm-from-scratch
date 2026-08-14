@@ -1,9 +1,15 @@
 # GPT-Style Language Model from Scratch
 
+A GPT-style Transformer language model built from raw PyTorch tensor
+operations, no nn.Transformer, no Hugging Face, see the details in
+[Highlights](#highlights). A trained checkpoint is published on
+[Hugging Face](https://huggingface.co/zehl/tinystories-transformer-scratch),
+see [Usage](#usage) to run it, or jump to the [Write-ups](#write-ups) for
+how it was built.
+
 ## Highlights
 
-- A GPT-style Transformer language model built from raw PyTorch tensor
-operations, no nn.Transformer, no Hugging Face. Key components include:
+- Key components of the model include:
 
   - A from-scratch **BPE tokenizer**
   ([`train_bpe.py`](cs336_basics/train_bpe.py),
@@ -32,7 +38,7 @@ operations, no nn.Transformer, no Hugging Face. Key components include:
   top-p sampling
 
 - Trained on dataset([TinyStories](https://huggingface.co/datasets/roneneldan/TinyStories)) through a learning-rate sweep, reaching a
-  validation loss of **1.62**, see **Weights & Biases** experiments report([Training Experiments: The Importance of Parameter Initialization](https://wandb.ai/sft_llm/stf-assignment1-basics-cs336_basics/reports/Tune-the-learning-rate-Report--VmlldzoxNjU1ODcwNg))
+  validation loss of **1.62**, see **Weights & Biases** experiments report([Training Experiments: The Importance of Parameter Initialization](https://wandb.ai/sft_llm/stf-assignment1-basics-cs336_basics/reports/Tune-the-learning-rate-Report--VmlldzoxNjU1ODcwNg)).
 - Architecture Ablations(Ablation 1: **Remove RMSNorm**, Ablation 2: **Pre-norm vs. Post-norm**) to confirm their impact, see **Weights & Biases** experiments report([Ablation 1: Remove RMSNorm](https://wandb.ai/sft_llm/stf-assignment1-basics-cs336_basics/reports/Ablation-1-Remove-RMSNorm--VmlldzoxNzY1NzQzMA), [Ablation 2: Pre-norm vs. Post-norm](https://wandb.ai/sft_llm/stf-assignment1-basics-cs336_basics/reports/Ablation-1-pre_norm_ablation--VmlldzoxNzY1NzQ2OA))
 - Profiled and optimized the BPE tokenizer trainer (cProfile, scalene)
   for a **~3x** training-time speedup, see blog
@@ -43,13 +49,27 @@ operations, no nn.Transformer, no Hugging Face. Key components include:
   [Training the BPE Tokenizer in the Cloud](docs/blog/tokenizer-cloud-training.md)
 - FLOPs/memory resource accounting across model scales, see jupyter notebook([`transformer_accounting.ipynb`](cs336_basics/notebooks/transformer_accounting.ipynb), [`adamwAccounting.ipynb`](cs336_basics/notebooks/adamwAccounting.ipynb))
 
+
 ## Write-ups
 
-- [Transformer Architecture from Scratch](docs/blog/transformer-from-scratch.md)
 - [BPE Tokenizer: 4 Optimization Rounds](docs/blog/tokenizer-performance.md)
 - [Training the BPE Tokenizer in the Cloud](docs/blog/tokenizer-cloud-training.md)
 - [Training Experiments: The Importance of Parameter Initialization](https://wandb.ai/sft_llm/stf-assignment1-basics-cs336_basics/reports/Tune-the-learning-rate-Report--VmlldzoxNjU1ODcwNg)
 - [Training Experiments: Ablation 1: Remove RMSNorm](https://wandb.ai/sft_llm/stf-assignment1-basics-cs336_basics/reports/Ablation-1-Remove-RMSNorm--VmlldzoxNzY1NzQzMA)
 - [Training Experiments: Ablation 2: Pre-norm vs. Post-norm](https://wandb.ai/sft_llm/stf-assignment1-basics-cs336_basics/reports/Ablation-1-pre_norm_ablation--VmlldzoxNzY1NzQ2OA)
 
+## Usage
+
+Run the model with trained checkpoint (val_loss 1.62), see the
+[model card](https://huggingface.co/zehl/tinystories-transformer-scratch)
+for  details:
+
+```bash
+uv venv --python 3.12
+uv pip install "cs336_basics @ git+https://github.com/zhL-d/llm-from-scratch.git@2b1593c1bc049dde93d332b9f5a6cf9d57575744"
+uv pip install huggingface_hub
+huggingface-cli download zehl/tinystories-transformer-scratch --local-dir .
+
+uv run generate.py "Once upon a time"
+```
 
