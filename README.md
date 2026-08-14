@@ -68,7 +68,7 @@ for  details:
 uv venv --python 3.12
 uv pip install "cs336_basics @ git+https://github.com/zhL-d/llm-from-scratch.git@2b1593c1bc049dde93d332b9f5a6cf9d57575744"
 uv pip install huggingface_hub
-huggingface-cli download zehl/tinystories-transformer-scratch --local-dir .
+hf download zehl/tinystories-transformer-scratch --local-dir .
 
 uv run generate.py "Once upon a time"
 ```
