@@ -3,7 +3,7 @@
 ## Highlights
 
 - A GPT-style Transformer language model built from raw PyTorch tensor
-operations, no nn.Transformer, no Hugging Face. Full development details are documented in the blog: [Transformer Architecture from Scratch](docs/blog/transformer-from-scratch.md). Key components include:
+operations, no nn.Transformer, no Hugging Face. Key components include:
 
   - A from-scratch **BPE tokenizer**
   ([`train_bpe.py`](cs336_basics/train_bpe.py),
