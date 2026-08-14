@@ -61,7 +61,7 @@ how it was built.
 ## Usage
 
 Run the model with trained checkpoint (val_loss 1.62), see the
-[model card](https://huggingface.co/zehl/tinystories-transformer-scratch)
+[Model Card](https://huggingface.co/zehl/tinystories-transformer-scratch)
 for  details:
 
 ```bash
