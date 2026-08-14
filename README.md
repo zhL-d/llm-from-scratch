@@ -73,3 +73,5 @@ hf download zehl/tinystories-transformer-scratch --local-dir .
 uv run generate.py "Once upon a time"
 ```
 
+![Validation Loss](docs/evidence/sweep162.svg)
+
