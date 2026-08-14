@@ -1,0 +1,465 @@
+         697280 function calls (697220 primitive calls) in 0.744 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    0.744    0.744 /private/tmp/bpe-round4/tests/adapters.py:566(run_train_bpe)
+        1    0.002    0.002    0.744    0.744 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:744(train_bpe)
+        1    0.000    0.000    0.458    0.458 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:302(pretokenize_parallel)
+        1    0.000    0.000    0.454    0.454 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:646(__exit__)
+        1    0.000    0.000    0.452    0.452 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:856(shutdown)
+      2/1    0.000    0.000    0.451    0.451 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1117(join)
+      2/1    0.000    0.000    0.451    0.451 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1155(_wait_for_tstate_lock)
+     26/4    0.000    0.000    0.451    0.113 {method 'acquire' of '_thread.lock' objects}
+      2/1    0.000    0.000    0.451    0.451 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1018(_bootstrap)
+      2/1    0.000    0.000    0.451    0.451 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1058(_bootstrap_inner)
+        1    0.000    0.000    0.451    0.451 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:339(run)
+        1    0.000    0.000    0.451    0.451 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:568(join_executor_internals)
+        1    0.000    0.000    0.451    0.451 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:572(_join_executor_internals)
+        8    0.000    0.000    0.380    0.047 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/util.py:208(__call__)
+        1    0.000    0.000    0.380    0.380 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:147(join_thread)
+        1    0.000    0.000    0.380    0.380 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:214(_finalize_join)
+        2    0.000    0.000    0.379    0.190 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:414(wait_result_broken_or_wakeup)
+        6    0.000    0.000    0.378    0.063 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:1122(wait)
+        6    0.000    0.000    0.378    0.063 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/selectors.py:402(select)
+        6    0.378    0.063    0.378    0.063 {method 'poll' of 'select.poll' objects}
+      243    0.055    0.000    0.268    0.001 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:672(merge_new)
+    15404    0.142    0.000    0.157    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:624(_add_new_contribution)
+        1    0.000    0.000    0.071    0.071 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:142(join)
+        3    0.000    0.000    0.071    0.024 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/popen_fork.py:24(poll)
+        1    0.000    0.000    0.071    0.071 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/popen_fork.py:36(wait)
+        3    0.071    0.024    0.071    0.024 {built-in method posix.waitpid}
+    15404    0.027    0.000    0.040    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:573(_delete_old_contribution)
+    15404    0.012    0.000    0.017    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:480(_build_new_pretoken)
+   279974    0.014    0.000    0.014    0.000 {method 'get' of 'dict' objects}
+        1    0.006    0.006    0.009    0.009 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:390(build_paircount_and_cache)
+   105977    0.009    0.000    0.009    0.000 {method 'add' of 'set' objects}
+    91518    0.008    0.000    0.008    0.000 {method 'discard' of 'set' objects}
+    91676    0.004    0.000    0.004    0.000 {method 'append' of 'list' objects}
+      243    0.002    0.000    0.004    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:421(update_heap)
+        2    0.000    0.000    0.004    0.002 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/util.py:450(spawnv_passfds)
+        1    0.000    0.000    0.004    0.004 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:650(__init__)
+        2    0.003    0.002    0.003    0.002 {built-in method _posixsubprocess.fork_exec}
+        1    0.000    0.000    0.003    0.003 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:174(__init__)
+        1    0.000    0.000    0.003    0.003 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:37(__init__)
+        4    0.000    0.000    0.003    0.001 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/context.py:65(Lock)
+        5    0.000    0.000    0.003    0.001 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:50(__init__)
+        4    0.000    0.000    0.003    0.001 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:168(__init__)
+       10    0.000    0.000    0.003    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:205(_send)
+        5    0.000    0.000    0.003    0.001 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:197(register)
+       11    0.000    0.000    0.003    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:118(ensure_running)
+        1    0.000    0.000    0.002    0.002 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:768(_adjust_process_count)
+        1    0.000    0.000    0.002    0.002 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:791(_spawn_process)
+        1    0.000    0.000    0.002    0.002 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:110(start)
+        1    0.000    0.000    0.002    0.002 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/context.py:286(_Popen)
+      243    0.000    0.000    0.002    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:438(_pick_best_mergetoken)
+    52773    0.002    0.000    0.002    0.000 {built-in method builtins.len}
+        1    0.000    0.000    0.002    0.002 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/popen_spawn_posix.py:30(__init__)
+        1    0.000    0.000    0.002    0.002 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/popen_fork.py:15(__init__)
+        1    0.000    0.000    0.002    0.002 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/popen_spawn_posix.py:38(_launch)
+     9994    0.001    0.000    0.001    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:17(__init__)
+     1464    0.001    0.000    0.001    0.000 {built-in method _heapq.heappop}
+      7/3    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:1349(_find_and_load)
+      7/3    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:1304(_find_and_load_unlocked)
+     8925    0.001    0.000    0.001    0.000 {built-in method _heapq.heappush}
+        1    0.000    0.000    0.001    0.001 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:246(recv)
+      7/3    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:911(_load_unlocked)
+      5/3    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:993(exec_module)
+        1    0.000    0.000    0.000    0.000 {built-in method _pickle.loads}
+     16/6    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:480(_call_with_frames_removed)
+      6/3    0.000    0.000    0.000    0.000 {built-in method builtins.exec}
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1066(get_code)
+     13/9    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1390(_handle_fromlist)
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.__import__}
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:81(find_chunk_boundaries)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:253(poll)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:415(build_heap)
+     3890    0.000    0.000    0.000    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:20(__lt__)
+      243    0.000    0.000    0.000    0.000 {method 'copy' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:1(<module>)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:439(_poll)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:391(add_call_item_to_queue)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:598(_check_system_limits)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:91(clear)
+        4    0.000    0.000    0.000    0.000 {method 'dump' of '_pickle.Pickler' objects}
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:86(put)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/reduction.py:58(dump)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1240(_find_spec)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:755(_compile_bytecode)
+      150    0.000    0.000    0.000    0.000 {method 'find' of 'bytes' objects}
+        5    0.000    0.000    0.000    0.000 {built-in method marshal.loads}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/popen_spawn_posix.py:1(<module>)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/reduction.py:48(dumps)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1187(get_data)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:294(__init__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:175(_start_thread)
+      164    0.000    0.000    0.000    0.000 {method 'read' of '_io.BufferedReader' objects}
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1524(find_spec)
+        5    0.000    0.000    0.000    0.000 {built-in method _io.open_code}
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1495(_get_spec)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:884(__init__)
+      2/1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:975(start)
+        5    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:121(_make_name)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/reduction.py:38(__init__)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1597(find_spec)
+        3    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:429(_recv_bytes)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/spawn.py:160(get_preparation_data)
+       16    0.000    0.000    0.000    0.000 {built-in method builtins.__build_class__}
+       20    0.000    0.000    0.000    0.000 {built-in method builtins.next}
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:416(__enter__)
+        8    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/util.py:189(__init__)
+        5    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/tempfile.py:153(__next__)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:182(send_bytes)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:86(wakeup)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/context.py:110(SimpleQueue)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:806(module_from_spec)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/signal.py:69(pthread_sigmask)
+        5    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:84(_cleanup)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/spawn.py:1(<module>)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:361(__init__)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:390(_recv)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:802(submit)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:199(as_completed)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:1(<module>)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:733(_init_module_attrs)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:208(recv_bytes)
+        1    0.000    0.000    0.000    0.000 {built-in method _heapq.heapify}
+        5    0.000    0.000    0.000    0.000 {method 'copy' of 'dict' objects}
+       10    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/selectors.py:351(register)
+        2    0.000    0.000    0.000    0.000 {built-in method _io.open}
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:406(_send_bytes)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:758(_start_executor_manager_thread)
+      243    0.000    0.000    0.000    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:703(update_vocab)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:304(acquire)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:71(_reset)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/signal.py:72(<genexpr>)
+       15    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:140(_path_stat)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/signal.py:24(_int_to_enum)
+      492    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+       10    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:486(cache_from_source)
+       15    0.000    0.000    0.000    0.000 {built-in method posix.stat}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1001(run)
+        2    0.000    0.000    0.000    0.000 {built-in method _thread.start_new_thread}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:231(_feed)
+       10    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:632(cached)
+       10    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/selectors.py:234(register)
+        5    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:201(unregister)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/util.py:174(register_after_fork)
+        3    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:533(Pipe)
+        5    0.000    0.000    0.000    0.000 {built-in method posix.read}
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:615(_get_cached)
+      2/1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:637(wait)
+        9    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:277(__init__)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/selectors.py:347(__init__)
+        5    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/tempfile.py:142(rng)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:80(__init__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:554(shutdown_workers)
+        5    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/random.py:454(choices)
+       24    0.000    0.000    0.000    0.000 {built-in method posix.write}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/popen_fork.py:1(<module>)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:1172(reduce_connection)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:426(_get_module_lock)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/context.py:85(BoundedSemaphore)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1045(_set_tstate_lock)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/random.py:126(__init__)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/weakref.py:164(__setitem__)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/selectors.py:209(__init__)
+       15    0.000    0.000    0.000    0.000 {built-in method posix.close}
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:720(__call__)
+        7    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+        9    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:394(notify)
+        5    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:131(full)
+       30    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:126(_path_join)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/random.py:135(seed)
+        5    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/queue.py:154(get)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:162(__enter__)
+       42    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:645(parent)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:151(__init__)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:616(set)
+        3    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/copyreg.py:107(_slotnames)
+        1    0.000    0.000    0.000    0.000 {function Random.seed at 0x100ff44a0}
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1171(exec_module)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:62(init_vocab)
+        3    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:588(__init__)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:589(get_n_children_alive)
+        8    0.000    0.000    0.000    0.000 {built-in method posix.pipe}
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:174(close)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/queue.py:122(put)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:159(_path_isfile)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1592(_get_spec)
+        3    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:424(notify_all)
+        1    0.000    0.000    0.000    0.000 {method 'copy' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 <frozen runpy>:1(<module>)
+       10    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:132(_path_split)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:444(process_result_item)
+       69    0.000    0.000    0.000    0.000 {method 'rpartition' of 'str' objects}
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:150(_path_is_mode_type)
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.sum}
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:124(setdefault)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/spawn.py:83(get_command_line)
+      243    0.000    0.000    0.000    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:56(dump_pair_count)
+        1    0.000    0.000    0.000    0.000 {built-in method posix.getcwd}
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:857(_maintain_shutdown_locks)
+       10    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/selectors.py:215(_fileobj_lookup)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:376(_close)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/subprocess.py:300(_args_from_interpreter_flags)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:591(<genexpr>)
+        5    0.000    0.000    0.000    0.000 {method '_is_zero' of '_multiprocessing.SemLock' objects}
+       10    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:186(_check_alive)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:420(__exit__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:328(__init__)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:806(spec_from_file_location)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/context.py:369(set_spawning_popen)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        7    0.000    0.000    0.000    0.000 {method '__exit__' of '_io._IOBase' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/queue.py:34(__init__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:69(__init__)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1081(_stop)
+        6    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1128(find_spec)
+       10    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/selectors.py:21(_fileobj_to_fd)
+       19    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:299(__enter__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:155(_create_and_install_waiters)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:370(close)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:372(release)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:982(find_spec)
+       47    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
+       77    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:234(ident)
+        5    0.000    0.000    0.000    0.000 {method 'write' of '_io.BytesIO' objects}
+        4    0.000    0.000    0.000    0.000 {built-in method _struct.pack}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/context.py:60(Pipe)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1206(path_stats)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:153(is_alive)
+      3/2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:323(wait)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:381(_send)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:537(set_result)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:140(close)
+       54    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/selectors.py:202(__exit__)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/reduction.py:191(DupFd)
+       61    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:232(__init__)
+       10    0.000    0.000    0.000    0.000 {built-in method builtins.max}
+        5    0.000    0.000    0.000    0.000 {built-in method _multiprocessing.sem_unlink}
+       19    0.000    0.000    0.000    0.000 {built-in method _thread.allocate_lock}
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/weakref.py:105(remove)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1356(_make_invoke_excepthook)
+       15    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:84(_unpack_uint32)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:77(__init__)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:670(_classify_pyc)
+       19    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:302(__exit__)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:703(_validate_timestamp_pyc)
+        7    0.000    0.000    0.000    0.000 /private/tmp/bpe-round4/.venv/lib/python3.12/site-packages/_distutils_hack/__init__.py:101(find_spec)
+       35    0.000    0.000    0.000    0.000 {method '__exit__' of '_thread.RLock' objects}
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:177(_yield_finished_futures)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:137(put_nowait)
+        3    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/_weakrefset.py:85(add)
+        3    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1485(current_thread)
+       12    0.000    0.000    0.000    0.000 {method 'format' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 {method 'getbuffer' of '_io.BytesIO' objects}
+        4    0.000    0.000    0.000    0.000 {method 'acquire' of '_multiprocessing.SemLock' objects}
+        5    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:90(_make_methods)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/selectors.py:268(close)
+       10    0.000    0.000    0.000    0.000 <string>:1(<lambda>)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:74(close)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:82(remove)
+       32    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1226(__exit__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:839(_newname)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/enum.py:1128(__new__)
+        7    0.000    0.000    0.000    0.000 {built-in method _imp.is_builtin}
+       32    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1222(__enter__)
+       11    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:314(_is_owned)
+       70    0.000    0.000    0.000    0.000 {method 'rstrip' of 'str' objects}
+       10    0.000    0.000    0.000    0.000 {method 'release' of '_thread.lock' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:61(__init__)
+        1    0.000    0.000    0.000    0.000 {built-in method posix.sysconf}
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:74(__new__)
+       11    0.000    0.000    0.000    0.000 {method 'seek' of '_io.BufferedReader' objects}
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:350(__reduce__)
+       46    0.000    0.000    0.000    0.000 {built-in method _imp.acquire_lock}
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1108(_delete)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/weakref.py:347(__new__)
+        5    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1236(daemon)
+        1    0.000    0.000    0.000    0.000 {built-in method posix.cpu_count}
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:118(__init__)
+        5    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:100(__getstate__)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:445(cb)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/util.py:436(_flush_std_streams)
+       20    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:134(<genexpr>)
+       23    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x10231e058}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:497(set_running_or_notify_cancel)
+       23    0.000    0.000    0.000    0.000 {method '__exit__' of '_thread.lock' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:515(release)
+        4    0.000    0.000    0.000    0.000 {built-in method builtins.sorted}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:662(spec_from_loader)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:457(__init__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/queue.py:213(_put)
+        7    0.000    0.000    0.000    0.000 /private/tmp/bpe-round4/.venv/lib/python3.12/site-packages/_virtualenv.py:50(find_spec)
+        5    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/queue.py:209(_qsize)
+       12    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:169(fileno)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/util.py:466(close_fds)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/weakref.py:427(__setitem__)
+        3    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/_weakrefset.py:39(_remove)
+       17    0.000    0.000    0.000    0.000 {built-in method posix.fspath}
+        7    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:99(_check_closed)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/weakref.py:369(remove)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:67(_relax_case)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:144(__init__)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:989(create_module)
+       46    0.000    0.000    0.000    0.000 {built-in method _imp.release_lock}
+       37    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:491(_verbose_message)
+       27    0.000    0.000    0.000    0.000 {built-in method posix.getpid}
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:185(_path_abspath)
+       13    0.000    0.000    0.000    0.000 {method 'encode' of 'str' objects}
+       23    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:135(_check_closed)
+       13    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/context.py:366(get_spawning_popen)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:647(_check_name_wrapper)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:173(__exit__)
+        2    0.000    0.000    0.000    0.000 {method 'flush' of '_io.TextIOWrapper' objects}
+       40    0.000    0.000    0.000    0.000 {method 'random' of '_random.Random' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:224(_finalize_close)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:370(Barrier)
+       15    0.000    0.000    0.000    0.000 {method '__enter__' of '_thread.lock' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method _signal.pthread_sigmask}
+        5    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:114(getfd)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:428(result)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:151(__init__)
+       21    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+       10    0.000    0.000    0.000    0.000 {method 'register' of 'select.poll' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:57(__getstate__)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/weakref.py:352(__init__)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:79(__init__)
+        6    0.000    0.000    0.000    0.000 {method 'clear' of 'dict' objects}
+        7    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/context.py:372(assert_spawning)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/popen_spawn_posix.py:34(duplicate_for_child)
+        1    0.000    0.000    0.000    0.000 {built-in method _imp.create_builtin}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:147(__enter__)
+        1    0.000    0.000    0.000    0.000 <frozen posixpath>:60(isabs)
+       40    0.000    0.000    0.000    0.000 {built-in method math.floor}
+        3    0.000    0.000    0.000    0.000 {built-in method _struct.unpack}
+        6    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:48(_new_module)
+       13    0.000    0.000    0.000    0.000 {built-in method _weakref._remove_dead_weakref}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/spawn.py:36(set_executable)
+       11    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:180(_path_isabs)
+        2    0.000    0.000    0.000    0.000 {method 'release' of '_multiprocessing.SemLock' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:46(SemLock)
+        2    0.000    0.000    0.000    0.000 {method 'difference_update' of 'set' objects}
+       15    0.000    0.000    0.000    0.000 {built-in method from_bytes}
+       14    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/util.py:48(debug)
+       13    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+        3    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:308(_release_save)
+       10    0.000    0.000    0.000    0.000 {method 'rfind' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1103(_resolve_filename)
+       11    0.000    0.000    0.000    0.000 {method '_recursion_count' of '_thread.RLock' objects}
+        8    0.000    0.000    0.000    0.000 {method 'pop' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:468(acquire)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1038(_set_ident)
+        8    0.000    0.000    0.000    0.000 {method 'remove' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:58(ResourceTracker)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:599(__init__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:60(__init__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/popen_fork.py:12(Popen)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:1042(_set_native_id)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:247(sentinel)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/popen_spawn_posix.py:17(__init__)
+        3    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:311(_acquire_restore)
+        6    0.000    0.000    0.000    0.000 {built-in method _imp.find_frozen}
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:131(__del__)
+        6    0.000    0.000    0.000    0.000 {built-in method time.monotonic}
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/selectors.py:63(__init__)
+        5    0.000    0.000    0.000    0.000 {method 'getvalue' of '_io.BytesIO' objects}
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:501(_requires_builtin_wrapper)
+        2    0.000    0.000    0.000    0.000 {built-in method _thread._set_sentinel}
+        7    0.000    0.000    0.000    0.000 {method 'append' of 'collections.deque' objects}
+        6    0.000    0.000    0.000    0.000 {built-in method select.poll}
+        1    0.000    0.000    0.000    0.000 <frozen os>:841(fsencode)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:166(Lock)
+        5    0.000    0.000    0.000    0.000 {method 'values' of 'dict' objects}
+        5    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/context.py:237(get_context)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:143(_check_writable)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/selectors.py:275(_key_from_fd)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:467(is_shutting_down)
+        3    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/spawn.py:92(<genexpr>)
+        3    0.000    0.000    0.000    0.000 {method 'remove' of 'collections.deque' objects}
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:997(exec_module)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1473(_path_importer_cache)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:151(__exit__)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:223(<genexpr>)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/queue.py:217(_get)
+        8    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/util.py:44(sub_debug)
+        5    0.000    0.000    0.000    0.000 {method 'popleft' of 'collections.deque' objects}
+        1    0.000    0.000    0.000    0.000 {method 'index' of 'list' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.locals}
+        1    0.000    0.000    0.000    0.000 {method 'write' of '_io.BufferedWriter' objects}
+        4    0.000    0.000    0.000    0.000 {method '__enter__' of '_thread.RLock' objects}
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:528(flag_executor_shutting_down)
+        1    0.000    0.000    0.000    0.000 {method 'fileno' of '_io.TextIOWrapper' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/spawn.py:138(_check_not_importing_main)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1158(create_module)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/context.py:197(get_start_method)
+        7    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:37(current_process)
+        3    0.000    0.000    0.000    0.000 {method 'get' of 'mappingproxy' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/queues.py:377(__getstate__)
+        5    0.000    0.000    0.000    0.000 {method 'locked' of '_thread.lock' objects}
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:124(RLock)
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:94(<genexpr>)
+        7    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:139(_check_readable)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:158(__init__)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:412(__init__)
+        7    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:653(has_location)
+        1    0.000    0.000    0.000    0.000 /private/tmp/bpe-round4/cs336_basics/tokenizer.py:28(__init__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:217(Condition)
+        2    0.000    0.000    0.000    0.000 {method 'setter' of 'property' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method posix._path_normpath}
+        1    0.000    0.000    0.000    0.000 {built-in method posix.waitstatus_to_exitcode}
+        2    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/subprocess.py:290(_optim_args_from_interpreter_flags)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/threading.py:601(is_set)
+        6    0.000    0.000    0.000    0.000 {built-in method builtins.id}
+        5    0.000    0.000    0.000    0.000 {built-in method _imp._fix_co_filename}
+        1    0.000    0.000    0.000    0.000 {method 'tell' of '_io.BufferedReader' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:61(_cleanup)
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/context.py:187(get_context)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/process.py:165(__init__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/popen_spawn_posix.py:26(Popen)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1157(__init__)
+        1    0.000    0.000    0.000    0.000 {built-in method _imp.get_frozen_object}
+        2    0.000    0.000    0.000    0.000 {built-in method _thread.get_native_id}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/queue.py:206(_init)
+        1    0.000    0.000    0.000    0.000 {method 'clear' of 'collections.deque' objects}
+        6    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/selectors.py:199(__enter__)
+        1    0.000    0.000    0.000    0.000 <frozen posixpath>:41(_get_sep)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:328(Event)
+        1    0.000    0.000    0.000    0.000 <frozen runpy>:26(_TempModule)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/context.py:253(get_start_method)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:159(readable)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:398(__get_result)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:130(Semaphore)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1182(get_filename)
+        5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:990(create_module)
+        4    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/connection.py:164(writable)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/popen_spawn_posix.py:16(_DupFd)
+        3    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/spawn.py:45(get_executable)
+        1    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 <frozen runpy>:49(_ModifiedArgv0)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:191(RLock)
+        1    0.000    0.000    0.000    0.000 {method 'remove' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:337(_invoke_callbacks)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/synchronize.py:149(BoundedSemaphore)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:213(authkey)
+        2    0.000    0.000    0.000    0.000 /private/tmp/bpe-round4/.venv/lib/python3.12/site-packages/_distutils_hack/__init__.py:108(<lambda>)
+        1    0.000    0.000    0.000    0.000 {built-in method _imp.exec_builtin}
+        1    0.000    0.000    0.000    0.000 {built-in method _thread.daemon_threads_allowed}
+        1    0.000    0.000    0.000    0.000 {method 'acquire' of '_thread.RLock' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:54(ReentrantCallError)
+        1    0.000    0.000    0.000    0.000 {method '_is_owned' of '_thread.RLock' objects}
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:643(__enter__)
+        1    0.000    0.000    0.000    0.000 /Users/zehualu/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/multiprocessing/process.py:189(name)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1014(is_package)
+        1    0.000    0.000    0.000    0.000 <frozen runpy>:166(_Error)
+        1    0.000    0.000    0.000    0.000 {method 'release' of '_thread.RLock' objects}
+
+

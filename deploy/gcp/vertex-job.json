@@ -1,0 +1,19 @@
+{
+  "workerPoolSpecs": [
+    {
+      "machineSpec": {
+        "machineType": "n2-highmem-4"
+      },
+      "replicaCount": 1,
+      "containerSpec": {
+        "imageUri": "eu.gcr.io/digital-proton-473814-m9/bpe-training:trainer-a3738d1",
+        "env": [
+          {"name": "TRAINDATA_PATH", "value": "gs://bpe-training-mfp/data/TinyStoriesV2-GPT4-train.txt"},
+          {"name": "OUTPUTS_PATH", "value": "gs://bpe-training-mfp/output"},
+          {"name": "VOCAB_SIZE", "value": "10000"},
+          {"name": "PRETOKEN_PROCS", "value": "4"}
+        ]
+      }
+    }
+  ]
+}

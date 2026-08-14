@@ -6,18 +6,17 @@ cross entropy
 $$
 
 $$
-= − log(softmax(o_i)[x_{i+1}])
+= − log(softmax(o_i)_{x_{i+1}})
 $$
 
 $$
 = -\log\left(
-\frac{\exp(o_i[x_{i+1}])}{\sum_{a=1}^{vocab\_size} \exp(o_i[a])}
+\frac{\exp(o_{i,x_{i+1}})}{\sum_{a=1}^{vocab\_size} \exp(o_{i,a})}
 \right)
 $$
 
 $$
-= \log\left(\sum_{a=1}^{vocab\_size} \exp(o_i[a])\right)
-- o_i[x_{i+1}]
+= \log\left(\sum_{a=1}^{vocab\_size} \exp(o_{i,a})\right) - o_{i,x_{i+1}}
 $$
 
 ---
@@ -35,8 +34,8 @@ $$
 Let:
 
 $$
-A = \exp(o_i[x_{i+1}]), \quad
-B = \sum_{a=1}^{V} \exp(o_i[a])
+A = \exp(o_{i,x_{i+1}}), \quad
+B = \sum_{a=1}^{V} \exp(o_{i,a})
 $$
 
 Then:
@@ -55,11 +54,9 @@ $$
 We obtain:
 
 $$
--\log\left(
-\frac{\exp(o_i[x_{i+1}])}{\sum_{a=1}^{V} \exp(o_i[a])}
-\right)
-=
-\log\left(\sum_{a=1}^{V} \exp(o_i[a])\right)
-- o_i[x_{i+1}]
+-\log\left(\frac{\exp(o_{i,x_{i+1}})}{\sum_{a=1}^{V} \exp(o_{i,a})}\right)
 $$
 
+$$
+= \log\left(\sum_{a=1}^{V} \exp(o_{i,a})\right) - o_{i,x_{i+1}}
+$$

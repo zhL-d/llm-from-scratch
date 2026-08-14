@@ -20,6 +20,7 @@ class MultiHeadSelfAttention(nn.Module):
         self.O = nn.Parameter(torch.randn(d_model, d_model))
 
         self.num_heads = num_heads
+        self.attention_layer = SDPAttention()
 
     def forward(self, x: Float[Tensor, " ... sequence_length d_in"]) -> Float[Tensor, " ... sequence_length d_out"]:
         batch_shape = x.shape[:-2]
@@ -39,8 +40,7 @@ class MultiHeadSelfAttention(nn.Module):
 
         causal_mask = ~torch.triu(torch.ones(x.shape[-2], x.shape[-2], dtype=bool), diagonal=1)
 
-        attention_layer = SDPAttention(q_x_heads, k_x_heads, v_x_heads, causal_mask)
-        embedding_cmhsa = attention_layer.forward()
+        embedding_cmhsa = self.attention_layer.forward(q_x_heads, k_x_heads, v_x_heads, causal_mask)
         embedding_cmhsa_trans = embedding_cmhsa.transpose(-3, -2)
         embedding_cmhsa_combined = embedding_cmhsa_trans.contiguous().reshape(*batch_shape, seq_len, -1)
         # embedding_cmhsa_reshaped = embedding_cmhsa.reshape(x.shape[:-2], self.num_heads, x.shape[-2], -1).reshape(x.shape[:-2], x.shape[-2], -1)
