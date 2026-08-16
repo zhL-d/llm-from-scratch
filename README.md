@@ -54,6 +54,7 @@ how it was built.
 
 - [BPE Tokenizer: 4 Optimization Rounds](docs/blog/tokenizer-performance.md)
 - [Training the BPE Tokenizer in the Cloud](docs/blog/tokenizer-cloud-training.md)
+- [Mathematical Reasoning Process: The Importance of Parameter Initialization](docs/evidence/initialization.pdf)
 - [Training Experiments: The Importance of Parameter Initialization](https://api.wandb.ai/links/sft_llm/865oqnr8)
 - [Training Experiments: Ablation 1: Remove RMSNorm](https://api.wandb.ai/links/sft_llm/75wosrus)
 - [Training Experiments: Ablation 2: Pre-norm vs. Post-norm](https://api.wandb.ai/links/sft_llm/jb8awtmz)
